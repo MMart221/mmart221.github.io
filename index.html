@@ -69,7 +69,8 @@
       text-transform: uppercase;
       transition: color 0.2s;
     }
-    .nav-links a:hover { color: var(--accent); }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--accent); }
 
     /* ── HERO ── */
     #hero {
@@ -165,6 +166,7 @@
       border: 1px solid var(--border);
       transition: all 0.2s;
       clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+      cursor: pointer;
     }
     .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
 
@@ -208,7 +210,7 @@
     .code-line .num { color: #f78c6c; }
     .code-line .cm { color: #546e7a; }
 
-    /* ── SECTIONS ── */
+    /* ── SHARED SECTION STYLES ── */
     section { padding: 6rem 4rem; }
     .section-label {
       font-size: 0.65rem;
@@ -221,135 +223,40 @@
       font-family: 'Syne', sans-serif;
       font-size: clamp(2rem, 4vw, 3rem);
       font-weight: 800;
-      margin-bottom: 3rem;
       letter-spacing: -0.02em;
     }
     .section-title span { color: var(--accent); }
 
-    /* ── SKILLS ── */
-    #skills { background: var(--surface); }
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
+    /* ── RESUME SECTION ── */
+    #resume { background: var(--surface); }
+    .resume-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3.5rem;
+      flex-wrap: wrap;
       gap: 1.5rem;
     }
-    .skill-group {
-      border: 1px solid var(--border);
-      padding: 1.5rem;
-      position: relative;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    .skill-group:hover {
-      border-color: rgba(0,229,255,0.3);
-      box-shadow: var(--glow);
-    }
-    .skill-group-label {
+    .resume-block { margin-bottom: 4rem; }
+    .resume-block:last-child { margin-bottom: 0; }
+    .resume-block-label {
       font-size: 0.65rem;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.25em;
       text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1rem;
+      color: var(--accent2);
+      margin-bottom: 2rem;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 1rem;
     }
-    .skill-group-label::after {
+    .resume-block-label::after {
       content: '';
       flex: 1;
       height: 1px;
-      background: var(--border);
+      background: linear-gradient(90deg, rgba(255,107,53,0.3), transparent);
     }
-    .skill-tags { display: flex; flex-direction: column; gap: 0.5rem; }
-    .skill-tag {
-      font-size: 0.75rem;
-      color: var(--text);
-      padding: 0.4rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-    .skill-tag::before {
-      content: '›';
-      color: var(--accent);
-      font-size: 0.9rem;
-    }
-    .skill-tag:last-child { border-bottom: none; }
 
-    /* ── PROJECTS ── */
-    #projects { background: var(--bg); }
-    .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
-    .project-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 2rem;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-    }
-    .project-card:hover {
-      border-color: rgba(0,229,255,0.35);
-      transform: translateY(-4px);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.4), var(--glow);
-    }
-    .project-card::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.4s;
-    }
-    .project-card:hover::after { transform: scaleX(1); }
-    .project-number {
-      font-size: 0.65rem;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      margin-bottom: 0.8rem;
-    }
-    .project-name {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 0.4rem;
-    }
-    .project-client {
-      font-size: 0.7rem;
-      color: var(--accent);
-      margin-bottom: 1rem;
-      letter-spacing: 0.05em;
-    }
-    .project-stack {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-bottom: 1.2rem;
-    }
-    .stack-tag {
-      font-size: 0.65rem;
-      padding: 0.25rem 0.6rem;
-      background: rgba(0,229,255,0.08);
-      border: 1px solid rgba(0,229,255,0.15);
-      color: var(--accent);
-      letter-spacing: 0.05em;
-    }
-    .project-bullets { list-style: none; }
-    .project-bullets li {
-      font-size: 0.75rem;
-      color: var(--muted);
-      line-height: 1.7;
-      padding: 0.3rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      display: flex;
-      gap: 0.6rem;
-    }
-    .project-bullets li:last-child { border-bottom: none; }
-    .project-bullets li::before { content: '—'; color: var(--accent2); flex-shrink: 0; }
-
-    /* ── EXPERIENCE ── */
-    #experience { background: var(--surface); }
+    /* ── TIMELINE ── */
     .timeline { display: flex; flex-direction: column; gap: 0; position: relative; }
     .timeline::before {
       content: '';
@@ -368,7 +275,7 @@
       left: -4px; top: 6px;
       width: 9px; height: 9px;
       background: var(--accent);
-      border: 2px solid var(--bg);
+      border: 2px solid var(--surface);
       border-radius: 50%;
       box-shadow: 0 0 10px rgba(0,229,255,0.5);
     }
@@ -418,9 +325,8 @@
     .timeline-bullets li::before { content: '›'; color: var(--accent); flex-shrink: 0; font-size: 1rem; }
 
     /* ── EDUCATION ── */
-    #education { background: var(--bg); }
     .edu-card {
-      background: var(--surface);
+      background: var(--surface2);
       border: 1px solid var(--border);
       padding: 2.5rem;
       max-width: 700px;
@@ -458,7 +364,7 @@
       margin-bottom: 1.5rem;
     }
     .edu-stat {
-      background: var(--surface2);
+      background: var(--surface);
       border: 1px solid var(--border);
       padding: 1rem;
       text-align: center;
@@ -485,9 +391,280 @@
       letter-spacing: 0.05em;
     }
 
+    /* ── SKILLS ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    .skill-group {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      position: relative;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .skill-group:hover {
+      border-color: rgba(0,229,255,0.3);
+      box-shadow: var(--glow);
+    }
+    .skill-group-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .skill-group-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .skill-tags { display: flex; flex-direction: column; gap: 0.5rem; }
+    .skill-tag {
+      font-size: 0.75rem;
+      color: var(--text);
+      padding: 0.4rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .skill-tag::before {
+      content: '›';
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+    .skill-tag:last-child { border-bottom: none; }
+
+    /* ── PORTFOLIO SECTION ── */
+    #portfolio { background: var(--bg); }
+    .portfolio-featured {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2.5rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .portfolio-featured:hover {
+      border-color: rgba(0,229,255,0.3);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), var(--glow);
+    }
+    .portfolio-featured::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+    .featured-badge {
+      display: inline-block;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(0,229,255,0.08);
+      border: 1px solid rgba(0,229,255,0.2);
+      padding: 0.25rem 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+    .featured-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+    .project-status {
+      font-size: 0.65rem;
+      color: #27c93f;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.8rem;
+    }
+    .project-status::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: #27c93f;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    .featured-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    .featured-subtitle {
+      font-size: 0.78rem;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.05em;
+    }
+    .project-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+    }
+    .stack-tag {
+      font-size: 0.65rem;
+      padding: 0.25rem 0.6rem;
+      background: rgba(0,229,255,0.08);
+      border: 1px solid rgba(0,229,255,0.15);
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+    .featured-links {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+    .project-link {
+      font-size: 0.72rem;
+      padding: 0.55rem 1.2rem;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      text-decoration: none;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .project-link:hover { color: var(--accent); border-color: var(--accent); }
+    .project-link.primary {
+      background: rgba(0,229,255,0.08);
+      border-color: rgba(0,229,255,0.25);
+      color: var(--accent);
+    }
+    .project-bullets { list-style: none; }
+    .project-bullets li {
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.75;
+      padding: 0.35rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      display: flex;
+      gap: 0.6rem;
+    }
+    .project-bullets li:last-child { border-bottom: none; }
+    .project-bullets li::before { content: '—'; color: var(--accent2); flex-shrink: 0; }
+
+    .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    }
+    .project-card:hover {
+      border-color: rgba(0,229,255,0.35);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), var(--glow);
+    }
+    .project-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .project-card:hover::after { transform: scaleX(1); }
+    .project-card.accent2::after {
+      background: linear-gradient(90deg, var(--accent2), #ff9a6c);
+    }
+    .project-type {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+    .project-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+    .project-client {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── GITHUB SECTION ── */
+    #github { background: var(--surface); }
+    .github-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .repo-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .repo-card:hover {
+      border-color: rgba(0,229,255,0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .repo-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--accent);
+      word-break: break-word;
+    }
+    .repo-desc {
+      font-size: 0.72rem;
+      color: var(--muted);
+      line-height: 1.6;
+      flex: 1;
+    }
+    .repo-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.65rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .repo-lang { color: var(--accent2); }
+    .github-cta { text-align: center; }
+    .gh-loading, .gh-error, .gh-empty {
+      font-size: 0.78rem;
+      color: var(--muted);
+      padding: 3rem;
+      grid-column: 1 / -1;
+      text-align: center;
+    }
+    .gh-error a, .gh-empty a { color: var(--accent); text-decoration: none; }
+    .gh-error a:hover, .gh-empty a:hover { text-decoration: underline; }
+
     /* ── CONTACT ── */
     #contact {
-      background: var(--surface);
+      background: var(--bg);
       text-align: center;
     }
     .contact-links {
@@ -512,11 +689,6 @@
       color: var(--accent);
       border-color: var(--accent);
       box-shadow: var(--glow);
-    }
-    .contact-email {
-      font-size: 0.85rem;
-      color: var(--text);
-      margin-top: 1rem;
     }
 
     /* ── FOOTER ── */
@@ -544,6 +716,27 @@
     .fade-in:nth-child(3) { animation-delay: 0.4s; }
     .fade-in:nth-child(4) { animation-delay: 0.55s; }
 
+    /* ── PRINT STYLES ── */
+    @media print {
+      nav, .hero-visual, .hero-ctas, .resume-print-btn,
+      #portfolio, #github, #contact, footer { display: none !important; }
+      body::before { display: none; }
+      #hero { min-height: auto; grid-template-columns: 1fr; padding: 1rem; }
+      section { padding: 1.5rem 1rem; }
+      .hero-bg, .hero-grid { display: none; }
+      #resume { background: white; color: black; }
+      .resume-block-label, .section-label { color: #333; }
+      .section-title span, .timeline-date, .edu-degree, .edu-stat-val { color: #0066cc; }
+      .timeline-role { color: #cc4400; }
+      .skill-tag, .timeline-bullets li, .project-bullets li { color: #333; }
+      .edu-stat { border: 1px solid #ccc; }
+      .edu-badge { border: 1px solid #ccc; color: #555; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1100px) {
+      .github-grid { grid-template-columns: repeat(2, 1fr); }
+    }
     @media (max-width: 900px) {
       nav { padding: 1rem 1.5rem; }
       .nav-links { display: none; }
@@ -552,8 +745,14 @@
       section { padding: 4rem 1.5rem; }
       .skills-grid { grid-template-columns: 1fr; }
       .projects-grid { grid-template-columns: 1fr; }
+      .featured-layout { grid-template-columns: 1fr; gap: 1.5rem; }
       .edu-stats { grid-template-columns: 1fr 1fr; }
+      .github-grid { grid-template-columns: repeat(2, 1fr); }
       footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+    @media (max-width: 600px) {
+      .github-grid { grid-template-columns: 1fr; }
+      .resume-header { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
@@ -563,15 +762,15 @@
   <nav>
     <a class="nav-logo" href="#hero">MM.DEV</a>
     <ul class="nav-links">
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#education">Education</a></li>
+      <li><a href="#hero">About</a></li>
+      <li><a href="#resume">Resume</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#github">GitHub</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
 
-  <!-- HERO -->
+  <!-- ══════════════════════════════ HERO / ABOUT ══════════════════════════════ -->
   <section id="hero">
     <div class="hero-bg"></div>
     <div class="hero-grid"></div>
@@ -586,8 +785,8 @@
         BS Information Systems @ Utah State · GPA 3.90 · Graduating May 2026.
       </p>
       <div class="hero-ctas fade-in">
-        <a class="btn-primary" href="#experience">View My Work</a>
-        <a class="btn-secondary" href="#contact">Get In Touch</a>
+        <a class="btn-primary" href="#resume">View Resume</a>
+        <a class="btn-secondary" href="#portfolio">See My Work</a>
       </div>
     </div>
     <div class="hero-visual">
@@ -612,60 +811,171 @@
     </div>
   </section>
 
-  <!-- SKILLS -->
-  <section id="skills">
-    <p class="section-label">// 02 — Capabilities</p>
-    <h2 class="section-title">Tools & <span>Skills</span></h2>
-    <div class="skills-grid">
-      <div class="skill-group">
-        <div class="skill-group-label">Advanced</div>
-        <div class="skill-tags">
-          <div class="skill-tag">SQL (Snowflake, SSMS, PostgreSQL)</div>
-          <div class="skill-tag">ETL/ELT Design & Integrations (AWS, GCP, Azure Data Factory, Databricks)</div>
-          <div class="skill-tag">Python (Pandas, NumPy, Matplotlib, Plotly, NLP)</div>
-          <div class="skill-tag">Databricks (Delta Lake, Spark, Notebooks)</div>
-        </div>
+  <!-- ══════════════════════════════ RESUME ══════════════════════════════ -->
+  <section id="resume">
+    <div class="resume-header">
+      <div>
+        <p class="section-label">// 02 — Resume</p>
+        <h2 class="section-title">Professional <span>Background</span></h2>
       </div>
-      <div class="skill-group">
-        <div class="skill-group-label">Proficient</div>
-        <div class="skill-tags">
-          <div class="skill-tag">Cloud Administration (AWS, GCP, Azure)</div>
-          <div class="skill-tag">Data Visualization (Tableau, Power BI)</div>
-          <div class="skill-tag">Software & Web Development (Django, React Native, Docker, Cloud Deployment)</div>
-          <div class="skill-tag">Linux & Unix Systems (Cron Jobs, Shell Scripts, RDP)</div>
+      <button class="btn-secondary resume-print-btn" onclick="window.print()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:0.4rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Save as PDF
+      </button>
+    </div>
+
+    <!-- ── Work Experience ── -->
+    <div class="resume-block">
+      <div class="resume-block-label">Work Experience</div>
+      <div class="timeline">
+
+        <div class="timeline-item">
+          <div class="timeline-meta">
+            <div class="timeline-org">Utah State University — Analytics Solutions Center</div>
+            <div class="timeline-date">Jan 2026 – Present</div>
+          </div>
+          <div class="timeline-role">Data Engineer · Client: Lee's Marketplace</div>
+          <div class="timeline-location">Logan, UT</div>
+          <ul class="timeline-bullets">
+            <li>Mapped current-state data flows across 7 business systems to identify integration gaps and automation opportunities.</li>
+            <li>Led development of a formal system redesign proposal recommending Power Automate + Azure SQL + Power BI — synthesizing team research — and presented directly to senior stakeholders including company ownership.</li>
+            <li>Contributing to ETL pipeline development, dashboard and report building, and system diagram documentation for a client-facing data modernization engagement.</li>
+            <li>Coordinating implementation readiness including Azure SQL database configuration, Power Automate environment setup, and Business Central permission planning.</li>
+          </ul>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-meta">
+            <div class="timeline-org">ASPIRE NSF Engineering Research Center</div>
+            <div class="timeline-date">Jun 2025 – Present</div>
+          </div>
+          <div class="timeline-role">Innovation Analyst</div>
+          <div class="timeline-location">Logan, UT</div>
+          <ul class="timeline-bullets">
+            <li>Conducted one-on-one interviews with senior engineers to document technical specifications for an electrified roadway pilot — findings directly informed a pilot recently approved by a State Department of Transportation.</li>
+            <li>Contributed to RFP development and contractor agreement documentation by translating engineering specs into structured procurement requirements.</li>
+            <li>Built an NLP-powered analytics dashboard (NLTK, Streamlit) to process annual meeting workshop responses, quantifying key themes and enabling leadership association analysis.</li>
+            <li>Designed and implemented a pilot data library hub for Agency Working Group members to securely share and access project data across teams.</li>
+          </ul>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-meta">
+            <div class="timeline-org">Vivint</div>
+            <div class="timeline-date">Jul 2024 – Mar 2025</div>
+          </div>
+          <div class="timeline-role">Claims Manager</div>
+          <div class="timeline-location">Logan, UT</div>
+          <ul class="timeline-bullets">
+            <li>Analyzed complex claims data to identify recurring service issues, reducing repeat claims by 15% through targeted reporting.</li>
+            <li>Identified recurring technician errors through data analysis, leading directly to new auditing standards and reduced repeat service calls.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── Education ── -->
+    <div class="resume-block">
+      <div class="resume-block-label">Education</div>
+      <div class="edu-card">
+        <div class="edu-school">Utah State University</div>
+        <div class="edu-degree">BS Information Systems — Data Engineering Emphasis · Jon M. Huntsman School of Business</div>
+        <div class="edu-date">Graduating May 2026 · Logan, UT</div>
+        <div class="edu-stats">
+          <div class="edu-stat">
+            <span class="edu-stat-val">3.90</span>
+            <span class="edu-stat-label">USU GPA</span>
+          </div>
+          <div class="edu-stat">
+            <span class="edu-stat-val">20+</span>
+            <span class="edu-stat-label">Hrs/wk Worked</span>
+          </div>
+          <div class="edu-stat">
+            <span class="edu-stat-val">3×</span>
+            <span class="edu-stat-label">Dean's List</span>
+          </div>
+        </div>
+        <div class="edu-badges">
+          <span class="edu-badge">Dean's List: Fall '24, Spring '25, Fall '25</span>
+          <span class="edu-badge">Talent Development Scholarship</span>
+          <span class="edu-badge">Association for Information Systems</span>
+          <span class="edu-badge">Analytics Solutions Center Innovation Labs</span>
         </div>
       </div>
     </div>
+
+    <!-- ── Skills ── -->
+    <div class="resume-block">
+      <div class="resume-block-label">Skills & Tools</div>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <div class="skill-group-label">Advanced</div>
+          <div class="skill-tags">
+            <div class="skill-tag">SQL (Snowflake, SSMS, PostgreSQL)</div>
+            <div class="skill-tag">ETL/ELT Design & Integrations (AWS, GCP, Azure Data Factory, Databricks)</div>
+            <div class="skill-tag">Python (Pandas, NumPy, Matplotlib, Plotly, NLP)</div>
+            <div class="skill-tag">Databricks (Delta Lake, Spark, Notebooks)</div>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-label">Proficient</div>
+          <div class="skill-tags">
+            <div class="skill-tag">Cloud Administration (AWS, GCP, Azure)</div>
+            <div class="skill-tag">Data Visualization (Tableau, Power BI)</div>
+            <div class="skill-tag">Software & Web Development (Django, React Native, Docker, Cloud Deployment)</div>
+            <div class="skill-tag">Linux & Unix Systems (Cron Jobs, Shell Scripts, RDP)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </section>
 
-  <!-- PROJECTS -->
-  <section id="projects">
-    <p class="section-label">// 03 — Built Things</p>
-    <h2 class="section-title">Personal <span>Projects</span></h2>
-    <div class="projects-grid">
-      <div class="project-card">
-        <div class="project-number">01 / PERSONAL PROJECT</div>
-        <div class="project-name">SoiMate</div>
-        <div class="project-client">Full-Stack Housing Recommender System</div>
-        <div class="project-stack">
-          <span class="stack-tag">AWS</span>
-          <span class="stack-tag">DynamoDB</span>
-          <span class="stack-tag">Python</span>
-          <span class="stack-tag">Django</span>
-          <span class="stack-tag">React Native</span>
-          <span class="stack-tag">Docker</span>
+  <!-- ══════════════════════════════ PORTFOLIO ══════════════════════════════ -->
+  <section id="portfolio">
+    <p class="section-label">// 03 — Portfolio</p>
+    <h2 class="section-title" style="margin-bottom:2.5rem;">Featured <span>Projects</span></h2>
+
+    <!-- Featured: SoiMate -->
+    <div class="portfolio-featured">
+      <div class="featured-badge">★ Featured Project</div>
+      <div class="featured-layout">
+        <div>
+          <div class="project-status">In Active Development</div>
+          <div class="featured-name">SoiMate</div>
+          <div class="featured-subtitle">Full-Stack Housing Recommender System · May 2025 – Ongoing</div>
+          <div class="project-stack">
+            <span class="stack-tag">AWS</span>
+            <span class="stack-tag">DynamoDB</span>
+            <span class="stack-tag">Python</span>
+            <span class="stack-tag">Django</span>
+            <span class="stack-tag">React Native</span>
+            <span class="stack-tag">Docker</span>
+          </div>
+          <div class="featured-links">
+            <a class="project-link primary" href="https://github.com/MMart221" target="_blank" rel="noopener">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+              View on GitHub
+            </a>
+          </div>
         </div>
         <ul class="project-bullets">
-          <li>Designed and deployed end-to-end AWS data pipeline ingesting, cleaning, and transforming housing data including condominium complexes, unit sizes, amenities, and building attributes.</li>
-          <li>Designed a NoSQL housing database in DynamoDB with planned migration to a normalized relational model as data complexity scales.</li>
-          <li>Built automated web scraping and NLP extraction pipeline to infer missing attributes from unstructured reviews, reducing incomplete records by 9%.</li>
-          <li>Developing full-stack app (Django + React Native, containerized with Docker) serving personalized neighborhood recommendations.</li>
+          <li>Designed and deployed an end-to-end AWS data pipeline ingesting, cleaning, and transforming housing data including condominium complexes, unit sizes, amenities, and building attributes.</li>
+          <li>Designed a NoSQL housing database in DynamoDB, supporting distinct attribute types, with planned migration to a normalized relational model as data complexity scales.</li>
+          <li>Built an automated web scraping and NLP extraction pipeline to infer missing building and neighborhood attributes from unstructured reviews, reducing incomplete records by over 9%.</li>
+          <li>Developing a full-stack application (Django + React Native, containerized with Docker) to serve personalized neighborhood and apartment recommendations based on lifestyle preferences and budget.</li>
         </ul>
       </div>
-      <div class="project-card" style="border-color: rgba(255,107,53,0.2);">
-        <div class="project-number" style="color: var(--accent2);">02 / CLIENT PROJECT</div>
+    </div>
+
+    <!-- Secondary Projects -->
+    <div class="projects-grid">
+
+      <div class="project-card accent2">
+        <div class="project-type" style="color:var(--accent2);">Client Project</div>
         <div class="project-name">Lee's Marketplace Migration</div>
-        <div class="project-client">Data Migration & Automation Initiative</div>
+        <div class="project-client">Data Modernization & Automation Initiative · Jan 2026 – Present</div>
         <div class="project-stack">
           <span class="stack-tag" style="background:rgba(255,107,53,0.08);border-color:rgba(255,107,53,0.2);color:var(--accent2);">Azure SQL</span>
           <span class="stack-tag" style="background:rgba(255,107,53,0.08);border-color:rgba(255,107,53,0.2);color:var(--accent2);">Power Automate</span>
@@ -674,115 +984,63 @@
         </div>
         <ul class="project-bullets">
           <li>Mapped current-state data flows across 7 business systems to identify integration gaps and automation opportunities.</li>
-          <li>Led development of formal system redesign proposal — synthesizing team research — and presented to senior stakeholders including company ownership.</li>
+          <li>Led formal system redesign proposal — recommending Power Automate + Azure SQL + Power BI — and presented findings to senior stakeholders including company ownership.</li>
           <li>Contributing to ETL pipelines, dashboard builds, and system diagrams for a live client-facing data modernization engagement.</li>
-          <li>Coordinating implementation readiness including Azure SQL config, Power Automate setup, and Business Central permissions.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- EXPERIENCE -->
-  <section id="experience">
-    <p class="section-label">// 04 — Where I've Worked</p>
-    <h2 class="section-title">Work <span>Experience</span></h2>
-    <div class="timeline">
-
-      <div class="timeline-item">
-        <div class="timeline-meta">
-          <div class="timeline-org">Utah State University — Analytics Solutions Center</div>
-          <div class="timeline-date">Jan 2026 – Present</div>
-        </div>
-        <div class="timeline-role">Data Engineer · Client: Lee's Marketplace</div>
-        <div class="timeline-location">Logan, UT</div>
-        <ul class="timeline-bullets">
-          <li>Mapped current-state data flows across 7 business systems to identify integration gaps and automation opportunities.</li>
-          <li>Led development of a formal system redesign proposal recommending Power Automate + Azure SQL + Power BI — synthesizing team research — and presented to senior stakeholders including company ownership.</li>
-          <li>Contributing to ETL pipeline development, dashboard and report building, and system diagram documentation for a client-facing data modernization engagement.</li>
-          <li>Coordinating implementation readiness including Azure SQL database configuration, Power Automate environment setup, and Business Central permission planning.</li>
         </ul>
       </div>
 
-      <div class="timeline-item">
-        <div class="timeline-meta">
-          <div class="timeline-org">ASPIRE NSF Engineering Research Center</div>
-          <div class="timeline-date">Jun 2025 – Present</div>
+      <div class="project-card">
+        <div class="project-type" style="color:var(--accent);">Research Project</div>
+        <div class="project-name">ASPIRE NLP Analytics Dashboard</div>
+        <div class="project-client">NSF Engineering Research Center · Jun 2025 – Present</div>
+        <div class="project-stack">
+          <span class="stack-tag">Python</span>
+          <span class="stack-tag">NLTK</span>
+          <span class="stack-tag">Streamlit</span>
         </div>
-        <div class="timeline-role">Innovation Analyst</div>
-        <div class="timeline-location">Logan, UT</div>
-        <ul class="timeline-bullets">
-          <li>Conducted one-on-one interviews with senior engineers to document technical specifications for an electrified roadway pilot — findings directly informed a pilot recently approved by a State Department of Transportation.</li>
-          <li>Contributed to RFP development and contractor agreement documentation by translating engineering specs into structured procurement requirements.</li>
-          <li>Built an NLP-powered analytics dashboard (NLTK, Streamlit) to process annual meeting workshop responses, quantifying key themes and enabling association analysis by leadership.</li>
-          <li>Designed and implemented a pilot data library hub for Agency Working Group members to securely share and access project data.</li>
-        </ul>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-meta">
-          <div class="timeline-org">Vivint</div>
-          <div class="timeline-date">Jul 2024 – Mar 2025</div>
-        </div>
-        <div class="timeline-role">Claims Manager</div>
-        <div class="timeline-location">Logan, UT</div>
-        <ul class="timeline-bullets">
-          <li>Analyzed complex claims data to identify recurring service issues, reducing repeat claims by 15% through targeted reporting.</li>
-          <li>Identified recurring technician errors through data analysis, leading directly to new auditing standards and reduced repeat issues.</li>
+        <ul class="project-bullets">
+          <li>Built an NLP-powered analytics dashboard to process and condense ASPIRE's annual meeting workshop responses, quantifying key themes across barrier, solution, and success metric categories.</li>
+          <li>Enabled leadership to conduct further exploration through association analysis, surfacing patterns across hundreds of stakeholder responses.</li>
+          <li>Designed and implemented a pilot data library hub for Agency Working Group members to securely upload, share, and access project data.</li>
         </ul>
       </div>
 
     </div>
   </section>
 
-  <!-- EDUCATION -->
-  <section id="education">
-    <p class="section-label">// 05 — Academic Background</p>
-    <h2 class="section-title">Edu<span>cation</span></h2>
-    <div class="edu-card">
-      <div class="edu-school">Utah State University</div>
-      <div class="edu-degree">BS Information Systems — Data Engineering Emphasis · Jon M. Huntsman School of Business</div>
-      <div class="edu-date">Graduating May 2026 · Logan, UT</div>
-      <div class="edu-stats">
-        <div class="edu-stat">
-          <span class="edu-stat-val">3.90</span>
-          <span class="edu-stat-label">USU GPA</span>
-        </div>
-        <div class="edu-stat">
-          <span class="edu-stat-val">20+</span>
-          <span class="edu-stat-label">Hrs/wk Worked</span>
-        </div>
-        <div class="edu-stat">
-          <span class="edu-stat-val">3×</span>
-          <span class="edu-stat-label">Dean's List</span>
-        </div>
-      </div>
-      <div class="edu-badges">
-        <span class="edu-badge">Dean's List: Fall '24, Spring '25, Fall '25</span>
-        <span class="edu-badge">Talent Development Scholarship</span>
-        <span class="edu-badge">Association for Information Systems</span>
-        <span class="edu-badge">Analytics Solutions Center Innovation Labs</span>
-      </div>
+  <!-- ══════════════════════════════ GITHUB ══════════════════════════════ -->
+  <section id="github">
+    <p class="section-label">// 04 — Open Source</p>
+    <h2 class="section-title" style="margin-bottom:0.8rem;">GitHub <span>Repositories</span></h2>
+    <p style="color:var(--muted);font-size:0.8rem;margin-bottom:2.5rem;">A live look at my public repositories, updated automatically.</p>
+    <div id="github-repos" class="github-grid">
+      <div class="gh-loading">Loading repositories...</div>
+    </div>
+    <div class="github-cta">
+      <a class="btn-secondary" href="https://github.com/MMart221" target="_blank" rel="noopener">
+        View All Repositories →
+      </a>
     </div>
   </section>
 
-  <!-- CONTACT -->
+  <!-- ══════════════════════════════ CONTACT ══════════════════════════════ -->
   <section id="contact">
-    <p class="section-label">// 06 — Let's Connect</p>
+    <p class="section-label">// 05 — Let's Connect</p>
     <h2 class="section-title">Get In <span>Touch</span></h2>
-    <p style="color:var(--muted);font-size:0.82rem;max-width:480px;margin:0 auto;">
+    <p style="color:var(--muted);font-size:0.82rem;max-width:480px;margin:1rem auto 0;">
       Actively seeking data engineering roles for May 2026. Open to full-time positions, internships, and contract work.
     </p>
-    <p class="contact-email" style="margin-top:1.5rem;">michaelmartinez24628@gmail.com</p>
+    <p style="font-size:0.9rem;color:var(--text);margin-top:1.5rem;">(435) 764-6679 · michaelmartinez24628@gmail.com</p>
     <div class="contact-links">
       <a class="contact-link" href="mailto:michaelmartinez24628@gmail.com">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
         Email Me
       </a>
-      <a class="contact-link" href="https://github.com/MMart221" target="_blank">
+      <a class="contact-link" href="https://github.com/MMart221" target="_blank" rel="noopener">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
         GitHub
       </a>
-      <a class="contact-link" href="https://www.linkedin.com/in/michael-martinez-dev" target="_blank">
+      <a class="contact-link" href="https://www.linkedin.com/in/michael-martinez-dev" target="_blank" rel="noopener">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
         LinkedIn
       </a>
@@ -794,6 +1052,50 @@
     <span>© 2026 Michael Martinez</span>
     <span style="color:var(--accent);">Data Engineer · Utah State University · May 2026</span>
   </footer>
+
+  <script>
+    // ── Active nav highlighting on scroll ──
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
+          });
+        }
+      });
+    }, { threshold: 0.35 });
+    sections.forEach(s => observer.observe(s));
+
+    // ── GitHub Repos ──
+    async function loadGitHubRepos() {
+      const grid = document.getElementById('github-repos');
+      try {
+        const res = await fetch('https://api.github.com/users/MMart221/repos?sort=updated&per_page=6&type=public');
+        if (!res.ok) throw new Error('API error');
+        const repos = await res.json();
+        if (!Array.isArray(repos) || repos.length === 0) {
+          grid.innerHTML = '<p class="gh-empty">No public repositories found. <a href="https://github.com/MMart221" target="_blank">Visit GitHub profile →</a></p>';
+          return;
+        }
+        grid.innerHTML = repos.map(r => `
+          <a class="repo-card" href="${r.html_url}" target="_blank" rel="noopener noreferrer">
+            <div class="repo-name">${r.name}</div>
+            <div class="repo-desc">${r.description ? r.description : 'No description provided.'}</div>
+            <div class="repo-meta">
+              ${r.language ? `<span class="repo-lang">● ${r.language}</span>` : ''}
+              <span>★ ${r.stargazers_count}</span>
+              <span>${new Date(r.updated_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+            </div>
+          </a>
+        `).join('');
+      } catch {
+        grid.innerHTML = '<p class="gh-error">Unable to load repositories. <a href="https://github.com/MMart221" target="_blank">View on GitHub →</a></p>';
+      }
+    }
+    loadGitHubRepos();
+  </script>
 
 </body>
 </html>
