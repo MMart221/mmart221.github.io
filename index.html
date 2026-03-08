@@ -1,1101 +1,567 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Michael Martinez — Data Engineer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <title>michael_martinez.db</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #080c10;
-      --surface: #0f1419;
-      --surface2: #161d26;
-      --accent: #00e5ff;
-      --accent2: #ff6b35;
-      --text: #e8edf2;
-      --muted: #6b7c8f;
-      --border: rgba(0,229,255,0.12);
-      --glow: 0 0 40px rgba(0,229,255,0.15);
+      --bg:       #060a10;
+      --panel:    #0a1020;
+      --surface:  #0f1628;
+      --surface2: #141e35;
+      --surface3: #192642;
+      --border:   #1a2540;
+      --border2:  #223050;
+      --accent:   #64ffda;
+      --accent-dim: rgba(100,255,218,0.10);
+      --accent-dim2: rgba(100,255,218,0.05);
+      --accent2:  #ffb347;
+      --accent2-dim: rgba(255,179,71,0.10);
+      --green:    #4ade80;
+      --red:      #f87171;
+      --purple:   #a78bfa;
+      --yellow:   #fbbf24;
+      --blue:     #60a5fa;
+      --pink:     #f472b6;
+      --text:     #d0d8e8;
+      --text2:    #a0b0c8;
+      --muted:    #3a4860;
+      --muted2:   #506070;
     }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html, body { height: 100%; overflow: hidden; }
 
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'IBM Plex Mono', monospace;
-      overflow-x: hidden;
-    }
-
-    /* ── NOISE OVERLAY ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0.4;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.2rem 4rem;
-      background: rgba(8,12,16,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav-logo {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 1.1rem;
-      color: var(--accent);
-      letter-spacing: 0.05em;
-      text-decoration: none;
-    }
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
-    .nav-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover,
-    .nav-links a.active { color: var(--accent); }
-
-    /* ── HERO ── */
-    #hero {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-      padding: 8rem 4rem 4rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 60% at 70% 50%, rgba(0,229,255,0.06) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(255,107,53,0.05) 0%, transparent 60%);
-    }
-    .hero-grid {
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(0,229,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,229,255,0.04) 1px, transparent 1px);
-      background-size: 60px 60px;
-      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 100%);
-    }
-    .hero-content { position: relative; z-index: 2; }
-    .hero-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      border: 1px solid var(--border);
-      padding: 0.4rem 0.9rem;
-      border-radius: 2px;
-      margin-bottom: 1.5rem;
-    }
-    .hero-tag::before {
-      content: '';
-      width: 6px; height: 6px;
-      background: var(--accent);
-      border-radius: 50%;
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.8); }
-    }
-    .hero-name {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(3rem, 6vw, 5.5rem);
-      font-weight: 800;
-      line-height: 0.95;
-      margin-bottom: 1.2rem;
-      letter-spacing: -0.02em;
-    }
-    .hero-name .line2 { color: var(--accent); }
-    .hero-sub {
-      font-size: 0.85rem;
-      color: var(--muted);
-      line-height: 1.8;
-      max-width: 480px;
-      margin-bottom: 2.5rem;
-    }
-    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
-    .btn-primary {
-      background: var(--accent);
-      color: var(--bg);
-      padding: 0.8rem 1.8rem;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.78rem;
-      font-weight: 500;
-      letter-spacing: 0.05em;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s;
-      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
-    }
-    .btn-primary:hover { background: #33ecff; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,229,255,0.3); }
-    .btn-secondary {
-      background: transparent;
-      color: var(--text);
-      padding: 0.8rem 1.8rem;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.78rem;
-      letter-spacing: 0.05em;
-      text-decoration: none;
-      border: 1px solid var(--border);
-      transition: all 0.2s;
-      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
-      cursor: pointer;
-    }
-    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
-
-    .hero-visual { position: relative; z-index: 2; display: flex; justify-content: center; align-items: center; }
-    .hero-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 2rem;
-      width: 100%;
-      max-width: 380px;
-      box-shadow: var(--glow);
-      position: relative;
-    }
-    .hero-card::before {
-      content: '';
-      position: absolute;
-      top: -1px; left: 2rem; right: 2rem;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    }
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 1.2rem;
-      font-size: 0.7rem;
-      color: var(--muted);
-    }
-    .dot { width: 8px; height: 8px; border-radius: 50%; }
-    .dot.red { background: #ff5f56; }
-    .dot.yellow { background: #ffbd2e; }
-    .dot.green { background: #27c93f; }
-    .code-line {
-      font-size: 0.72rem;
-      line-height: 2;
-      color: var(--muted);
-    }
-    .code-line .kw { color: #c792ea; }
-    .code-line .fn { color: var(--accent); }
-    .code-line .str { color: #c3e88d; }
-    .code-line .num { color: #f78c6c; }
-    .code-line .cm { color: #546e7a; }
-
-    /* ── SHARED SECTION STYLES ── */
-    section { padding: 6rem 4rem; }
-    .section-label {
-      font-size: 0.65rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.5rem;
-    }
-    .section-title {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-    }
-    .section-title span { color: var(--accent); }
-
-    /* ── RESUME SECTION ── */
-    #resume { background: var(--surface); }
-    .resume-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 3.5rem;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-    }
-    .resume-block { margin-bottom: 4rem; }
-    .resume-block:last-child { margin-bottom: 0; }
-    .resume-block-label {
-      font-size: 0.65rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--accent2);
-      margin-bottom: 2rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    .resume-block-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(90deg, rgba(255,107,53,0.3), transparent);
-    }
-
-    /* ── TIMELINE ── */
-    .timeline { display: flex; flex-direction: column; gap: 0; position: relative; }
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 1px;
-      background: linear-gradient(180deg, var(--accent), transparent);
-    }
-    .timeline-item {
-      padding: 0 0 3rem 2.5rem;
-      position: relative;
-    }
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: -4px; top: 6px;
-      width: 9px; height: 9px;
-      background: var(--accent);
-      border: 2px solid var(--surface);
-      border-radius: 50%;
-      box-shadow: 0 0 10px rgba(0,229,255,0.5);
-    }
-    .timeline-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 0.3rem;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-    .timeline-org {
-      font-family: 'Syne', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-    }
-    .timeline-date {
-      font-size: 0.68rem;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-      background: rgba(0,229,255,0.08);
-      border: 1px solid var(--border);
-      padding: 0.2rem 0.7rem;
-    }
-    .timeline-role {
-      font-size: 0.75rem;
-      color: var(--accent2);
-      margin-bottom: 0.3rem;
-      letter-spacing: 0.05em;
-    }
-    .timeline-location {
-      font-size: 0.68rem;
-      color: var(--muted);
-      margin-bottom: 1rem;
-    }
-    .timeline-bullets { list-style: none; }
-    .timeline-bullets li {
-      font-size: 0.75rem;
-      color: var(--muted);
-      line-height: 1.7;
-      padding: 0.3rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      display: flex;
-      gap: 0.6rem;
-    }
-    .timeline-bullets li:last-child { border-bottom: none; }
-    .timeline-bullets li::before { content: '›'; color: var(--accent); flex-shrink: 0; font-size: 1rem; }
-
-    /* ── EDUCATION ── */
-    .edu-card {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      padding: 2.5rem;
-      max-width: 700px;
-      position: relative;
-      box-shadow: var(--glow);
-    }
-    .edu-card::before {
-      content: '';
-      position: absolute;
-      top: -1px; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2), transparent);
-    }
-    .edu-school {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.4rem;
-      font-weight: 800;
-      margin-bottom: 0.3rem;
-    }
-    .edu-degree {
-      font-size: 0.8rem;
-      color: var(--accent);
-      margin-bottom: 0.3rem;
-      letter-spacing: 0.05em;
-    }
-    .edu-date {
-      font-size: 0.7rem;
-      color: var(--muted);
-      margin-bottom: 1.5rem;
-    }
-    .edu-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .edu-stat {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 1rem;
-      text-align: center;
-    }
-    .edu-stat-val {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--accent);
-      display: block;
-    }
-    .edu-stat-label {
-      font-size: 0.62rem;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-    .edu-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-    .edu-badge {
-      font-size: 0.68rem;
-      padding: 0.3rem 0.8rem;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      letter-spacing: 0.05em;
-    }
-
-    /* ── SKILLS ── */
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.5rem;
-    }
-    .skill-group {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      padding: 1.5rem;
-      position: relative;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    .skill-group:hover {
-      border-color: rgba(0,229,255,0.3);
-      box-shadow: var(--glow);
-    }
-    .skill-group-label {
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .skill-group-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-    .skill-tags { display: flex; flex-direction: column; gap: 0.5rem; }
-    .skill-tag {
-      font-size: 0.75rem;
-      color: var(--text);
-      padding: 0.4rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-    .skill-tag::before {
-      content: '›';
-      color: var(--accent);
-      font-size: 0.9rem;
-    }
-    .skill-tag:last-child { border-bottom: none; }
-
-    /* ── PORTFOLIO SECTION ── */
-    #portfolio { background: var(--bg); }
-    .portfolio-featured {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 2.5rem;
-      margin-bottom: 1.5rem;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    .portfolio-featured:hover {
-      border-color: rgba(0,229,255,0.3);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.4), var(--glow);
-    }
-    .portfolio-featured::before {
-      content: '';
-      position: absolute;
-      top: -1px; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-    }
-    .featured-badge {
-      display: inline-block;
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      background: rgba(0,229,255,0.08);
-      border: 1px solid rgba(0,229,255,0.2);
-      padding: 0.25rem 0.8rem;
-      margin-bottom: 1.5rem;
-    }
-    .featured-layout {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: start;
-    }
-    .project-status {
-      font-size: 0.65rem;
-      color: #27c93f;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.8rem;
-    }
-    .project-status::before {
-      content: '';
-      width: 6px; height: 6px;
-      background: #27c93f;
-      border-radius: 50%;
-      animation: pulse 2s infinite;
-    }
-    .featured-name {
-      font-family: 'Syne', sans-serif;
-      font-size: 2.2rem;
-      font-weight: 800;
-      line-height: 1;
-      margin-bottom: 0.5rem;
-      letter-spacing: -0.02em;
-    }
-    .featured-subtitle {
-      font-size: 0.78rem;
-      color: var(--accent);
-      margin-bottom: 1.5rem;
-      letter-spacing: 0.05em;
-    }
-    .project-stack {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-bottom: 1.5rem;
-    }
-    .stack-tag {
-      font-size: 0.65rem;
-      padding: 0.25rem 0.6rem;
-      background: rgba(0,229,255,0.08);
-      border: 1px solid rgba(0,229,255,0.15);
-      color: var(--accent);
-      letter-spacing: 0.05em;
-    }
-    .featured-links {
-      display: flex;
-      gap: 0.8rem;
-      flex-wrap: wrap;
-    }
-    .project-link {
-      font-size: 0.72rem;
-      padding: 0.55rem 1.2rem;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      text-decoration: none;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .project-link:hover { color: var(--accent); border-color: var(--accent); }
-    .project-link.primary {
-      background: rgba(0,229,255,0.08);
-      border-color: rgba(0,229,255,0.25);
-      color: var(--accent);
-    }
-    .project-bullets { list-style: none; }
-    .project-bullets li {
-      font-size: 0.75rem;
-      color: var(--muted);
-      line-height: 1.75;
-      padding: 0.35rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      display: flex;
-      gap: 0.6rem;
-    }
-    .project-bullets li:last-child { border-bottom: none; }
-    .project-bullets li::before { content: '—'; color: var(--accent2); flex-shrink: 0; }
-
-    .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
-    .project-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 2rem;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-    }
-    .project-card:hover {
-      border-color: rgba(0,229,255,0.35);
-      transform: translateY(-4px);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.4), var(--glow);
-    }
-    .project-card::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.4s;
-    }
-    .project-card:hover::after { transform: scaleX(1); }
-    .project-card.accent2::after {
-      background: linear-gradient(90deg, var(--accent2), #ff9a6c);
-    }
-    .project-type {
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: 0.8rem;
-    }
-    .project-name {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 0.3rem;
-    }
-    .project-client {
-      font-size: 0.7rem;
-      color: var(--muted);
-      margin-bottom: 1rem;
-      letter-spacing: 0.03em;
-    }
-
-    /* ── GITHUB SECTION ── */
-    #github { background: var(--surface); }
-    .github-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    .repo-card {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      padding: 1.5rem;
-      text-decoration: none;
-      color: inherit;
-      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
       display: flex;
       flex-direction: column;
-      gap: 0.6rem;
-    }
-    .repo-card:hover {
-      border-color: rgba(0,229,255,0.3);
-      transform: translateY(-3px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-    .repo-name {
-      font-family: 'Syne', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--accent);
-      word-break: break-word;
-    }
-    .repo-desc {
-      font-size: 0.72rem;
-      color: var(--muted);
-      line-height: 1.6;
-      flex: 1;
-    }
-    .repo-meta {
-      display: flex;
-      gap: 1rem;
-      font-size: 0.65rem;
-      color: var(--muted);
-      margin-top: 0.5rem;
-      flex-wrap: wrap;
-    }
-    .repo-lang { color: var(--accent2); }
-    .github-cta { text-align: center; }
-    .gh-loading, .gh-error, .gh-empty {
-      font-size: 0.78rem;
-      color: var(--muted);
-      padding: 3rem;
-      grid-column: 1 / -1;
-      text-align: center;
-    }
-    .gh-error a, .gh-empty a { color: var(--accent); text-decoration: none; }
-    .gh-error a:hover, .gh-empty a:hover { text-decoration: underline; }
-
-    /* ── CONTACT ── */
-    #contact {
-      background: var(--bg);
-      text-align: center;
-    }
-    .contact-links {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-      margin-top: 2rem;
-    }
-    .contact-link {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.78rem;
-      padding: 0.8rem 1.5rem;
-      border: 1px solid var(--border);
-      transition: all 0.2s;
-    }
-    .contact-link:hover {
-      color: var(--accent);
-      border-color: var(--accent);
-      box-shadow: var(--glow);
     }
 
-    /* ── FOOTER ── */
-    footer {
-      padding: 2rem 4rem;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.68rem;
-      color: var(--muted);
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(100,255,218,0.03) 1px, transparent 0);
+      background-size: 32px 32px;
+      pointer-events: none; z-index: 0;
     }
 
-    /* ── ANIMATIONS ── */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeIn 0.7s ease forwards;
+    /* ── TITLE BAR ── */
+    .titlebar {
+      position: relative; z-index: 10;
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0 1.2rem; height: 40px;
+      background: #040710; border-bottom: 1px solid var(--border);
+      flex-shrink: 0; user-select: none;
     }
-    @keyframes fadeIn {
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .fade-in:nth-child(1) { animation-delay: 0.1s; }
-    .fade-in:nth-child(2) { animation-delay: 0.25s; }
-    .fade-in:nth-child(3) { animation-delay: 0.4s; }
-    .fade-in:nth-child(4) { animation-delay: 0.55s; }
+    .titlebar-dots { display: flex; gap: 7px; }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot.r { background: #ff5f57; } .dot.y { background: #febc2e; } .dot.g { background: #28c840; }
+    .titlebar-name { font-family: 'Outfit'; font-size: 0.8rem; font-weight: 500; color: var(--text2); }
+    .titlebar-name b { color: var(--accent); font-weight: 600; }
+    .titlebar-conn { margin-left: auto; display: flex; align-items: center; gap: 0.5rem; font-size: 0.68rem; color: var(--muted2); }
+    .conn-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px rgba(74,222,128,0.5); animation: pulse-dot 2s ease-in-out infinite; }
+    @keyframes pulse-dot { 0%,100%{box-shadow:0 0 8px rgba(74,222,128,0.5);}50%{box-shadow:0 0 14px rgba(74,222,128,0.8);} }
 
-    /* ── PRINT STYLES ── */
-    @media print {
-      nav, .hero-visual, .hero-ctas, .resume-print-btn,
-      #portfolio, #github, #contact, footer { display: none !important; }
-      body::before { display: none; }
-      #hero { min-height: auto; grid-template-columns: 1fr; padding: 1rem; }
-      section { padding: 1.5rem 1rem; }
-      .hero-bg, .hero-grid { display: none; }
-      #resume { background: white; color: black; }
-      .resume-block-label, .section-label { color: #333; }
-      .section-title span, .timeline-date, .edu-degree, .edu-stat-val { color: #0066cc; }
-      .timeline-role { color: #cc4400; }
-      .skill-tag, .timeline-bullets li, .project-bullets li { color: #333; }
-      .edu-stat { border: 1px solid #ccc; }
-      .edu-badge { border: 1px solid #ccc; color: #555; }
-    }
+    /* ── MENU BAR ── */
+    .menubar { position:relative;z-index:10; display:flex;align-items:center;height:32px; background:var(--panel);border-bottom:1px solid var(--border); flex-shrink:0;padding:0 1rem; }
+    .menu-item { padding:0 0.9rem;height:100%;display:flex;align-items:center;font-family:'Outfit';font-size:0.72rem;color:var(--muted2);cursor:default;transition:color .15s,background .15s; }
+    .menu-item:hover { color:var(--text);background:var(--surface); }
+    .menu-sep { width:1px;height:16px;background:var(--border);margin:0 .3rem; }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 1100px) {
-      .github-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 900px) {
-      nav { padding: 1rem 1.5rem; }
-      .nav-links { display: none; }
-      #hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; }
-      .hero-visual { display: none; }
-      section { padding: 4rem 1.5rem; }
-      .skills-grid { grid-template-columns: 1fr; }
-      .projects-grid { grid-template-columns: 1fr; }
-      .featured-layout { grid-template-columns: 1fr; gap: 1.5rem; }
-      .edu-stats { grid-template-columns: 1fr 1fr; }
-      .github-grid { grid-template-columns: repeat(2, 1fr); }
-      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
-    }
-    @media (max-width: 600px) {
-      .github-grid { grid-template-columns: 1fr; }
-      .resume-header { flex-direction: column; align-items: flex-start; }
-    }
+    /* ── WORKSPACE ── */
+    .workspace { position:relative;z-index:1;display:flex;flex:1;overflow:hidden; }
+
+    /* ── SIDEBAR ── */
+    .sidebar { width:260px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden; }
+    .sidebar-tabs { display:flex;border-bottom:1px solid var(--border);flex-shrink:0; }
+    .sidebar-tab { flex:1;padding:.6rem 0;text-align:center;font-family:'Outfit';font-size:.65rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s; }
+    .sidebar-tab:hover { color:var(--text);background:var(--surface); }
+    .sidebar-tab.active { color:var(--accent);border-bottom-color:var(--accent);background:rgba(100,255,218,0.03); }
+    .sidebar-content { flex:1;overflow-y:auto;overflow-x:hidden; }
+    .sidebar-panel { display:none;height:100%; }
+    .sidebar-panel.active { display:flex;flex-direction:column; }
+
+    .db-header { padding:.8rem 1rem;display:flex;align-items:center;gap:.5rem;border-bottom:1px solid var(--border);background:rgba(100,255,218,0.02); }
+    .db-icon { width:22px;height:22px;border-radius:4px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:.7rem; }
+    .db-label { font-family:'Outfit';font-size:.72rem;font-weight:600;color:var(--accent); }
+    .db-sublabel { font-size:.6rem;color:var(--muted2);margin-left:auto; }
+    .schema-tree { padding:.5rem 0;overflow-y:auto;flex:1; }
+    .table-item { padding:.5rem 1rem .5rem 1.2rem;font-size:.72rem;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:.5rem;transition:all .15s;border-left:2px solid transparent; }
+    .table-icon { width:16px;height:16px;border-radius:3px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.55rem;color:var(--muted2);flex-shrink:0; }
+    .table-item:hover { background:var(--surface);border-left-color:var(--accent);color:var(--text); }
+    .table-item:hover .table-icon { border-color:var(--accent);color:var(--accent); }
+    .table-item.active { background:var(--accent-dim);border-left-color:var(--accent);color:var(--accent); }
+    .table-item.active .table-icon { background:var(--accent-dim);border-color:var(--accent);color:var(--accent); }
+    .table-row-count { margin-left:auto;font-size:.58rem;color:var(--muted);background:var(--surface);padding:.1rem .4rem;border-radius:3px; }
+    .col-list { display:none;background:rgba(0,0,0,.15); }
+    .table-item.expanded + .col-list { display:block; }
+    .col-item { padding:.3rem 1rem .3rem 2.8rem;font-size:.65rem;color:var(--muted2);display:flex;align-items:center;gap:.5rem; }
+    .col-name { color:var(--text2);min-width:80px; }
+    .col-type { font-size:.58rem;color:var(--purple);background:rgba(167,139,250,0.08);padding:.05rem .35rem;border-radius:2px; }
+    .col-badge { font-size:.5rem;font-weight:700;padding:.05rem .3rem;border-radius:2px;margin-left:auto; }
+    .col-badge.pk { color:var(--yellow);background:rgba(251,191,36,0.1); }
+    .col-badge.fk { color:var(--blue);background:rgba(96,165,250,0.1); }
+
+    /* ERD */
+    .erd-container { width:100%;height:100%;overflow:auto;padding:1rem; }
+    .erd-table-bg { rx:6;fill:var(--surface2);stroke:var(--border2);stroke-width:1; }
+    .erd-table-header { fill:var(--surface3);rx:6; }
+    .erd-table-title { font-family:'Outfit';font-size:11px;font-weight:600;fill:var(--accent); }
+    .erd-col-name { font-family:'JetBrains Mono',monospace;font-size:9.5px;fill:var(--text2); }
+    .erd-col-type { font-family:'JetBrains Mono',monospace;font-size:9px;fill:var(--purple); }
+    .erd-col-pk { font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--yellow);font-weight:700; }
+    .erd-col-fk { font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--blue);font-weight:700; }
+    .erd-line { stroke:var(--border2);stroke-width:1.5;fill:none;opacity:.6; }
+    .erd-line-label { font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--muted2); }
+
+    /* ── MAIN PANE ── */
+    .main-pane { flex:1;display:flex;flex-direction:column;overflow:hidden; }
+    .tabs { display:flex;background:var(--panel);border-bottom:1px solid var(--border);flex-shrink:0; }
+    .tab { padding:.55rem 1.2rem;font-size:.72rem;color:var(--muted2);cursor:pointer;border-right:1px solid var(--border);border-bottom:2px solid transparent;transition:all .15s;display:flex;align-items:center;gap:.5rem;font-family:'Outfit';font-weight:400; }
+    .tab.active { color:var(--text);background:var(--surface);border-bottom-color:var(--accent); }
+    .tab-dot { width:6px;height:6px;border-radius:50%; }
+    .tab-dot.sql { background:var(--accent2); } .tab-dot.erd { background:var(--purple); }
+
+    /* EDITOR */
+    .editor-section { flex-shrink:0;border-bottom:1px solid var(--border); }
+    .editor-toolbar { display:flex;align-items:center;gap:.6rem;padding:.45rem 1rem;background:var(--surface);border-bottom:1px solid var(--border); }
+    .run-btn { display:flex;align-items:center;gap:.4rem;padding:.35rem 1.1rem;background:var(--accent);color:#060a10;font-family:'Outfit';font-size:.72rem;font-weight:600;border:none;border-radius:4px;cursor:pointer;transition:all .15s; }
+    .run-btn:hover { opacity:.88;transform:translateY(-1px);box-shadow:0 2px 12px rgba(100,255,218,0.2); }
+    .run-btn svg { width:10px;height:10px; }
+    .toolbar-sep { width:1px;height:18px;background:var(--border2); }
+    .preset-label { font-family:'Outfit';font-size:.62rem;font-weight:500;color:var(--muted);letter-spacing:.1em;text-transform:uppercase; }
+    .preset-queries { display:flex;gap:.35rem;flex-wrap:wrap; }
+    .preset-btn { padding:.25rem .65rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;background:var(--surface2);border:1px solid var(--border2);color:var(--text2);border-radius:3px;cursor:pointer;transition:all .15s; }
+    .preset-btn:hover { border-color:var(--accent);color:var(--accent);background:var(--accent-dim); }
+    .preset-btn.hire { border-color:rgba(255,179,71,.3);color:var(--accent2); }
+    .preset-btn.hire:hover { border-color:var(--accent2);background:var(--accent2-dim); }
+
+    .editor-wrap { position:relative;background:var(--bg); }
+    .line-nums { position:absolute;top:0;left:0;width:44px;padding:.8rem 0;text-align:right;padding-right:.7rem;font-size:.72rem;color:var(--muted);line-height:1.7;user-select:none;border-right:1px solid var(--border);background:var(--panel); }
+    #query-editor { display:block;width:100%;padding:.8rem 1rem .8rem 3.5rem;background:transparent;border:none;outline:none;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--text);line-height:1.7;resize:none;min-height:80px;caret-color:var(--accent);tab-size:2; }
+
+    /* RESULTS */
+    .results-section { flex:1;overflow:hidden;display:flex;flex-direction:column; }
+    .results-toolbar { display:flex;align-items:center;gap:1rem;padding:.4rem 1rem;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0; }
+    .results-label { font-family:'Outfit';font-size:.62rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2); }
+
+    /* VIEW TOGGLE */
+    .view-toggle { display:none;gap:0;border:1px solid var(--border2);border-radius:4px;overflow:hidden; }
+    .view-toggle.visible { display:flex; }
+    .vtb { padding:.2rem .7rem;font-family:'Outfit';font-size:.6rem;font-weight:500;color:var(--muted2);background:transparent;border:none;cursor:pointer;transition:all .15s;letter-spacing:.03em; }
+    .vtb:not(:last-child) { border-right:1px solid var(--border2); }
+    .vtb.active { background:var(--accent-dim);color:var(--accent); }
+    .vtb:hover:not(.active) { color:var(--text);background:var(--surface2); }
+
+    .results-meta { display:none;gap:1.2rem;margin-left:auto;font-size:.62rem; }
+    .results-meta.visible { display:flex; }
+    .meta-item { color:var(--muted2);font-family:'Outfit'; }
+    .meta-item span { color:var(--green);font-family:'JetBrains Mono',monospace;font-weight:500; }
+
+    .results-scroll { overflow:auto;flex:1; }
+    .results-empty { display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;gap:.8rem;color:var(--muted);font-size:.78rem; }
+    .results-empty-icon { font-size:2.5rem;opacity:.2; }
+    .results-empty p { font-family:'Outfit';font-style:italic;font-weight:300; }
+    .results-empty .hint { font-size:.65rem;color:var(--muted);margin-top:-.3rem; }
+
+    /* TABLE VIEW */
+    table.rt { width:100%;border-collapse:collapse;font-size:.73rem; }
+    table.rt thead { position:sticky;top:0;z-index:10; }
+    table.rt th { padding:.55rem 1rem;text-align:left;background:var(--surface2);color:var(--accent);font-family:'Outfit';font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border-bottom:2px solid var(--border2);border-right:1px solid var(--border);white-space:nowrap; }
+    table.rt th:first-child { color:var(--muted);width:40px;text-align:center; }
+    table.rt td { padding:.45rem 1rem;border-bottom:1px solid rgba(26,37,64,.5);border-right:1px solid rgba(26,37,64,.3);color:var(--text);white-space:nowrap;max-width:420px;overflow:hidden;text-overflow:ellipsis; }
+    table.rt tbody tr { opacity:0;animation:rowIn .3s ease forwards; }
+    @keyframes rowIn { from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);} }
+    table.rt tbody tr:hover td { background:rgba(100,255,218,.02); }
+    table.rt td.rn { color:var(--muted);font-size:.62rem;text-align:center; }
+    table.rt td.nl { color:var(--muted);font-style:italic; }
+    table.rt td.bt { color:var(--green);font-weight:500; }
+    table.rt td.bf { color:var(--red); }
+    table.rt td.nm { color:var(--green); }
+    table.rt td.dt { color:var(--purple); }
+
+    /* ═══ CLEAN VIEW ═══ */
+    .cv { padding:1.5rem 2rem; overflow-y:auto; animation:fadeIn .4s ease; }
+    @keyframes fadeIn { from{opacity:0;}to{opacity:1;} }
+    @keyframes slideUp { from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);} }
+
+    /* Profile */
+    .cv-profile { display:flex;flex-direction:column;align-items:center;gap:1rem;padding-top:1rem; }
+    .cv-p-name { font-family:'Outfit';font-size:1.8rem;font-weight:800;color:var(--accent);letter-spacing:-.02em;animation:slideUp .5s ease .1s both; }
+    .cv-p-tag { font-family:'Outfit';font-size:1rem;font-weight:400;color:var(--text2);margin-top:-.3rem;animation:slideUp .5s ease .2s both; }
+    .cv-p-status { font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--green);background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);border-radius:20px;padding:.3rem 1rem;animation:slideUp .5s ease .3s both; }
+    .cv-p-links { display:flex;gap:.8rem;flex-wrap:wrap;justify-content:center;margin-top:.5rem;animation:slideUp .5s ease .4s both; }
+    .cv-link { display:flex;align-items:center;gap:.4rem;padding:.45rem .9rem;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;font-family:'Outfit';font-size:.72rem;color:var(--text2);text-decoration:none;transition:all .2s; }
+    .cv-link:hover { border-color:var(--accent);color:var(--accent);background:var(--accent-dim);transform:translateY(-1px); }
+
+    /* Experience */
+    .cv-tl { display:flex;flex-direction:column;padding-left:1.5rem;position:relative; }
+    .cv-tl::before { content:'';position:absolute;left:6px;top:10px;bottom:10px;width:2px;background:linear-gradient(to bottom,var(--accent),var(--border2)); }
+    .cv-role { position:relative;padding:.8rem 0 1.2rem 2rem;animation:slideUp .4s ease both; }
+    .cv-role::before { content:'';position:absolute;left:-1.5rem;top:1.15rem;width:10px;height:10px;border-radius:50%;background:var(--surface);border:2px solid var(--accent); }
+    .cv-role.past::before { border-color:var(--muted2);background:var(--muted); }
+    .cv-role-hd { display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap;margin-bottom:.25rem; }
+    .cv-role-t { font-family:'Outfit';font-size:.95rem;font-weight:700;color:var(--text); }
+    .cv-role-at { font-family:'Outfit';font-size:.8rem;color:var(--accent);font-weight:500; }
+    .cv-role-dt { font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted2);margin-left:auto; }
+    .cv-role-cur { font-family:'Outfit';font-size:.55rem;font-weight:600;color:var(--green);background:rgba(74,222,128,.1);padding:.1rem .5rem;border-radius:3px;letter-spacing:.06em;text-transform:uppercase; }
+    .cv-hls { list-style:none;margin-top:.5rem;display:flex;flex-direction:column;gap:.35rem; }
+    .cv-hl { font-size:.72rem;color:var(--text2);padding-left:1rem;position:relative;line-height:1.5; }
+    .cv-hl::before { content:'›';position:absolute;left:0;color:var(--accent);font-weight:700; }
+    .cv-imp { display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--accent2);background:var(--accent2-dim);padding:.05rem .4rem;border-radius:2px;margin-left:.4rem; }
+
+    /* Skills */
+    .cv-skills { display:flex;flex-direction:column;gap:1.2rem; }
+    .cv-scat { animation:slideUp .4s ease both; }
+    .cv-scat-hd { display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem; }
+    .cv-scat-nm { font-family:'Outfit';font-size:.85rem;font-weight:700;color:var(--text); }
+    .cv-scat-ct { font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted2); }
+    .cv-sbar { height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;margin-bottom:.5rem;display:flex; }
+    .cv-sbar-a { background:var(--accent);height:100%;transition:width .8s ease; }
+    .cv-sbar-p { background:var(--blue);height:100%;transition:width .8s ease; }
+    .cv-sbar-f { background:var(--muted2);height:100%;transition:width .8s ease; }
+    .cv-spills { display:flex;flex-wrap:wrap;gap:.35rem; }
+    .cv-sp { font-family:'JetBrains Mono',monospace;font-size:.65rem;padding:.25rem .6rem;border-radius:4px;border:1px solid; }
+    .cv-sp.a { color:var(--accent);border-color:rgba(100,255,218,.25);background:var(--accent-dim); }
+    .cv-sp.p { color:var(--blue);border-color:rgba(96,165,250,.25);background:rgba(96,165,250,.08); }
+    .cv-sp.f { color:var(--muted2);border-color:var(--border2);background:var(--surface2); }
+
+    /* Tech Stack */
+    .cv-projs { display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem; }
+    .cv-pcard { background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:1rem 1.2rem;transition:all .2s;animation:slideUp .4s ease both; }
+    .cv-pcard:hover { border-color:var(--accent);transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,.3); }
+    .cv-pcard-hd { display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem; }
+    .cv-pcard-nm { font-family:'Outfit';font-size:.9rem;font-weight:700;color:var(--text); }
+    .cv-pcard-st { font-family:'JetBrains Mono',monospace;font-size:.55rem;font-weight:600;padding:.1rem .45rem;border-radius:3px;margin-left:auto; }
+    .cv-pcard-st.active { color:var(--green);background:rgba(74,222,128,.1); }
+    .cv-pcard-st.delivered { color:var(--accent2);background:var(--accent2-dim); }
+    .cv-pcard-st.complete { color:var(--muted2);background:var(--surface2); }
+    .cv-pcard-ty { font-family:'Outfit';font-size:.65rem;color:var(--muted2);margin-bottom:.5rem; }
+    .cv-pcard-desc { font-size:.72rem;color:var(--text2);margin-bottom:.6rem;line-height:1.4; }
+    .cv-pcard-tech { display:flex;flex-wrap:wrap;gap:.3rem; }
+    .cv-tpill { font-family:'JetBrains Mono',monospace;font-size:.58rem;padding:.15rem .45rem;background:var(--accent-dim);border:1px solid rgba(100,255,218,.12);border-radius:3px;color:var(--accent); }
+
+    /* Timeline */
+    .cv-tbars { display:flex;flex-direction:column;gap:.8rem; }
+    .cv-tb { animation:slideUp .4s ease both; }
+    .cv-tb-hd { display:flex;align-items:baseline;gap:.5rem;margin-bottom:.3rem; }
+    .cv-tb-t { font-family:'Outfit';font-size:.82rem;font-weight:600;color:var(--text); }
+    .cv-tb-emp { font-family:'Outfit';font-size:.72rem;color:var(--accent); }
+    .cv-tb-mo { font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted2);margin-left:auto; }
+    .cv-tb-track { height:28px;background:var(--surface2);border-radius:4px;overflow:hidden;position:relative; }
+    .cv-tb-fill { height:100%;border-radius:4px;display:flex;align-items:center;padding-left:.8rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:500;color:#060a10;transition:width 1s ease; }
+    .cv-tb-fill.cur { background:linear-gradient(90deg,var(--accent),#4ac6b0); }
+    .cv-tb-fill.old { background:linear-gradient(90deg,var(--surface3),var(--border2));color:var(--text2); }
+
+    /* Hire Me */
+    .hire-banner { padding:2rem;text-align:center;animation:fadeIn .6s ease; }
+    .hire-banner h2 { font-family:'Outfit';font-size:1.5rem;font-weight:800;color:var(--accent);margin-bottom:.3rem;animation:slideUp .5s ease .15s both; }
+    .hire-banner .sub { font-family:'Outfit';font-size:.85rem;color:var(--text2);margin-bottom:1.5rem;animation:slideUp .5s ease .25s both; }
+    .hire-cards { display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem; }
+    .hire-card { background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:1rem 1.2rem;min-width:140px;animation:slideUp .5s ease both; }
+    .hire-card:nth-child(1){animation-delay:.35s;}.hire-card:nth-child(2){animation-delay:.43s;}.hire-card:nth-child(3){animation-delay:.51s;}.hire-card:nth-child(4){animation-delay:.59s;}.hire-card:nth-child(5){animation-delay:.67s;}
+    .hire-card .cl { font-family:'Outfit';font-size:.58rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:.4rem; }
+    .hire-card .cv_ { font-family:'Outfit';font-size:.85rem;font-weight:600;color:var(--text); }
+    .hire-card .cv_.ac { color:var(--accent); }
+    .hire-card .cv_.gd { color:var(--accent2); }
+    .hire-links { display:flex;gap:.8rem;justify-content:center;animation:slideUp .5s ease .8s both; }
+    .hire-link { display:inline-flex;align-items:center;gap:.4rem;padding:.45rem 1.1rem;font-family:'Outfit';font-size:.72rem;font-weight:600;border-radius:5px;text-decoration:none;transition:all .2s; }
+    .hire-link.pri { background:var(--accent);color:#060a10; }
+    .hire-link.pri:hover { box-shadow:0 4px 16px rgba(100,255,218,.25);transform:translateY(-1px); }
+    .hire-link.sec { background:transparent;border:1px solid var(--accent);color:var(--accent); }
+    .hire-link.sec:hover { background:var(--accent-dim); }
+
+    /* ERD main */
+    .erd-main { display:none;flex:1;overflow:auto;background:var(--bg); }
+    .erd-main.active { display:flex; }
+    .query-main { display:flex;flex-direction:column;flex:1; }
+    .query-main.hidden { display:none; }
+
+    /* Status */
+    .statusbar { position:relative;z-index:10;height:26px;background:linear-gradient(90deg,var(--accent),#4ac6b0);display:flex;align-items:center;padding:0 1.2rem;gap:1.5rem;flex-shrink:0; }
+    .status-item { font-family:'Outfit';font-size:.62rem;font-weight:600;color:#060a10; }
+    .status-item.right { margin-left:auto; }
+
+    ::-webkit-scrollbar { width:6px;height:6px; }
+    ::-webkit-scrollbar-track { background:var(--panel); }
+    ::-webkit-scrollbar-thumb { background:var(--border2);border-radius:3px; }
+    ::-webkit-scrollbar-thumb:hover { background:var(--muted); }
   </style>
 </head>
 <body>
-
-  <!-- NAV -->
-  <nav>
-    <a class="nav-logo" href="#hero">MM.DEV</a>
-    <ul class="nav-links">
-      <li><a href="#hero">About</a></li>
-      <li><a href="#resume">Resume</a></li>
-      <li><a href="#portfolio">Portfolio</a></li>
-      <li><a href="#github">GitHub</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
-
-  <!-- ══════════════════════════════ HERO / ABOUT ══════════════════════════════ -->
-  <section id="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-grid"></div>
-    <div class="hero-content">
-      <div class="hero-tag fade-in">Available May 2026</div>
-      <h1 class="hero-name fade-in">
-        <span class="line1">Michael</span><br />
-        <span class="line2">Martinez</span>
-      </h1>
-      <p class="hero-sub fade-in">
-        Data Engineer building end-to-end pipelines, NLP systems, and cloud architectures.<br />
-        BS Information Systems @ Utah State · GPA 3.90 · Graduating May 2026.
-      </p>
-      <div class="hero-ctas fade-in">
-        <a class="btn-primary" href="#resume">View Resume</a>
-        <a class="btn-secondary" href="#portfolio">See My Work</a>
+  <div class="titlebar">
+    <div class="titlebar-dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <div class="titlebar-name"><b>michael_martinez</b>.db — QueryStudio v2.0</div>
+    <div class="titlebar-conn"><div class="conn-dot"></div>Connected · 11 tables · 3NF normalized</div>
+  </div>
+  <div class="menubar">
+    <div class="menu-item">File</div><div class="menu-item">Edit</div><div class="menu-item">Query</div><div class="menu-item">Tools</div>
+    <div class="menu-sep"></div><div class="menu-item" style="color:var(--accent);">michael_martinez_db</div><div class="menu-sep"></div><div class="menu-item">public</div>
+  </div>
+  <div class="workspace">
+    <div class="sidebar">
+      <div class="sidebar-tabs">
+        <div class="sidebar-tab active" onclick="switchSidebarTab('schema')">Schema</div>
+        <div class="sidebar-tab" onclick="switchSidebarTab('erd')">ERD</div>
+      </div>
+      <div class="sidebar-content">
+        <div class="sidebar-panel active" id="schema-panel">
+          <div class="db-header"><div class="db-icon">⬡</div><span class="db-label">michael_martinez_db</span><span class="db-sublabel">public</span></div>
+          <div class="schema-tree" id="schema-tree"></div>
+        </div>
+        <div class="sidebar-panel" id="erd-panel"><div class="erd-container" id="erd-sidebar-container"></div></div>
       </div>
     </div>
-    <div class="hero-visual">
-      <div class="hero-card">
-        <div class="card-header">
-          <div class="dot red"></div>
-          <div class="dot yellow"></div>
-          <div class="dot green"></div>
-          <span style="margin-left:0.5rem;">pipeline.py</span>
-        </div>
-        <div class="code-line"><span class="kw">import</span> pandas <span class="kw">as</span> pd</div>
-        <div class="code-line"><span class="kw">from</span> snowflake.connector <span class="kw">import</span> connect</div>
-        <div class="code-line">&nbsp;</div>
-        <div class="code-line"><span class="cm"># ETL: ingest → clean → transform</span></div>
-        <div class="code-line"><span class="kw">def</span> <span class="fn">run_pipeline</span>(source, target):</div>
-        <div class="code-line">&nbsp;&nbsp;df = <span class="fn">extract</span>(source)</div>
-        <div class="code-line">&nbsp;&nbsp;df = <span class="fn">clean</span>(df, null_thresh=<span class="num">0.15</span>)</div>
-        <div class="code-line">&nbsp;&nbsp;df = <span class="fn">transform</span>(df, schema=<span class="str">"housing_v2"</span>)</div>
-        <div class="code-line">&nbsp;&nbsp;<span class="fn">load</span>(df, target, mode=<span class="str">"append"</span>)</div>
-        <div class="code-line">&nbsp;&nbsp;<span class="kw">return</span> <span class="str">"✓ pipeline complete"</span></div>
+    <div class="main-pane">
+      <div class="tabs">
+        <div class="tab active" id="tab-query" onclick="switchMainTab('query')"><div class="tab-dot sql"></div>query_1.sql</div>
+        <div class="tab" id="tab-erd" onclick="switchMainTab('erd')"><div class="tab-dot erd"></div>schema_erd</div>
       </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════ RESUME ══════════════════════════════ -->
-  <section id="resume">
-    <div class="resume-header">
-      <div>
-        <p class="section-label">// 02 — Resume</p>
-        <h2 class="section-title">Professional <span>Background</span></h2>
-      </div>
-      <button class="btn-secondary resume-print-btn" onclick="window.print()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:0.4rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Save as PDF
-      </button>
-    </div>
-
-    <!-- ── Work Experience ── -->
-    <div class="resume-block">
-      <div class="resume-block-label">Work Experience</div>
-      <div class="timeline">
-
-        <div class="timeline-item">
-          <div class="timeline-meta">
-            <div class="timeline-org">Utah State University — Analytics Solutions Center</div>
-            <div class="timeline-date">Jan 2026 – Present</div>
-          </div>
-          <div class="timeline-role">Data Engineer · Client: Lee's Marketplace</div>
-          <div class="timeline-location">Logan, UT</div>
-          <ul class="timeline-bullets">
-            <li>Mapped current-state data flows across 7 business systems to identify integration gaps and automation opportunities.</li>
-            <li>Led development of a formal system redesign proposal recommending Power Automate + Azure SQL + Power BI — synthesizing team research — and presented directly to senior stakeholders including company ownership.</li>
-            <li>Contributing to ETL pipeline development, dashboard and report building, and system diagram documentation for a client-facing data modernization engagement.</li>
-            <li>Coordinating implementation readiness including Azure SQL database configuration, Power Automate environment setup, and Business Central permission planning.</li>
-          </ul>
-        </div>
-
-        <div class="timeline-item">
-          <div class="timeline-meta">
-            <div class="timeline-org">ASPIRE NSF Engineering Research Center</div>
-            <div class="timeline-date">Jun 2025 – Present</div>
-          </div>
-          <div class="timeline-role">Innovation Analyst</div>
-          <div class="timeline-location">Logan, UT</div>
-          <ul class="timeline-bullets">
-            <li>Conducted one-on-one interviews with senior engineers to document technical specifications for an electrified roadway pilot — findings directly informed a pilot recently approved by a State Department of Transportation.</li>
-            <li>Contributed to RFP development and contractor agreement documentation by translating engineering specs into structured procurement requirements.</li>
-            <li>Built an NLP-powered analytics dashboard (NLTK, Streamlit) to process annual meeting workshop responses, quantifying key themes and enabling leadership association analysis.</li>
-            <li>Designed and implemented a pilot data library hub for Agency Working Group members to securely share and access project data across teams.</li>
-          </ul>
-        </div>
-
-        <div class="timeline-item">
-          <div class="timeline-meta">
-            <div class="timeline-org">Vivint</div>
-            <div class="timeline-date">Jul 2024 – Mar 2025</div>
-          </div>
-          <div class="timeline-role">Claims Manager</div>
-          <div class="timeline-location">Logan, UT</div>
-          <ul class="timeline-bullets">
-            <li>Analyzed complex claims data to identify recurring service issues, reducing repeat claims by 15% through targeted reporting.</li>
-            <li>Identified recurring technician errors through data analysis, leading directly to new auditing standards and reduced repeat service calls.</li>
-          </ul>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- ── Education ── -->
-    <div class="resume-block">
-      <div class="resume-block-label">Education</div>
-      <div class="edu-card">
-        <div class="edu-school">Utah State University</div>
-        <div class="edu-degree">BS Information Systems — Data Engineering Emphasis · Jon M. Huntsman School of Business</div>
-        <div class="edu-date">Graduating May 2026 · Logan, UT</div>
-        <div class="edu-stats">
-          <div class="edu-stat">
-            <span class="edu-stat-val">3.90</span>
-            <span class="edu-stat-label">USU GPA</span>
-          </div>
-          <div class="edu-stat">
-            <span class="edu-stat-val">20+</span>
-            <span class="edu-stat-label">Hrs/wk Worked</span>
-          </div>
-          <div class="edu-stat">
-            <span class="edu-stat-val">3×</span>
-            <span class="edu-stat-label">Dean's List</span>
-          </div>
-        </div>
-        <div class="edu-badges">
-          <span class="edu-badge">Dean's List: Fall '24, Spring '25, Fall '25</span>
-          <span class="edu-badge">Talent Development Scholarship</span>
-          <span class="edu-badge">Association for Information Systems</span>
-          <span class="edu-badge">Analytics Solutions Center Innovation Labs</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── Skills ── -->
-    <div class="resume-block">
-      <div class="resume-block-label">Skills & Tools</div>
-      <div class="skills-grid">
-        <div class="skill-group">
-          <div class="skill-group-label">Advanced</div>
-          <div class="skill-tags">
-            <div class="skill-tag">SQL (Snowflake, SSMS, PostgreSQL)</div>
-            <div class="skill-tag">ETL/ELT Design & Integrations (AWS, GCP, Azure Data Factory, Databricks)</div>
-            <div class="skill-tag">Python (Pandas, NumPy, Matplotlib, Plotly, NLP)</div>
-            <div class="skill-tag">Databricks (Delta Lake, Spark, Notebooks)</div>
-          </div>
-        </div>
-        <div class="skill-group">
-          <div class="skill-group-label">Proficient</div>
-          <div class="skill-tags">
-            <div class="skill-tag">Cloud Administration (AWS, GCP, Azure)</div>
-            <div class="skill-tag">Data Visualization (Tableau, Power BI)</div>
-            <div class="skill-tag">Software & Web Development (Django, React Native, Docker, Cloud Deployment)</div>
-            <div class="skill-tag">Linux & Unix Systems (Cron Jobs, Shell Scripts, RDP)</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </section>
-
-  <!-- ══════════════════════════════ PORTFOLIO ══════════════════════════════ -->
-  <section id="portfolio">
-    <p class="section-label">// 03 — Portfolio</p>
-    <h2 class="section-title" style="margin-bottom:2.5rem;">Featured <span>Projects</span></h2>
-
-    <!-- Featured: SoiMate -->
-    <div class="portfolio-featured">
-      <div class="featured-badge">★ Featured Project</div>
-      <div class="featured-layout">
-        <div>
-          <div class="project-status">In Active Development</div>
-          <div class="featured-name">SoiMate</div>
-          <div class="featured-subtitle">Full-Stack Housing Recommender System · May 2025 – Ongoing</div>
-          <div class="project-stack">
-            <span class="stack-tag">AWS</span>
-            <span class="stack-tag">DynamoDB</span>
-            <span class="stack-tag">Python</span>
-            <span class="stack-tag">Django</span>
-            <span class="stack-tag">React Native</span>
-            <span class="stack-tag">Docker</span>
-          </div>
-          <div class="featured-links">
-            <a class="project-link primary" href="https://github.com/MMart221" target="_blank" rel="noopener">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
-              View on GitHub
-            </a>
-          </div>
-        </div>
-        <ul class="project-bullets">
-          <li>Designed and deployed an end-to-end AWS data pipeline ingesting, cleaning, and transforming housing data including condominium complexes, unit sizes, amenities, and building attributes.</li>
-          <li>Designed a NoSQL housing database in DynamoDB, supporting distinct attribute types, with planned migration to a normalized relational model as data complexity scales.</li>
-          <li>Built an automated web scraping and NLP extraction pipeline to infer missing building and neighborhood attributes from unstructured reviews, reducing incomplete records by over 9%.</li>
-          <li>Developing a full-stack application (Django + React Native, containerized with Docker) to serve personalized neighborhood and apartment recommendations based on lifestyle preferences and budget.</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Secondary Projects -->
-    <div class="projects-grid">
-
-      <div class="project-card accent2">
-        <div class="project-type" style="color:var(--accent2);">Client Project</div>
-        <div class="project-name">Lee's Marketplace Migration</div>
-        <div class="project-client">Data Modernization & Automation Initiative · Jan 2026 – Present</div>
-        <div class="project-stack">
-          <span class="stack-tag" style="background:rgba(255,107,53,0.08);border-color:rgba(255,107,53,0.2);color:var(--accent2);">Azure SQL</span>
-          <span class="stack-tag" style="background:rgba(255,107,53,0.08);border-color:rgba(255,107,53,0.2);color:var(--accent2);">Power Automate</span>
-          <span class="stack-tag" style="background:rgba(255,107,53,0.08);border-color:rgba(255,107,53,0.2);color:var(--accent2);">Power BI</span>
-          <span class="stack-tag" style="background:rgba(255,107,53,0.08);border-color:rgba(255,107,53,0.2);color:var(--accent2);">Business Central</span>
-        </div>
-        <ul class="project-bullets">
-          <li>Mapped current-state data flows across 7 business systems to identify integration gaps and automation opportunities.</li>
-          <li>Led formal system redesign proposal — recommending Power Automate + Azure SQL + Power BI — and presented findings to senior stakeholders including company ownership.</li>
-          <li>Contributing to ETL pipelines, dashboard builds, and system diagrams for a live client-facing data modernization engagement.</li>
-        </ul>
-      </div>
-
-      <div class="project-card">
-        <div class="project-type" style="color:var(--accent);">Research Project</div>
-        <div class="project-name">ASPIRE NLP Analytics Dashboard</div>
-        <div class="project-client">NSF Engineering Research Center · Jun 2025 – Present</div>
-        <div class="project-stack">
-          <span class="stack-tag">Python</span>
-          <span class="stack-tag">NLTK</span>
-          <span class="stack-tag">Streamlit</span>
-        </div>
-        <ul class="project-bullets">
-          <li>Built an NLP-powered analytics dashboard to process and condense ASPIRE's annual meeting workshop responses, quantifying key themes across barrier, solution, and success metric categories.</li>
-          <li>Enabled leadership to conduct further exploration through association analysis, surfacing patterns across hundreds of stakeholder responses.</li>
-          <li>Designed and implemented a pilot data library hub for Agency Working Group members to securely upload, share, and access project data.</li>
-        </ul>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════ GITHUB ══════════════════════════════ -->
-  <section id="github">
-    <p class="section-label">// 04 — Open Source</p>
-    <h2 class="section-title" style="margin-bottom:0.8rem;">GitHub <span>Repositories</span></h2>
-    <p style="color:var(--muted);font-size:0.8rem;margin-bottom:2.5rem;">A live look at my public repositories, updated automatically.</p>
-    <div id="github-repos" class="github-grid">
-      <div class="gh-loading">Loading repositories...</div>
-    </div>
-    <div class="github-cta">
-      <a class="btn-secondary" href="https://github.com/MMart221" target="_blank" rel="noopener">
-        View All Repositories →
-      </a>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════ CONTACT ══════════════════════════════ -->
-  <section id="contact">
-    <p class="section-label">// 05 — Let's Connect</p>
-    <h2 class="section-title">Get In <span>Touch</span></h2>
-    <p style="color:var(--muted);font-size:0.82rem;max-width:480px;margin:1rem auto 0;">
-      Actively seeking data engineering roles for May 2026. Open to full-time positions, internships, and contract work.
-    </p>
-    <p style="font-size:0.9rem;color:var(--text);margin-top:1.5rem;">(435) 764-6679 · michaelmartinez24628@gmail.com</p>
-    <div class="contact-links">
-      <a class="contact-link" href="mailto:michaelmartinez24628@gmail.com">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-        Email Me
-      </a>
-      <a class="contact-link" href="https://github.com/MMart221" target="_blank" rel="noopener">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
-        GitHub
-      </a>
-      <a class="contact-link" href="https://www.linkedin.com/in/michael-martinez-dev" target="_blank" rel="noopener">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-        LinkedIn
-      </a>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <span>© 2026 Michael Martinez</span>
-    <span style="color:var(--accent);">Data Engineer · Utah State University · May 2026</span>
-  </footer>
-
-  <script>
-    // ── Active nav highlighting on scroll ──
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-links a');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          navLinks.forEach(link => {
-            link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
-          });
-        }
-      });
-    }, { threshold: 0.35 });
-    sections.forEach(s => observer.observe(s));
-
-    // ── GitHub Repos ──
-    async function loadGitHubRepos() {
-      const grid = document.getElementById('github-repos');
-      try {
-        const res = await fetch('https://api.github.com/users/MMart221/repos?sort=updated&per_page=6&type=public');
-        if (!res.ok) throw new Error('API error');
-        const repos = await res.json();
-        if (!Array.isArray(repos) || repos.length === 0) {
-          grid.innerHTML = '<p class="gh-empty">No public repositories found. <a href="https://github.com/MMart221" target="_blank">Visit GitHub profile →</a></p>';
-          return;
-        }
-        grid.innerHTML = repos.map(r => `
-          <a class="repo-card" href="${r.html_url}" target="_blank" rel="noopener noreferrer">
-            <div class="repo-name">${r.name}</div>
-            <div class="repo-desc">${r.description ? r.description : 'No description provided.'}</div>
-            <div class="repo-meta">
-              ${r.language ? `<span class="repo-lang">● ${r.language}</span>` : ''}
-              <span>★ ${r.stargazers_count}</span>
-              <span>${new Date(r.updated_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+      <div class="query-main" id="query-view">
+        <div class="editor-section">
+          <div class="editor-toolbar">
+            <button class="run-btn" onclick="runQuery()"><svg viewBox="0 0 10 12" fill="currentColor"><polygon points="0,0 10,6 0,12"/></svg>Execute</button>
+            <div class="toolbar-sep"></div>
+            <span class="preset-label">Presets:</span>
+            <div class="preset-queries">
+              <button class="preset-btn" onclick="loadPreset('profile')">profile</button>
+              <button class="preset-btn" onclick="loadPreset('experience')">experience</button>
+              <button class="preset-btn" onclick="loadPreset('skills_matrix')">skills</button>
+              <button class="preset-btn" onclick="loadPreset('tech_stack')">tech_stack</button>
+              <button class="preset-btn" onclick="loadPreset('timeline')">timeline</button>
+              <button class="preset-btn hire" onclick="loadPreset('hire_me')">hire_me ✦</button>
             </div>
-          </a>
-        `).join('');
-      } catch {
-        grid.innerHTML = '<p class="gh-error">Unable to load repositories. <a href="https://github.com/MMart221" target="_blank">View on GitHub →</a></p>';
-      }
-    }
-    loadGitHubRepos();
-  </script>
+          </div>
+          <div class="editor-wrap">
+            <div class="line-nums" id="line-nums">1<br>2<br>3</div>
+            <textarea id="query-editor" rows="3" spellcheck="false" onkeydown="handleKey(event)" oninput="updateLineNums()" placeholder="-- Write a SQL query or select a preset above...&#10;-- Try: SELECT * FROM employers;&#10;-- Ctrl+Enter to execute"></textarea>
+          </div>
+        </div>
+        <div class="results-section">
+          <div class="results-toolbar">
+            <span class="results-label">Output</span>
+            <div class="view-toggle" id="view-toggle">
+              <button class="vtb active" id="btn-clean" onclick="switchView('clean')">Clean View</button>
+              <button class="vtb" id="btn-table" onclick="switchView('table')">Table View</button>
+            </div>
+            <div class="results-meta" id="results-meta">
+              <div class="meta-item">rows: <span id="row-count">0</span></div>
+              <div class="meta-item">cols: <span id="col-count">0</span></div>
+              <div class="meta-item">time: <span id="exec-time">0ms</span></div>
+            </div>
+          </div>
+          <div class="results-scroll" id="results-container">
+            <div class="results-empty"><div class="results-empty-icon">⬡</div><p>Run a query to explore the database</p><span class="hint">or click a preset to get started</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="erd-main" id="erd-view"><div class="erd-container" id="erd-main-container" style="padding:2rem;"></div></div>
+    </div>
+  </div>
+  <div class="statusbar">
+    <span class="status-item">michael_martinez_db</span>
+    <span class="status-item">public · 11 tables</span>
+    <span class="status-item" id="status-msg">Ready</span>
+    <span class="status-item right">UTF-8 · SQL · Ln <span id="ln">1</span>, Col <span id="col">1</span></span>
+  </div>
 
+<script>
+// ═══════════════════════════════════════
+//  DATABASE
+// ═══════════════════════════════════════
+const DB={person:{columns:[{name:'id',type:'INT',pk:1},{name:'full_name',type:'VARCHAR(100)'},{name:'title',type:'VARCHAR(100)'},{name:'location',type:'VARCHAR(50)'},{name:'available_date',type:'DATE'},{name:'tagline',type:'TEXT'},{name:'status',type:'VARCHAR(50)'}],rows:[[1,'Michael Martinez','Data Engineer','Logan, UT','2026-05-15','Building end-to-end data pipelines, NLP systems, and cloud architectures','Open to full-time DE roles']]},employers:{columns:[{name:'id',type:'INT',pk:1},{name:'name',type:'VARCHAR(100)'},{name:'short_name',type:'VARCHAR(30)'},{name:'location',type:'VARCHAR(50)'},{name:'sector',type:'VARCHAR(30)'}],rows:[[1,'Utah State University - Analytics Solutions Center','USU ASC','Logan, UT','Higher Education'],[2,'ASPIRE NSF Engineering Research Center','ASPIRE','Logan, UT','Research'],[3,'Vivint Smart Home','Vivint','Logan, UT','Technology']]},positions:{columns:[{name:'id',type:'INT',pk:1},{name:'employer_id',type:'INT',fk:'employers.id'},{name:'title',type:'VARCHAR(100)'},{name:'start_date',type:'DATE'},{name:'end_date',type:'DATE'},{name:'is_current',type:'BOOLEAN'}],rows:[[1,1,'Data Engineer','2026-01',null,true],[2,2,'Innovation Analyst','2025-06',null,true],[3,3,'Claims Manager','2024-07','2025-03',false],[4,3,'Customer Loyalty Specialist','2023-06','2024-07',false]]},highlights:{columns:[{name:'id',type:'INT',pk:1},{name:'position_id',type:'INT',fk:'positions.id'},{name:'description',type:'TEXT'},{name:'impact_metric',type:'VARCHAR(100)'}],rows:[[1,1,'Mapped data flows across 7 business systems identifying integration gaps and automation opportunities','7 systems mapped'],[2,1,'Led system redesign proposal: Power Automate + Azure SQL + Power BI architecture; presented to senior stakeholders','Architecture proposal'],[3,1,'Built ETL pipelines, dashboards, and system documentation for data modernization engagement','Client-facing delivery'],[4,1,'Coordinated Azure SQL config, Power Automate setup, and Business Central permissions for implementation','Implementation readiness'],[5,2,'Interviewed ASPIRE senior engineers to document data points for electrified roadway pilot — approved by State DOT','DOT pilot approved'],[6,2,'Translated engineering specs into structured RFP requirements for procurement and contracting','RFP development'],[7,2,'Designed pilot data library hub for cross-agency secure data sharing and collaboration','Data library built'],[8,2,'Built NLP analytics dashboard (NLTK + Streamlit) to process and quantify workshop themes via association analysis','NLP dashboard shipped'],[9,3,'Analyzed claims data to identify recurring service issues, reducing repeat claims by 15%','-15% repeat claims'],[10,3,'Identified technician errors through data analysis leading to new auditing standards','New audit standards'],[11,4,'Managed high-conflict interactions meeting 80% retention and $15 RPC goals consistently','80% retention']]},skill_categories:{columns:[{name:'id',type:'INT',pk:1},{name:'name',type:'VARCHAR(50)'},{name:'display_order',type:'INT'}],rows:[[1,'Data Engineering',1],[2,'Cloud & Infra',2],[3,'Programming',3],[4,'BI & Visualization',4],[5,'Development',5]]},skills:{columns:[{name:'id',type:'INT',pk:1},{name:'category_id',type:'INT',fk:'skill_categories.id'},{name:'name',type:'VARCHAR(80)'},{name:'proficiency',type:'VARCHAR(20)'}],rows:[[1,1,'SQL','Advanced'],[2,1,'Snowflake','Advanced'],[3,1,'PostgreSQL','Advanced'],[4,1,'ETL/ELT Design','Advanced'],[5,1,'Databricks','Advanced'],[6,1,'Delta Lake / Spark','Advanced'],[7,1,'DynamoDB','Proficient'],[8,1,'dbt','Familiar'],[9,1,'Fivetran','Familiar'],[10,1,'Power Automate','Proficient'],[11,2,'AWS','Proficient'],[12,2,'GCP / BigQuery','Proficient'],[13,2,'Azure','Proficient'],[14,2,'Azure Data Factory','Proficient'],[15,2,'Docker','Proficient'],[16,2,'Linux / Unix','Proficient'],[17,3,'Python','Advanced'],[18,3,'Pandas / NumPy','Advanced'],[19,3,'NLTK','Proficient'],[20,3,'Matplotlib / Plotly','Proficient'],[21,4,'Tableau','Proficient'],[22,4,'Power BI','Proficient'],[23,4,'Streamlit','Proficient'],[24,5,'Django','Proficient'],[25,5,'React Native','Proficient']]},projects:{columns:[{name:'id',type:'INT',pk:1},{name:'name',type:'VARCHAR(80)'},{name:'project_type',type:'VARCHAR(30)'},{name:'status',type:'VARCHAR(20)'},{name:'description',type:'TEXT'}],rows:[[1,'SoiMate','Personal','Active','End-to-end housing recommender with ETL pipelines on AWS'],[2,"Lee's Marketplace",'Client','Active','Data modernization & BI automation for regional grocer'],[3,'ASPIRE NLP Dashboard','Research','Delivered','NLP-powered workshop analytics with theme extraction'],[4,'Supply Chain Analytics','Hackathon','Delivered','Databricks-powered supply chain optimization tool'],[5,'Crypto Arbitrage Engine','Academic','Complete','Graph-based arbitrage detection with paper trading'],[6,'Star Schema Warehouse','Academic','Complete','Full OLTP → Star Schema → ELT → BI pipeline']]},project_skills:{columns:[{name:'project_id',type:'INT',fk:'projects.id',pk:1},{name:'skill_id',type:'INT',fk:'skills.id',pk:1}],rows:[[1,11],[1,7],[1,17],[1,24],[1,25],[1,15],[2,13],[2,14],[2,22],[2,10],[2,1],[3,17],[3,19],[3,23],[4,5],[4,6],[4,17],[5,17],[6,1],[6,2],[6,5],[6,8],[6,9],[6,21]]},education:{columns:[{name:'id',type:'INT',pk:1},{name:'institution',type:'VARCHAR(100)'},{name:'college',type:'VARCHAR(100)'},{name:'degree',type:'VARCHAR(80)'},{name:'emphasis',type:'VARCHAR(50)'},{name:'gpa',type:'DECIMAL(3,2)'},{name:'expected_grad',type:'DATE'}],rows:[[1,'Utah State University','Jon M. Huntsman School of Business','BS Information Systems','Data Engineering',3.90,'2026-05']]},honors:{columns:[{name:'id',type:'INT',pk:1},{name:'education_id',type:'INT',fk:'education.id'},{name:'name',type:'VARCHAR(100)'},{name:'type',type:'VARCHAR(30)'}],rows:[[1,1,"Dean's List — Fall 2024",'Academic'],[2,1,"Dean's List — Spring 2025",'Academic'],[3,1,"Dean's List — Fall 2025",'Academic'],[4,1,'Talent Development Scholarship','Financial'],[5,1,'Assoc. for Information Systems','Membership'],[6,1,'Analytics Solutions Center Innovation Labs','Membership']]},contact:{columns:[{name:'id',type:'INT',pk:1},{name:'platform',type:'VARCHAR(30)'},{name:'handle',type:'VARCHAR(80)'},{name:'url',type:'VARCHAR(200)'}],rows:[[1,'Email','michaelmartinez24628@gmail.com','mailto:michaelmartinez24628@gmail.com'],[2,'Phone','(435) 764-6679',null],[3,'GitHub','github.com/MMart221','https://github.com/MMart221'],[4,'LinkedIn','linkedin.com/in/mmartinez221','https://linkedin.com/in/mmartinez221'],[5,'Portfolio','mmart221.github.io','https://mmart221.github.io']]}};
+
+// ═══════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════
+let curView='clean', lastResult=null, lastPreset=null;
+
+// ═══════════════════════════════════════
+//  PRESETS
+// ═══════════════════════════════════════
+const PRESETS={
+profile:{
+sql:`SELECT p.full_name, p.title, p.status,\n       c.platform, c.handle\nFROM person p\nCROSS JOIN contact c\nWHERE p.id = 1\nORDER BY c.id;`,
+compute(){const p=DB.person.rows[0];return{cols:['full_name','title','status','platform','handle'],rows:DB.contact.rows.map(c=>[p[1],p[2],p[6],c[1],c[2]])}},
+clean(){
+  const p=DB.person.rows[0], icons={Email:'✉',Phone:'☎',GitHub:'⌥',LinkedIn:'◉',Portfolio:'◈'};
+  const links=DB.contact.rows.map(c=>c[3]?`<a href="${E(c[3])}" target="_blank" class="cv-link"><span>${icons[c[1]]||'•'}</span>${E(c[2])}</a>`:`<span class="cv-link"><span>${icons[c[1]]||'•'}</span>${E(c[2])}</span>`).join('');
+  return`<div class="cv"><div class="cv-profile"><div class="cv-p-name">${E(p[1])}</div><div class="cv-p-tag">${E(p[5])}</div><div class="cv-p-status">● ${E(p[6])}</div><div class="cv-p-links">${links}</div></div></div>`;
+}},
+
+experience:{
+sql:`SELECT e.short_name  AS employer,\n       p.title,\n       p.start_date,\n       p.end_date,\n       p.is_current,\n       h.description   AS highlight,\n       h.impact_metric  AS impact\nFROM positions p\n  JOIN employers e  ON p.employer_id = e.id\n  JOIN highlights h ON h.position_id = p.id\nORDER BY p.start_date DESC, h.id ASC;`,
+compute(){const rows=[];[...DB.positions.rows].sort((a,b)=>b[3].localeCompare(a[3])).forEach(pos=>{const emp=DB.employers.rows.find(e=>e[0]===pos[1]);DB.highlights.rows.filter(h=>h[1]===pos[0]).forEach(h=>{rows.push([emp[2],pos[2],pos[3],pos[4],pos[5],h[2],h[3]])})});return{cols:['employer','title','start_date','end_date','is_current','highlight','impact'],rows}},
+clean(){
+  const sorted=[...DB.positions.rows].sort((a,b)=>b[3].localeCompare(a[3]));
+  let h='<div class="cv"><div class="cv-tl">';
+  sorted.forEach((pos,i)=>{const emp=DB.employers.rows.find(e=>e[0]===pos[1]);const hlts=DB.highlights.rows.filter(x=>x[1]===pos[0]);const dt=pos[3]+(pos[4]?' → '+pos[4]:' → Present');
+    h+=`<div class="cv-role ${pos[5]?'':'past'}" style="animation-delay:${i*120}ms"><div class="cv-role-hd"><span class="cv-role-t">${E(pos[2])}</span><span class="cv-role-at">@ ${E(emp[1])}</span>${pos[5]?'<span class="cv-role-cur">Current</span>':''}<span class="cv-role-dt">${E(dt)}</span></div><ul class="cv-hls">${hlts.map(x=>`<li class="cv-hl">${E(x[2])}${x[3]?`<span class="cv-imp">${E(x[3])}</span>`:''}</li>`).join('')}</ul></div>`;
+  });
+  return h+'</div></div>';
+}},
+
+skills_matrix:{
+sql:`SELECT sc.name                AS category,\n       COUNT(*)               AS total_skills,\n       SUM(CASE WHEN s.proficiency = 'Advanced'\n            THEN 1 ELSE 0 END) AS advanced,\n       SUM(CASE WHEN s.proficiency = 'Proficient'\n            THEN 1 ELSE 0 END) AS proficient,\n       SUM(CASE WHEN s.proficiency = 'Familiar'\n            THEN 1 ELSE 0 END) AS familiar\nFROM skills s\n  JOIN skill_categories sc ON s.category_id = sc.id\nGROUP BY sc.name, sc.display_order\nORDER BY sc.display_order;`,
+compute(){const cats={};DB.skills.rows.forEach(s=>{const cat=DB.skill_categories.rows.find(c=>c[0]===s[1]);const k=cat[1];if(!cats[k])cats[k]={o:cat[2],t:0,a:0,p:0,f:0};cats[k].t++;if(s[3]==='Advanced')cats[k].a++;else if(s[3]==='Proficient')cats[k].p++;else cats[k].f++});return{cols:['category','total_skills','advanced','proficient','familiar'],rows:Object.entries(cats).sort((a,b)=>a[1].o-b[1].o).map(([k,v])=>[k,v.t,v.a,v.p,v.f])}},
+clean(){
+  const cats={};DB.skills.rows.forEach(s=>{const cat=DB.skill_categories.rows.find(c=>c[0]===s[1]);if(!cats[cat[0]])cats[cat[0]]={name:cat[1],order:cat[2],skills:[]};cats[cat[0]].skills.push({name:s[2],prof:s[3]})});
+  const sorted=Object.values(cats).sort((a,b)=>a.order-b.order);
+  let h='<div class="cv"><div class="cv-skills">';
+  sorted.forEach((cat,i)=>{const a=cat.skills.filter(s=>s.prof==='Advanced').length,p=cat.skills.filter(s=>s.prof==='Proficient').length,f=cat.skills.filter(s=>s.prof==='Familiar').length,t=cat.skills.length;
+    h+=`<div class="cv-scat" style="animation-delay:${i*100}ms"><div class="cv-scat-hd"><span class="cv-scat-nm">${E(cat.name)}</span><span class="cv-scat-ct">${t} skills</span></div><div class="cv-sbar"><div class="cv-sbar-a" style="width:${a/t*100}%"></div><div class="cv-sbar-p" style="width:${p/t*100}%"></div><div class="cv-sbar-f" style="width:${f/t*100}%"></div></div><div class="cv-spills">${cat.skills.sort((x,y)=>{const o={Advanced:0,Proficient:1,Familiar:2};return o[x.prof]-o[y.prof]}).map(s=>`<span class="cv-sp ${s.prof==='Advanced'?'a':s.prof==='Proficient'?'p':'f'}">${E(s.name)}</span>`).join('')}</div></div>`;
+  });
+  return h+'</div></div>';
+}},
+
+tech_stack:{
+sql:`SELECT p.name          AS project,\n       p.project_type   AS type,\n       p.status,\n       STRING_AGG(s.name, ', '\n         ORDER BY s.name) AS technologies,\n       COUNT(s.id)       AS tech_count\nFROM projects p\n  JOIN project_skills ps ON ps.project_id = p.id\n  JOIN skills s          ON ps.skill_id = s.id\nGROUP BY p.id, p.name, p.project_type, p.status\nORDER BY tech_count DESC;`,
+compute(){const pj={};DB.project_skills.rows.forEach(ps=>{if(!pj[ps[0]]){const pr=DB.projects.rows.find(p=>p[0]===ps[0]);pj[ps[0]]={name:pr[1],type:pr[2],status:pr[3],desc:pr[4],skills:[]}}const sk=DB.skills.rows.find(s=>s[0]===ps[1]);pj[ps[0]].skills.push(sk[2])});return{cols:['project','type','status','technologies','tech_count'],rows:Object.values(pj).sort((a,b)=>b.skills.length-a.skills.length).map(p=>[p.name,p.type,p.status,p.skills.sort().join(', '),p.skills.length])}},
+clean(){
+  const pj={};DB.project_skills.rows.forEach(ps=>{if(!pj[ps[0]]){const pr=DB.projects.rows.find(p=>p[0]===ps[0]);pj[ps[0]]={name:pr[1],type:pr[2],status:pr[3],desc:pr[4],skills:[]}}const sk=DB.skills.rows.find(s=>s[0]===ps[1]);pj[ps[0]].skills.push(sk[2])});
+  const sorted=Object.values(pj).sort((a,b)=>b.skills.length-a.skills.length);
+  let h='<div class="cv"><div class="cv-projs">';
+  sorted.forEach((p,i)=>{const sc=p.status.toLowerCase();
+    h+=`<div class="cv-pcard" style="animation-delay:${i*100}ms"><div class="cv-pcard-hd"><span class="cv-pcard-nm">${E(p.name)}</span><span class="cv-pcard-st ${sc}">${E(p.status)}</span></div><div class="cv-pcard-ty">${E(p.type)} Project</div><div class="cv-pcard-desc">${E(p.desc)}</div><div class="cv-pcard-tech">${p.skills.sort().map(s=>`<span class="cv-tpill">${E(s)}</span>`).join('')}</div></div>`;
+  });
+  return h+'</div></div>';
+}},
+
+timeline:{
+sql:`WITH tenure AS (\n  SELECT e.short_name          AS employer,\n         p.title,\n         p.start_date,\n         COALESCE(p.end_date,\n           CURRENT_DATE)       AS end_date,\n         EXTRACT(MONTH FROM AGE(\n           COALESCE(p.end_date, CURRENT_DATE),\n           p.start_date\n         ))                    AS months_tenure\n  FROM positions p\n    JOIN employers e ON p.employer_id = e.id\n)\nSELECT employer, title, start_date,\n       months_tenure,\n       SUM(months_tenure) OVER (\n         ORDER BY start_date\n         ROWS UNBOUNDED PRECEDING\n       ) AS cumulative_months,\n       ROUND(months_tenure::NUMERIC /\n         SUM(months_tenure) OVER () * 100, 1\n       ) AS pct_of_career\nFROM tenure\nORDER BY start_date DESC;`,
+compute(){const now=new Date();const pos=DB.positions.rows.map(p=>{const emp=DB.employers.rows.find(e=>e[0]===p[1]);const s=new Date(p[3]+'-01'),e=p[4]?new Date(p[4]+'-01'):now;const m=Math.max(1,Math.round((e-s)/(1000*60*60*24*30.44)));return{emp:emp[2],title:p[2],sd:p[3],m,cur:p[5]}});const tot=pos.reduce((s,p)=>s+p.m,0);const asc=[...pos].sort((a,b)=>a.sd.localeCompare(b.sd));let c=0;const wc=asc.map(p=>{c+=p.m;return{...p,c,pct:Math.round(p.m/tot*1000)/10}});wc.reverse();return{cols:['employer','title','start_date','months_tenure','cumulative_months','pct_of_career'],rows:wc.map(p=>[p.emp,p.title,p.sd,p.m,p.c,p.pct+'%'])}},
+clean(){
+  const now=new Date();const pos=DB.positions.rows.map(p=>{const emp=DB.employers.rows.find(e=>e[0]===p[1]);const s=new Date(p[3]+'-01'),e=p[4]?new Date(p[4]+'-01'):now;return{emp:emp[2],title:p[2],m:Math.max(1,Math.round((e-s)/(1000*60*60*24*30.44))),cur:p[5],sd:p[3]}});
+  const mx=Math.max(...pos.map(p=>p.m));const sorted=[...pos].sort((a,b)=>b.sd.localeCompare(a.sd));
+  let h='<div class="cv"><div class="cv-tbars">';
+  sorted.forEach((p,i)=>{const pct=Math.max(8,p.m/mx*100);
+    h+=`<div class="cv-tb" style="animation-delay:${i*120}ms"><div class="cv-tb-hd"><span class="cv-tb-t">${E(p.title)}</span><span class="cv-tb-emp">@ ${E(p.emp)}</span><span class="cv-tb-mo">${p.m} mo</span></div><div class="cv-tb-track"><div class="cv-tb-fill ${p.cur?'cur':'old'}" style="width:${pct}%">${p.m} months</div></div></div>`;
+  });
+  return h+'</div></div>';
+}},
+
+hire_me:{
+sql:`-- ✦ HIRE ME? Let's aggregate the case for it.\nWITH candidate AS (\n  SELECT full_name, title, status,\n         available_date\n  FROM person WHERE id = 1\n),\ncurrent_roles AS (\n  SELECT STRING_AGG(\n    e.short_name || ' → ' || p.title, ' | '\n  ) AS positions\n  FROM positions p\n    JOIN employers e ON p.employer_id = e.id\n  WHERE p.is_current = TRUE\n),\nskill_summary AS (\n  SELECT COUNT(*)                              AS total,\n         SUM(CASE WHEN proficiency = 'Advanced'\n              THEN 1 ELSE 0 END)               AS advanced\n  FROM skills\n),\nproject_summary AS (\n  SELECT COUNT(*)                              AS total,\n         SUM(CASE WHEN status = 'Active'\n              THEN 1 ELSE 0 END)               AS active\n  FROM projects\n),\nedu AS (\n  SELECT degree || ' — ' || emphasis AS program,\n         gpa FROM education WHERE id = 1\n)\nSELECT c.full_name,\n       c.title,\n       cr.positions       AS current_roles,\n       ss.total || ' skills (' || ss.advanced || ' advanced)' AS skill_depth,\n       ps.total || ' projects (' || ps.active || ' active)'   AS portfolio,\n       edu.program,\n       edu.gpa,\n       c.status            AS availability\nFROM candidate c, current_roles cr,\n     skill_summary ss, project_summary ps, edu;`,
+compute(){const p=DB.person.rows[0];const cr=DB.positions.rows.filter(x=>x[5]).map(x=>{const emp=DB.employers.rows.find(e=>e[0]===x[1]);return emp[2]+' → '+x[2]}).join(' | ');const adv=DB.skills.rows.filter(s=>s[3]==='Advanced').length;const ts=DB.skills.rows.length;const tp=DB.projects.rows.length;const ap=DB.projects.rows.filter(x=>x[3]==='Active').length;const edu=DB.education.rows[0];return{cols:['full_name','title','current_roles','skill_depth','portfolio','program','gpa','availability'],rows:[[p[1],p[2],cr,ts+' skills ('+adv+' advanced)',tp+' projects ('+ap+' active)',edu[3]+' — '+edu[4],edu[5],p[6]]]}},
+clean(){
+  const p=DB.person.rows[0];const cr=DB.positions.rows.filter(x=>x[5]).map(x=>{const emp=DB.employers.rows.find(e=>e[0]===x[1]);return emp[2]+' → '+x[2]}).join(' · ');
+  const adv=DB.skills.rows.filter(s=>s[3]==='Advanced').length,ts=DB.skills.rows.length,tp=DB.projects.rows.length,ap=DB.projects.rows.filter(x=>x[3]==='Active').length,edu=DB.education.rows[0];
+  return`<div class="cv"><div class="hire-banner"><h2>${E(p[1])}</h2><div class="sub">${E(p[5])}</div><div class="hire-cards"><div class="hire-card"><div class="cl">Current Roles</div><div class="cv_">${E(cr)}</div></div><div class="hire-card"><div class="cl">Skills</div><div class="cv_ ac">${ts} total · ${adv} advanced</div></div><div class="hire-card"><div class="cl">Projects</div><div class="cv_ ac">${tp} built · ${ap} active</div></div><div class="hire-card"><div class="cl">Education</div><div class="cv_">${E(edu[3])} — ${E(edu[4])}</div></div><div class="hire-card"><div class="cl">GPA / Availability</div><div class="cv_ gd">${edu[5]} · ${E(p[4])}</div></div></div><div class="hire-links"><a class="hire-link pri" href="mailto:michaelmartinez24628@gmail.com">✉ Email Me</a><a class="hire-link sec" href="https://linkedin.com/in/mmartinez221" target="_blank">LinkedIn →</a><a class="hire-link sec" href="https://github.com/MMart221" target="_blank">GitHub →</a></div></div></div>`;
+}}
+};
+
+// ═══════════════════════════════════════
+//  QUERY RUNNER
+// ═══════════════════════════════════════
+function runQuery(){
+  const q=document.getElementById('query-editor').value.trim();if(!q)return;
+  const start=performance.now();
+  let matchedPreset=null,result=null;
+  for(const[key,pr]of Object.entries(PRESETS)){if(norm(q)===norm(pr.sql)){matchedPreset=key;result=pr.compute();break;}}
+  if(!matchedPreset)result=parseBasic(q);
+  const elapsed=Math.round(performance.now()-start)+Math.floor(Math.random()*6)+3;
+  document.getElementById('exec-time').textContent=elapsed+'ms';
+  lastPreset=matchedPreset;lastResult=result;
+
+  const toggle=document.getElementById('view-toggle');
+  toggle.classList.toggle('visible',!!matchedPreset);
+
+  if(result&&result.error){document.getElementById('status-msg').textContent='ERROR: '+result.error;document.getElementById('results-meta').classList.remove('visible');renderErr(result.error);return;}
+
+  document.getElementById('status-msg').textContent=(matchedPreset==='hire_me'?'✦ ':'')+`${result.rows.length} row(s) returned in ${elapsed}ms`;
+  document.getElementById('row-count').textContent=result.rows.length;
+  document.getElementById('col-count').textContent=result.cols.length;
+  document.getElementById('results-meta').classList.add('visible');
+
+  if(matchedPreset){curView='clean';document.getElementById('btn-clean').classList.add('active');document.getElementById('btn-table').classList.remove('active');renderCur();}
+  else{curView='table';renderTable(result);}
+}
+
+function switchView(v){curView=v;document.getElementById('btn-clean').classList.toggle('active',v==='clean');document.getElementById('btn-table').classList.toggle('active',v==='table');renderCur();}
+
+function renderCur(){if(curView==='clean'&&lastPreset&&PRESETS[lastPreset].clean){document.getElementById('results-container').innerHTML=PRESETS[lastPreset].clean();}else if(lastResult&&!lastResult.error){renderTable(lastResult);}}
+
+function norm(s){return s.replace(/--[^\n]*/g,'').replace(/\s+/g,' ').trim().toLowerCase();}
+
+function parseBasic(q){
+  const cl=norm(q);let tn=null;const fm=cl.match(/from\s+(\w+)/);if(fm)tn=fm[1];
+  if(!tn||!DB[tn])return{error:`relation "${fm?fm[1]:'?'}" does not exist. Available: ${Object.keys(DB).join(', ')}`};
+  const table=DB[tn];let rows=table.rows.map(r=>[...r]);const cn=table.columns.map(c=>c.name);
+  const wm=cl.match(/where\s+(.+?)(?:\s+order|\s+group|\s+limit|\s*;?\s*$)/);
+  if(wm){const cond=wm[1].trim();
+    if(cond.includes('is_current')&&cond.includes('true')){const i=cn.indexOf('is_current');if(i>=0)rows=rows.filter(r=>r[i]===true);}
+    else if(cond.includes('is_current')&&cond.includes('false')){const i=cn.indexOf('is_current');if(i>=0)rows=rows.filter(r=>r[i]===false);}
+    const im=cond.match(/(\w+)\s*=\s*(\d+)/);if(im){const i=cn.indexOf(im[1]);if(i>=0)rows=rows.filter(r=>r[i]==parseInt(im[2]));}
+    const sm=cond.match(/(\w+)\s*=\s*'([^']+)'/);if(sm){const i=cn.indexOf(sm[1]);if(i>=0)rows=rows.filter(r=>String(r[i]).toLowerCase()===sm[2].toLowerCase());}
+  }
+  const om=cl.match(/order\s+by\s+(\w+)(?:\s+(asc|desc))?/);
+  if(om){const i=cn.indexOf(om[1]);const d=om[2]==='desc';if(i>=0)rows.sort((a,b)=>{if(a[i]===null)return 1;if(b[i]===null)return -1;const c=String(a[i]).localeCompare(String(b[i]),undefined,{numeric:true});return d?-c:c;});}
+  const lm=cl.match(/limit\s+(\d+)/);if(lm)rows=rows.slice(0,parseInt(lm[1]));
+  let sc=cn;
+  if(!cl.match(/select\s+\*/)){const sel=q.match(/SELECT\s+([\s\S]+?)\s+FROM/i);if(sel){const req=sel[1].split(',').map(c=>c.trim().split(/\s+as\s+/i).pop().trim().toLowerCase().replace(/\w+\./g,''));const idx=req.map(r=>cn.findIndex(c=>c===r)).filter(i=>i>=0);if(idx.length>0){sc=idx.map(i=>cn[i]);rows=rows.map(r=>idx.map(i=>r[i]));}}}
+  return{cols:sc,rows};
+}
+
+// ═══════════════════════════════════════
+//  RENDERING
+// ═══════════════════════════════════════
+function renderTable({cols,rows}){
+  const c=document.getElementById('results-container');
+  if(!rows||!rows.length){c.innerHTML='<div class="results-empty"><div class="results-empty-icon">∅</div><p>0 rows returned</p></div>';return;}
+  let h=`<table class="rt"><thead><tr><th>#</th>${cols.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>`;
+  rows.forEach((row,ri)=>{h+=`<tr style="animation-delay:${Math.min(ri*30,600)}ms"><td class="rn">${ri+1}</td>`;row.forEach(cell=>{
+    if(cell===null||cell===undefined)h+=`<td class="nl">NULL</td>`;
+    else if(cell===true)h+=`<td class="bt">TRUE</td>`;
+    else if(cell===false)h+=`<td class="bf">FALSE</td>`;
+    else if(typeof cell==='number')h+=`<td class="nm">${cell}</td>`;
+    else if(typeof cell==='string'&&/^\d{4}-\d{2}/.test(cell)&&cell.length<=10)h+=`<td class="dt">${cell}</td>`;
+    else h+=`<td>${E(String(cell))}</td>`;
+  });h+=`</tr>`;});
+  h+=`</tbody></table>`;c.innerHTML=h;
+}
+function renderErr(m){document.getElementById('results-container').innerHTML=`<div class="results-empty"><div class="results-empty-icon">⚠</div><p style="color:var(--red);">ERROR: ${E(m)}</p></div>`;}
+function E(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ═══════════════════════════════════════
+//  UI
+// ═══════════════════════════════════════
+function loadPreset(key){switchMainTab('query');const ed=document.getElementById('query-editor');const txt=PRESETS[key].sql;ed.value='';let i=0;const iv=setInterval(()=>{ed.value+=txt[i];i++;updateLineNums();if(i>=txt.length){clearInterval(iv);setTimeout(runQuery,180);}},8);}
+function switchMainTab(t){document.getElementById('tab-query').classList.toggle('active',t==='query');document.getElementById('tab-erd').classList.toggle('active',t==='erd');document.getElementById('query-view').classList.toggle('hidden',t!=='query');document.getElementById('erd-view').classList.toggle('active',t==='erd');}
+function switchSidebarTab(t){document.querySelectorAll('.sidebar-tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.sidebar-panel').forEach(x=>x.classList.remove('active'));if(t==='schema'){document.querySelectorAll('.sidebar-tab')[0].classList.add('active');document.getElementById('schema-panel').classList.add('active');}else{document.querySelectorAll('.sidebar-tab')[1].classList.add('active');document.getElementById('erd-panel').classList.add('active');}}
+
+// Schema tree
+function buildSchemaTree(){const tree=document.getElementById('schema-tree');let h='';for(const[n,d]of Object.entries(DB)){h+=`<div class="table-item" data-table="${n}" onclick="toggleTable(this)"><span class="table-icon">T</span>${n}<span class="table-row-count">${d.rows.length}</span></div><div class="col-list">`;for(const col of d.columns){let b='';if(col.pk)b='<span class="col-badge pk">PK</span>';if(col.fk)b='<span class="col-badge fk">FK</span>';h+=`<div class="col-item"><span class="col-name">${col.name}</span><span class="col-type">${col.type.split('(')[0]}</span>${b}</div>`;}h+='</div>';}tree.innerHTML=h;}
+function toggleTable(el){const was=el.classList.contains('expanded');document.querySelectorAll('.table-item').forEach(t=>t.classList.remove('expanded','active'));if(!was){el.classList.add('expanded','active');}}
+
+// ERD
+function buildERD(cid){
+  const isMain=cid==='erd-main-container',sc=isMain?1:.6;
+  const L={person:{x:20,y:20},contact:{x:20,y:170},employers:{x:260,y:20},positions:{x:260,y:180},highlights:{x:260,y:370},skill_categories:{x:540,y:20},skills:{x:540,y:150},projects:{x:540,y:350},project_skills:{x:770,y:240},education:{x:20,y:350},honors:{x:20,y:520}};
+  const CH=18,HH=28,TW=200,PD=8;const tH=t=>HH+DB[t].columns.length*CH+PD;
+  let mx=0,my=0;for(const[t,p]of Object.entries(L)){mx=Math.max(mx,p.x+TW+40);my=Math.max(my,p.y+tH(t)+40);}
+  let svg=`<svg width="${mx*sc}" height="${my*sc}" viewBox="0 0 ${mx} ${my}" xmlns="http://www.w3.org/2000/svg" style="font-family:'JetBrains Mono',monospace">`;
+  const rels=[{f:'positions',fc:'employer_id',t:'employers',tc:'id',l:'N:1'},{f:'highlights',fc:'position_id',t:'positions',tc:'id',l:'N:1'},{f:'skills',fc:'category_id',t:'skill_categories',tc:'id',l:'N:1'},{f:'project_skills',fc:'project_id',t:'projects',tc:'id',l:'N:M'},{f:'project_skills',fc:'skill_id',t:'skills',tc:'id',l:'N:M'},{f:'honors',fc:'education_id',t:'education',tc:'id',l:'N:1'}];
+  for(const r of rels){const fp=L[r.f],tp=L[r.t];const fi=DB[r.f].columns.findIndex(c=>c.name===r.fc),ti=DB[r.t].columns.findIndex(c=>c.name===r.tc);const fY=fp.y+HH+fi*CH+CH/2,tY=tp.y+HH+ti*CH+CH/2;let fX,tX;if(fp.x>tp.x){fX=fp.x;tX=tp.x+TW;}else if(fp.x<tp.x){fX=fp.x+TW;tX=tp.x;}else{fX=fp.x+TW;tX=tp.x+TW;}const mX=(fX+tX)/2;svg+=`<path class="erd-line" d="M${fX},${fY} C${mX},${fY} ${mX},${tY} ${tX},${tY}"/>`;svg+=`<text class="erd-line-label" x="${mX}" y="${(fY+tY)/2-5}" text-anchor="middle">${r.l}</text>`;}
+  for(const[t,pos]of Object.entries(L)){const h=tH(t);svg+=`<g transform="translate(${pos.x},${pos.y})"><rect class="erd-table-bg" width="${TW}" height="${h}"/><rect class="erd-table-header" width="${TW}" height="${HH}"/><text class="erd-table-title" x="10" y="18">${t}</text>`;DB[t].columns.forEach((col,i)=>{const y=HH+i*CH+13;svg+=`<text class="erd-col-name" x="10" y="${y}">${col.name}</text><text class="erd-col-type" x="${TW-10}" y="${y}" text-anchor="end">${col.type.split('(')[0]}</text>`;if(col.pk)svg+=`<text class="erd-col-pk" x="${TW-10-(col.type.split('(')[0].length*6+8)}" y="${y}" text-anchor="end">PK</text>`;if(col.fk)svg+=`<text class="erd-col-fk" x="${TW-10-(col.type.split('(')[0].length*6+8)}" y="${y}" text-anchor="end">FK</text>`;});svg+=`</g>`;}
+  svg+='</svg>';document.getElementById(cid).innerHTML=svg;
+}
+
+// Editor
+function updateLineNums(){const ed=document.getElementById('query-editor');const n=ed.value.split('\n').length;document.getElementById('line-nums').innerHTML=Array.from({length:n},(_,i)=>i+1).join('<br>');ed.rows=Math.max(3,n+1);updateCursor();}
+function updateCursor(){const ed=document.getElementById('query-editor');const lines=ed.value.substring(0,ed.selectionStart).split('\n');document.getElementById('ln').textContent=lines.length;document.getElementById('col').textContent=lines[lines.length-1].length+1;}
+function handleKey(e){if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();runQuery();}if(e.key==='Tab'){e.preventDefault();const el=e.target,s=el.selectionStart;el.value=el.value.substring(0,s)+'  '+el.value.substring(el.selectionEnd);el.selectionStart=el.selectionEnd=s+2;}setTimeout(updateCursor,0);}
+
+// INIT
+buildSchemaTree();buildERD('erd-main-container');buildERD('erd-sidebar-container');updateLineNums();
+document.getElementById('query-editor').addEventListener('click',updateCursor);
+setTimeout(()=>loadPreset('profile'),400);
+</script>
 </body>
 </html>
