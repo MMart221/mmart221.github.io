@@ -7,322 +7,255 @@
   <title>michael_martinez.db</title>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --bg:       #060a10;
-      --panel:    #0a1020;
-      --surface:  #0f1628;
-      --surface2: #141e35;
-      --surface3: #192642;
-      --border:   #1a2540;
-      --border2:  #223050;
-      --accent:   #64ffda;
-      --accent-dim: rgba(100,255,218,0.10);
-      --accent-dim2: rgba(100,255,218,0.05);
-      --accent2:  #ffb347;
-      --accent2-dim: rgba(255,179,71,0.10);
-      --green:    #4ade80;
-      --red:      #f87171;
-      --purple:   #a78bfa;
-      --yellow:   #fbbf24;
-      --blue:     #60a5fa;
-      --pink:     #f472b6;
-      --text:     #d0d8e8;
-      --text2:    #a0b0c8;
-      --muted:    #3a4860;
-      --muted2:   #506070;
-    }
+    :root{--bg:#060a10;--panel:#0a1020;--surface:#0f1628;--surface2:#141e35;--surface3:#192642;--border:#1a2540;--border2:#223050;--accent:#64ffda;--accent-dim:rgba(100,255,218,.10);--accent2:#ffb347;--accent2-dim:rgba(255,179,71,.10);--green:#4ade80;--red:#f87171;--purple:#a78bfa;--yellow:#fbbf24;--blue:#60a5fa;--text:#d0d8e8;--text2:#a0b0c8;--muted:#3a4860;--muted2:#506070}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;overflow:hidden}
+    body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:13px;display:flex;flex-direction:column}
+    body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 1px 1px,rgba(100,255,218,.03) 1px,transparent 0);background-size:32px 32px;pointer-events:none;z-index:0}
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; overflow: hidden; }
+    /* TITLEBAR */
+    .titlebar{position:relative;z-index:10;display:flex;align-items:center;gap:1rem;padding:0 1.2rem;height:40px;background:#040710;border-bottom:1px solid var(--border);flex-shrink:0;user-select:none}
+    .titlebar-dots{display:flex;gap:7px}.dot{width:12px;height:12px;border-radius:50%}.dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}
+    .titlebar-name{font-family:'Outfit';font-size:.8rem;font-weight:500;color:var(--text2)}.titlebar-name b{color:var(--accent);font-weight:600}
+    .titlebar-conn{margin-left:auto;display:flex;align-items:center;gap:.5rem;font-size:.68rem;color:var(--muted2)}
+    .conn-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(74,222,128,.5);animation:pd 2s ease-in-out infinite}
+    @keyframes pd{0%,100%{box-shadow:0 0 8px rgba(74,222,128,.5)}50%{box-shadow:0 0 14px rgba(74,222,128,.8)}}
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      display: flex;
-      flex-direction: column;
-    }
+    /* MENUBAR */
+    .menubar{position:relative;z-index:10;display:flex;align-items:center;height:32px;background:var(--panel);border-bottom:1px solid var(--border);flex-shrink:0;padding:0 1rem}
+    .menu-item{padding:0 .9rem;height:100%;display:flex;align-items:center;font-family:'Outfit';font-size:.72rem;color:var(--muted2);cursor:default;transition:color .15s,background .15s}
+    .menu-item:hover{color:var(--text);background:var(--surface)}.menu-sep{width:1px;height:16px;background:var(--border);margin:0 .3rem}
 
-    body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background-image: radial-gradient(circle at 1px 1px, rgba(100,255,218,0.03) 1px, transparent 0);
-      background-size: 32px 32px;
-      pointer-events: none; z-index: 0;
-    }
+    /* WORKSPACE */
+    .workspace{position:relative;z-index:1;display:flex;flex:1;overflow:hidden}
 
-    /* ── TITLE BAR ── */
-    .titlebar {
-      position: relative; z-index: 10;
-      display: flex; align-items: center; gap: 1rem;
-      padding: 0 1.2rem; height: 40px;
-      background: #040710; border-bottom: 1px solid var(--border);
-      flex-shrink: 0; user-select: none;
-    }
-    .titlebar-dots { display: flex; gap: 7px; }
-    .dot { width: 12px; height: 12px; border-radius: 50%; }
-    .dot.r { background: #ff5f57; } .dot.y { background: #febc2e; } .dot.g { background: #28c840; }
-    .titlebar-name { font-family: 'Outfit'; font-size: 0.8rem; font-weight: 500; color: var(--text2); }
-    .titlebar-name b { color: var(--accent); font-weight: 600; }
-    .titlebar-conn { margin-left: auto; display: flex; align-items: center; gap: 0.5rem; font-size: 0.68rem; color: var(--muted2); }
-    .conn-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px rgba(74,222,128,0.5); animation: pulse-dot 2s ease-in-out infinite; }
-    @keyframes pulse-dot { 0%,100%{box-shadow:0 0 8px rgba(74,222,128,0.5);}50%{box-shadow:0 0 14px rgba(74,222,128,0.8);} }
+    /* SIDEBAR (collapsible) */
+    .sidebar{width:260px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transition:width .25s ease}
+    .sidebar.collapsed{width:0;border-right:none}
+    .sidebar.collapsed .sidebar-header,.sidebar.collapsed .sidebar-content{display:none}
+    .sidebar-toggle{width:28px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s;user-select:none}
+    .sidebar-toggle:hover{background:var(--surface)}
+    .sidebar-toggle svg{width:12px;height:12px;fill:var(--muted2);transition:transform .25s,fill .15s}
+    .sidebar-toggle:hover svg{fill:var(--accent)}
+    .sidebar-toggle.open svg{transform:rotate(180deg)}
+    .sidebar-header{padding:.7rem 1rem;font-family:'Outfit';font-size:.65rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--border);background:rgba(100,255,218,.03)}
+    .sidebar-content{flex:1;overflow-y:auto;overflow-x:hidden}
+    .db-header{padding:.8rem 1rem;display:flex;align-items:center;gap:.5rem;border-bottom:1px solid var(--border);background:rgba(100,255,218,.02)}
+    .db-icon{width:22px;height:22px;border-radius:4px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:.7rem}
+    .db-label{font-family:'Outfit';font-size:.72rem;font-weight:600;color:var(--accent)}
+    .db-sublabel{font-size:.6rem;color:var(--muted2);margin-left:auto}
+    .schema-tree{padding:.5rem 0}
+    .table-item{padding:.5rem 1rem .5rem 1.2rem;font-size:.72rem;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:.5rem;transition:all .15s;border-left:2px solid transparent}
+    .table-icon{width:16px;height:16px;border-radius:3px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.55rem;color:var(--muted2);flex-shrink:0}
+    .table-item:hover{background:var(--surface);border-left-color:var(--accent);color:var(--text)}
+    .table-item:hover .table-icon{border-color:var(--accent);color:var(--accent)}
+    .table-item.active{background:var(--accent-dim);border-left-color:var(--accent);color:var(--accent)}
+    .table-item.active .table-icon{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+    .table-row-count{margin-left:auto;font-size:.58rem;color:var(--muted);background:var(--surface);padding:.1rem .4rem;border-radius:3px}
+    .col-list{display:none;background:rgba(0,0,0,.15)}.table-item.expanded+.col-list{display:block}
+    .col-item{padding:.3rem 1rem .3rem 2.8rem;font-size:.65rem;color:var(--muted2);display:flex;align-items:center;gap:.5rem}
+    .col-name{color:var(--text2);min-width:80px}
+    .col-type{font-size:.58rem;color:var(--purple);background:rgba(167,139,250,.08);padding:.05rem .35rem;border-radius:2px}
+    .col-badge{font-size:.5rem;font-weight:700;padding:.05rem .3rem;border-radius:2px;margin-left:auto}
+    .col-badge.pk{color:var(--yellow);background:rgba(251,191,36,.1)}.col-badge.fk{color:var(--blue);background:rgba(96,165,250,.1)}
 
-    /* ── MENU BAR ── */
-    .menubar { position:relative;z-index:10; display:flex;align-items:center;height:32px; background:var(--panel);border-bottom:1px solid var(--border); flex-shrink:0;padding:0 1rem; }
-    .menu-item { padding:0 0.9rem;height:100%;display:flex;align-items:center;font-family:'Outfit';font-size:0.72rem;color:var(--muted2);cursor:default;transition:color .15s,background .15s; }
-    .menu-item:hover { color:var(--text);background:var(--surface); }
-    .menu-sep { width:1px;height:16px;background:var(--border);margin:0 .3rem; }
+    /* MAIN PANE */
+    .main-pane{flex:1;display:flex;flex-direction:column;overflow:hidden}
+    .tabs{display:flex;background:var(--panel);border-bottom:1px solid var(--border);flex-shrink:0}
+    .tab{padding:.55rem 1.2rem;font-size:.72rem;color:var(--muted2);cursor:pointer;border-right:1px solid var(--border);border-bottom:2px solid transparent;transition:all .15s;display:flex;align-items:center;gap:.5rem;font-family:'Outfit';font-weight:400}
+    .tab.active{color:var(--text);background:var(--surface);border-bottom-color:var(--accent)}
+    .tab-dot{width:6px;height:6px;border-radius:50%}.tab-dot.sql{background:var(--accent2)}.tab-dot.erd{background:var(--purple)}.tab-dot.dict{background:var(--green)}
 
-    /* ── WORKSPACE ── */
-    .workspace { position:relative;z-index:1;display:flex;flex:1;overflow:hidden; }
+    /* EDITOR (fixed height, scrollable) */
+    .editor-section{flex-shrink:0;border-bottom:none;display:flex;flex-direction:column;height:160px;min-height:60px;max-height:70%}
+    .editor-toolbar{display:flex;align-items:center;gap:.6rem;padding:.45rem 1rem;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
+    .run-btn{display:flex;align-items:center;gap:.4rem;padding:.35rem 1.1rem;background:var(--accent);color:#060a10;font-family:'Outfit';font-size:.72rem;font-weight:600;border:none;border-radius:4px;cursor:pointer;transition:all .15s}
+    .run-btn:hover{opacity:.88;transform:translateY(-1px);box-shadow:0 2px 12px rgba(100,255,218,.2)}
+    .run-btn svg{width:10px;height:10px}
+    .toolbar-sep{width:1px;height:18px;background:var(--border2)}
+    .preset-label{font-family:'Outfit';font-size:.62rem;font-weight:500;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+    .preset-queries{display:flex;gap:.35rem;flex-wrap:wrap}
+    .preset-btn{padding:.35rem .85rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;background:var(--accent2-dim);border:1px solid rgba(255,179,71,.3);color:var(--accent2);border-radius:4px;cursor:pointer;transition:all .15s;font-weight:500}
+    .preset-btn:hover{border-color:var(--accent2);color:var(--accent2);background:rgba(255,179,71,.15);transform:translateY(-1px)}
+    .preset-btn.hire{border-color:rgba(255,179,71,.5);background:rgba(255,179,71,.15)}.preset-btn.hire:hover{border-color:var(--accent2);background:rgba(255,179,71,.22)}
 
-    /* ── SIDEBAR ── */
-    .sidebar { width:260px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden; }
-    .sidebar-tabs { display:flex;border-bottom:1px solid var(--border);flex-shrink:0; }
-    .sidebar-tab { flex:1;padding:.6rem 0;text-align:center;font-family:'Outfit';font-size:.65rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s; }
-    .sidebar-tab:hover { color:var(--text);background:var(--surface); }
-    .sidebar-tab.active { color:var(--accent);border-bottom-color:var(--accent);background:rgba(100,255,218,0.03); }
-    .sidebar-content { flex:1;overflow-y:auto;overflow-x:hidden; }
-    .sidebar-panel { display:none;height:100%; }
-    .sidebar-panel.active { display:flex;flex-direction:column; }
+    .editor-wrap{position:relative;background:var(--bg);flex:1;overflow:hidden}
+    .line-nums{position:absolute;top:0;left:0;width:44px;text-align:right;font-size:.72rem;color:var(--muted);line-height:1.7;user-select:none;border-right:1px solid var(--border);background:var(--panel);height:100%;overflow:hidden}
+    #query-editor{display:block;width:100%;height:100%;padding:.8rem 1rem .8rem 3.5rem;background:transparent;border:none;outline:none;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--text);line-height:1.7;resize:none;caret-color:var(--accent);tab-size:2;overflow-y:auto}
 
-    .db-header { padding:.8rem 1rem;display:flex;align-items:center;gap:.5rem;border-bottom:1px solid var(--border);background:rgba(100,255,218,0.02); }
-    .db-icon { width:22px;height:22px;border-radius:4px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:.7rem; }
-    .db-label { font-family:'Outfit';font-size:.72rem;font-weight:600;color:var(--accent); }
-    .db-sublabel { font-size:.6rem;color:var(--muted2);margin-left:auto; }
-    .schema-tree { padding:.5rem 0;overflow-y:auto;flex:1; }
-    .table-item { padding:.5rem 1rem .5rem 1.2rem;font-size:.72rem;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:.5rem;transition:all .15s;border-left:2px solid transparent; }
-    .table-icon { width:16px;height:16px;border-radius:3px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.55rem;color:var(--muted2);flex-shrink:0; }
-    .table-item:hover { background:var(--surface);border-left-color:var(--accent);color:var(--text); }
-    .table-item:hover .table-icon { border-color:var(--accent);color:var(--accent); }
-    .table-item.active { background:var(--accent-dim);border-left-color:var(--accent);color:var(--accent); }
-    .table-item.active .table-icon { background:var(--accent-dim);border-color:var(--accent);color:var(--accent); }
-    .table-row-count { margin-left:auto;font-size:.58rem;color:var(--muted);background:var(--surface);padding:.1rem .4rem;border-radius:3px; }
-    .col-list { display:none;background:rgba(0,0,0,.15); }
-    .table-item.expanded + .col-list { display:block; }
-    .col-item { padding:.3rem 1rem .3rem 2.8rem;font-size:.65rem;color:var(--muted2);display:flex;align-items:center;gap:.5rem; }
-    .col-name { color:var(--text2);min-width:80px; }
-    .col-type { font-size:.58rem;color:var(--purple);background:rgba(167,139,250,0.08);padding:.05rem .35rem;border-radius:2px; }
-    .col-badge { font-size:.5rem;font-weight:700;padding:.05rem .3rem;border-radius:2px;margin-left:auto; }
-    .col-badge.pk { color:var(--yellow);background:rgba(251,191,36,0.1); }
-    .col-badge.fk { color:var(--blue);background:rgba(96,165,250,0.1); }
-
-    /* ERD */
-    .erd-container { width:100%;height:100%;overflow:auto;padding:1rem; }
-    .erd-table-bg { rx:6;fill:var(--surface2);stroke:var(--border2);stroke-width:1; }
-    .erd-table-header { fill:var(--surface3);rx:6; }
-    .erd-table-title { font-family:'Outfit';font-size:11px;font-weight:600;fill:var(--accent); }
-    .erd-col-name { font-family:'JetBrains Mono',monospace;font-size:9.5px;fill:var(--text2); }
-    .erd-col-type { font-family:'JetBrains Mono',monospace;font-size:9px;fill:var(--purple); }
-    .erd-col-pk { font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--yellow);font-weight:700; }
-    .erd-col-fk { font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--blue);font-weight:700; }
-    .erd-line { stroke:var(--border2);stroke-width:1.5;fill:none;opacity:.6; }
-    .erd-line-label { font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--muted2); }
-
-    /* ── MAIN PANE ── */
-    .main-pane { flex:1;display:flex;flex-direction:column;overflow:hidden; }
-    .tabs { display:flex;background:var(--panel);border-bottom:1px solid var(--border);flex-shrink:0; }
-    .tab { padding:.55rem 1.2rem;font-size:.72rem;color:var(--muted2);cursor:pointer;border-right:1px solid var(--border);border-bottom:2px solid transparent;transition:all .15s;display:flex;align-items:center;gap:.5rem;font-family:'Outfit';font-weight:400; }
-    .tab.active { color:var(--text);background:var(--surface);border-bottom-color:var(--accent); }
-    .tab-dot { width:6px;height:6px;border-radius:50%; }
-    .tab-dot.sql { background:var(--accent2); } .tab-dot.erd { background:var(--purple); }
-
-    /* EDITOR */
-    .editor-section { flex-shrink:0;border-bottom:1px solid var(--border); }
-    .editor-toolbar { display:flex;align-items:center;gap:.6rem;padding:.45rem 1rem;background:var(--surface);border-bottom:1px solid var(--border); }
-    .run-btn { display:flex;align-items:center;gap:.4rem;padding:.35rem 1.1rem;background:var(--accent);color:#060a10;font-family:'Outfit';font-size:.72rem;font-weight:600;border:none;border-radius:4px;cursor:pointer;transition:all .15s; }
-    .run-btn:hover { opacity:.88;transform:translateY(-1px);box-shadow:0 2px 12px rgba(100,255,218,0.2); }
-    .run-btn svg { width:10px;height:10px; }
-    .toolbar-sep { width:1px;height:18px;background:var(--border2); }
-    .preset-label { font-family:'Outfit';font-size:.62rem;font-weight:500;color:var(--muted);letter-spacing:.1em;text-transform:uppercase; }
-    .preset-queries { display:flex;gap:.35rem;flex-wrap:wrap; }
-    .preset-btn { padding:.25rem .65rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;background:var(--surface2);border:1px solid var(--border2);color:var(--text2);border-radius:3px;cursor:pointer;transition:all .15s; }
-    .preset-btn:hover { border-color:var(--accent);color:var(--accent);background:var(--accent-dim); }
-    .preset-btn.hire { border-color:rgba(255,179,71,.3);color:var(--accent2); }
-    .preset-btn.hire:hover { border-color:var(--accent2);background:var(--accent2-dim); }
-
-    .editor-wrap { position:relative;background:var(--bg); }
-    .line-nums { position:absolute;top:0;left:0;width:44px;padding:.8rem 0;text-align:right;padding-right:.7rem;font-size:.72rem;color:var(--muted);line-height:1.7;user-select:none;border-right:1px solid var(--border);background:var(--panel); }
-    #query-editor { display:block;width:100%;padding:.8rem 1rem .8rem 3.5rem;background:transparent;border:none;outline:none;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--text);line-height:1.7;resize:none;min-height:80px;caret-color:var(--accent);tab-size:2; }
+    /* RESIZER */
+    .editor-resizer{height:5px;background:var(--border);cursor:ns-resize;flex-shrink:0;position:relative;transition:background .15s}
+    .editor-resizer:hover,.editor-resizer.active{background:var(--accent);opacity:.6}
+    .editor-resizer::after{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:30px;height:2px;background:var(--muted);border-radius:1px}
 
     /* RESULTS */
-    .results-section { flex:1;overflow:hidden;display:flex;flex-direction:column; }
-    .results-toolbar { display:flex;align-items:center;gap:1rem;padding:.4rem 1rem;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0; }
-    .results-label { font-family:'Outfit';font-size:.62rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2); }
-
-    /* VIEW TOGGLE */
-    .view-toggle { display:none;gap:0;border:1px solid var(--border2);border-radius:4px;overflow:hidden; }
-    .view-toggle.visible { display:flex; }
-    .vtb { padding:.2rem .7rem;font-family:'Outfit';font-size:.6rem;font-weight:500;color:var(--muted2);background:transparent;border:none;cursor:pointer;transition:all .15s;letter-spacing:.03em; }
-    .vtb:not(:last-child) { border-right:1px solid var(--border2); }
-    .vtb.active { background:var(--accent-dim);color:var(--accent); }
-    .vtb:hover:not(.active) { color:var(--text);background:var(--surface2); }
-
-    .results-meta { display:none;gap:1.2rem;margin-left:auto;font-size:.62rem; }
-    .results-meta.visible { display:flex; }
-    .meta-item { color:var(--muted2);font-family:'Outfit'; }
-    .meta-item span { color:var(--green);font-family:'JetBrains Mono',monospace;font-weight:500; }
-
-    .results-scroll { overflow:auto;flex:1; }
-    .results-empty { display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;gap:.8rem;color:var(--muted);font-size:.78rem; }
-    .results-empty-icon { font-size:2.5rem;opacity:.2; }
-    .results-empty p { font-family:'Outfit';font-style:italic;font-weight:300; }
-    .results-empty .hint { font-size:.65rem;color:var(--muted);margin-top:-.3rem; }
+    .results-section{flex:1;overflow:hidden;display:flex;flex-direction:column}
+    .results-toolbar{display:flex;align-items:center;gap:1rem;padding:.4rem 1rem;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
+    .results-label{font-family:'Outfit';font-size:.62rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2)}
+    .view-toggle{display:none;gap:0;border:1px solid var(--border2);border-radius:4px;overflow:hidden}.view-toggle.visible{display:flex}
+    .vtb{padding:.2rem .7rem;font-family:'Outfit';font-size:.6rem;font-weight:500;color:var(--muted2);background:transparent;border:none;cursor:pointer;transition:all .15s}
+    .vtb:not(:last-child){border-right:1px solid var(--border2)}.vtb.active{background:var(--accent-dim);color:var(--accent)}.vtb:hover:not(.active){color:var(--text);background:var(--surface2)}
+    .results-meta{display:none;gap:1.2rem;margin-left:auto;font-size:.62rem}.results-meta.visible{display:flex}
+    .meta-item{color:var(--muted2);font-family:'Outfit'}.meta-item span{color:var(--green);font-family:'JetBrains Mono',monospace;font-weight:500}
+    .results-scroll{overflow:auto;flex:1}
+    .results-empty{display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;gap:.8rem;color:var(--muted)}
+    .results-empty-icon{font-size:2.5rem;opacity:.2}.results-empty p{font-family:'Outfit';font-style:italic;font-weight:300;font-size:.78rem}
+    .results-empty .hint{font-size:.65rem;color:var(--muted);margin-top:-.3rem}
 
     /* TABLE VIEW */
-    table.rt { width:100%;border-collapse:collapse;font-size:.73rem; }
-    table.rt thead { position:sticky;top:0;z-index:10; }
-    table.rt th { padding:.55rem 1rem;text-align:left;background:var(--surface2);color:var(--accent);font-family:'Outfit';font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border-bottom:2px solid var(--border2);border-right:1px solid var(--border);white-space:nowrap; }
-    table.rt th:first-child { color:var(--muted);width:40px;text-align:center; }
-    table.rt td { padding:.45rem 1rem;border-bottom:1px solid rgba(26,37,64,.5);border-right:1px solid rgba(26,37,64,.3);color:var(--text);white-space:nowrap;max-width:420px;overflow:hidden;text-overflow:ellipsis; }
-    table.rt tbody tr { opacity:0;animation:rowIn .3s ease forwards; }
-    @keyframes rowIn { from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);} }
-    table.rt tbody tr:hover td { background:rgba(100,255,218,.02); }
-    table.rt td.rn { color:var(--muted);font-size:.62rem;text-align:center; }
-    table.rt td.nl { color:var(--muted);font-style:italic; }
-    table.rt td.bt { color:var(--green);font-weight:500; }
-    table.rt td.bf { color:var(--red); }
-    table.rt td.nm { color:var(--green); }
-    table.rt td.dt { color:var(--purple); }
+    table.rt{width:100%;border-collapse:collapse;font-size:.73rem}
+    table.rt thead{position:sticky;top:0;z-index:10}
+    table.rt th{padding:.55rem 1rem;text-align:left;background:var(--surface2);color:var(--accent);font-family:'Outfit';font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border-bottom:2px solid var(--border2);border-right:1px solid var(--border);white-space:nowrap}
+    table.rt th:first-child{color:var(--muted);width:40px;text-align:center}
+    table.rt td{padding:.45rem 1rem;border-bottom:1px solid rgba(26,37,64,.5);border-right:1px solid rgba(26,37,64,.3);color:var(--text);white-space:nowrap;max-width:420px;overflow:hidden;text-overflow:ellipsis}
+    table.rt tbody tr{opacity:0;animation:rowIn .3s ease forwards}
+    @keyframes rowIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+    table.rt tbody tr:hover td{background:rgba(100,255,218,.02)}
+    table.rt td.rn{color:var(--muted);font-size:.62rem;text-align:center}
+    table.rt td.nl{color:var(--muted);font-style:italic}.table.rt td.bt{color:var(--green)}.table.rt td.bf{color:var(--red)}.table.rt td.nm{color:var(--green)}.table.rt td.dt{color:var(--purple)}
 
-    /* ═══ CLEAN VIEW ═══ */
-    .cv { padding:1.5rem 2rem; overflow-y:auto; animation:fadeIn .4s ease; }
-    @keyframes fadeIn { from{opacity:0;}to{opacity:1;} }
-    @keyframes slideUp { from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);} }
+    /* ═══ CLEAN VIEW (portfolio-style) ═══ */
+    .cv{padding:1.8rem 2.5rem;overflow-y:auto;height:100%;animation:fadeIn .4s ease}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
-    /* Profile */
-    .cv-profile { display:flex;flex-direction:column;align-items:center;gap:1rem;padding-top:1rem; }
-    .cv-p-name { font-family:'Outfit';font-size:1.8rem;font-weight:800;color:var(--accent);letter-spacing:-.02em;animation:slideUp .5s ease .1s both; }
-    .cv-p-tag { font-family:'Outfit';font-size:1rem;font-weight:400;color:var(--text2);margin-top:-.3rem;animation:slideUp .5s ease .2s both; }
-    .cv-p-status { font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--green);background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);border-radius:20px;padding:.3rem 1rem;animation:slideUp .5s ease .3s both; }
-    .cv-p-links { display:flex;gap:.8rem;flex-wrap:wrap;justify-content:center;margin-top:.5rem;animation:slideUp .5s ease .4s both; }
-    .cv-link { display:flex;align-items:center;gap:.4rem;padding:.45rem .9rem;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;font-family:'Outfit';font-size:.72rem;color:var(--text2);text-decoration:none;transition:all .2s; }
-    .cv-link:hover { border-color:var(--accent);color:var(--accent);background:var(--accent-dim);transform:translateY(-1px); }
+    .cv-section-label{font-size:.68rem;color:var(--accent);letter-spacing:.14em;margin-bottom:.4rem;animation:slideUp .4s ease .05s both}
+    .cv-section-title{font-family:'Outfit';font-size:1.6rem;font-weight:800;color:var(--text);margin-bottom:1.5rem;animation:slideUp .4s ease .1s both}
+    .cv-section-title em{color:var(--accent);font-style:normal}
 
-    /* Experience */
-    .cv-tl { display:flex;flex-direction:column;padding-left:1.5rem;position:relative; }
-    .cv-tl::before { content:'';position:absolute;left:6px;top:10px;bottom:10px;width:2px;background:linear-gradient(to bottom,var(--accent),var(--border2)); }
-    .cv-role { position:relative;padding:.8rem 0 1.2rem 2rem;animation:slideUp .4s ease both; }
-    .cv-role::before { content:'';position:absolute;left:-1.5rem;top:1.15rem;width:10px;height:10px;border-radius:50%;background:var(--surface);border:2px solid var(--accent); }
-    .cv-role.past::before { border-color:var(--muted2);background:var(--muted); }
-    .cv-role-hd { display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap;margin-bottom:.25rem; }
-    .cv-role-t { font-family:'Outfit';font-size:.95rem;font-weight:700;color:var(--text); }
-    .cv-role-at { font-family:'Outfit';font-size:.8rem;color:var(--accent);font-weight:500; }
-    .cv-role-dt { font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted2);margin-left:auto; }
-    .cv-role-cur { font-family:'Outfit';font-size:.55rem;font-weight:600;color:var(--green);background:rgba(74,222,128,.1);padding:.1rem .5rem;border-radius:3px;letter-spacing:.06em;text-transform:uppercase; }
-    .cv-hls { list-style:none;margin-top:.5rem;display:flex;flex-direction:column;gap:.35rem; }
-    .cv-hl { font-size:.72rem;color:var(--text2);padding-left:1rem;position:relative;line-height:1.5; }
-    .cv-hl::before { content:'›';position:absolute;left:0;color:var(--accent);font-weight:700; }
-    .cv-imp { display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--accent2);background:var(--accent2-dim);padding:.05rem .4rem;border-radius:2px;margin-left:.4rem; }
+    /* Overview */
+    .cv-avail{display:inline-flex;align-items:center;gap:.4rem;font-size:.68rem;color:var(--accent);border:1px solid rgba(100,255,218,.3);padding:.3rem .9rem;border-radius:3px;margin-bottom:1.2rem;letter-spacing:.1em;animation:slideUp .4s ease .1s both}
+    .cv-avail-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pd 2s ease-in-out infinite}
+    .cv-bigname{font-family:'Outfit';font-size:2.8rem;font-weight:800;color:var(--text);line-height:1.05;animation:slideUp .5s ease .15s both}
+    .cv-bigname em{color:var(--accent);font-style:normal}
+    .cv-bio{font-size:.78rem;color:var(--text2);line-height:1.7;margin:1rem 0 1.5rem;max-width:520px;animation:slideUp .5s ease .25s both}
+    .cv-actions{display:flex;gap:.8rem;margin-bottom:2rem;animation:slideUp .5s ease .35s both}
+    .cv-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem 1.3rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:500;border-radius:4px;text-decoration:none;cursor:pointer;transition:all .2s;border:none}
+    .cv-btn.primary{background:var(--accent);color:#060a10}.cv-btn.primary:hover{box-shadow:0 4px 16px rgba(100,255,218,.25);transform:translateY(-1px)}
+    .cv-btn.secondary{background:transparent;border:1px solid var(--accent);color:var(--accent)}.cv-btn.secondary:hover{background:var(--accent-dim)}
+    .cv-contact-row{display:flex;gap:1.5rem;flex-wrap:wrap;animation:slideUp .5s ease .45s both}
+    .cv-contact-item{font-size:.72rem;color:var(--text2);display:flex;align-items:center;gap:.4rem}
+    .cv-contact-item a{color:var(--accent);text-decoration:none}.cv-contact-item a:hover{text-decoration:underline}
 
-    /* Skills */
-    .cv-skills { display:flex;flex-direction:column;gap:1.2rem; }
-    .cv-scat { animation:slideUp .4s ease both; }
-    .cv-scat-hd { display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem; }
-    .cv-scat-nm { font-family:'Outfit';font-size:.85rem;font-weight:700;color:var(--text); }
-    .cv-scat-ct { font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted2); }
-    .cv-sbar { height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;margin-bottom:.5rem;display:flex; }
-    .cv-sbar-a { background:var(--accent);height:100%;transition:width .8s ease; }
-    .cv-sbar-p { background:var(--blue);height:100%;transition:width .8s ease; }
-    .cv-sbar-f { background:var(--muted2);height:100%;transition:width .8s ease; }
-    .cv-spills { display:flex;flex-wrap:wrap;gap:.35rem; }
-    .cv-sp { font-family:'JetBrains Mono',monospace;font-size:.65rem;padding:.25rem .6rem;border-radius:4px;border:1px solid; }
-    .cv-sp.a { color:var(--accent);border-color:rgba(100,255,218,.25);background:var(--accent-dim); }
-    .cv-sp.p { color:var(--blue);border-color:rgba(96,165,250,.25);background:rgba(96,165,250,.08); }
-    .cv-sp.f { color:var(--muted2);border-color:var(--border2);background:var(--surface2); }
+    /* Education */
+    .cv-edu-card{background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:1.8rem 2rem;max-width:700px;animation:slideUp .4s ease .2s both}
+    .cv-edu-name{font-family:'Outfit';font-size:1.3rem;font-weight:800;color:var(--text);margin-bottom:.3rem}
+    .cv-edu-degree{font-size:.78rem;color:var(--accent);margin-bottom:.15rem}
+    .cv-edu-detail{font-size:.72rem;color:var(--muted2);margin-bottom:1.2rem}
+    .cv-stats{display:flex;gap:1rem;margin-bottom:1.2rem}
+    .cv-stat{flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:.8rem;text-align:center}
+    .cv-stat-val{font-family:'Outfit';font-size:1.4rem;font-weight:800;color:var(--accent)}
+    .cv-stat-label{font-size:.6rem;color:var(--muted2);letter-spacing:.1em;text-transform:uppercase;margin-top:.2rem}
+    .cv-pills{display:flex;flex-wrap:wrap;gap:.4rem}
+    .cv-pill{font-size:.65rem;color:var(--text2);border:1px solid var(--border2);padding:.3rem .7rem;border-radius:3px}
 
-    /* Tech Stack */
-    .cv-projs { display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem; }
-    .cv-pcard { background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:1rem 1.2rem;transition:all .2s;animation:slideUp .4s ease both; }
-    .cv-pcard:hover { border-color:var(--accent);transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,.3); }
-    .cv-pcard-hd { display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem; }
-    .cv-pcard-nm { font-family:'Outfit';font-size:.9rem;font-weight:700;color:var(--text); }
-    .cv-pcard-st { font-family:'JetBrains Mono',monospace;font-size:.55rem;font-weight:600;padding:.1rem .45rem;border-radius:3px;margin-left:auto; }
-    .cv-pcard-st.active { color:var(--green);background:rgba(74,222,128,.1); }
-    .cv-pcard-st.delivered { color:var(--accent2);background:var(--accent2-dim); }
-    .cv-pcard-st.complete { color:var(--muted2);background:var(--surface2); }
-    .cv-pcard-ty { font-family:'Outfit';font-size:.65rem;color:var(--muted2);margin-bottom:.5rem; }
-    .cv-pcard-desc { font-size:.72rem;color:var(--text2);margin-bottom:.6rem;line-height:1.4; }
-    .cv-pcard-tech { display:flex;flex-wrap:wrap;gap:.3rem; }
-    .cv-tpill { font-family:'JetBrains Mono',monospace;font-size:.58rem;padding:.15rem .45rem;background:var(--accent-dim);border:1px solid rgba(100,255,218,.12);border-radius:3px;color:var(--accent); }
+    /* Skills (two-column) */
+    .cv-skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+    .cv-skill-box{border:1px solid var(--border2);border-radius:6px;padding:1.2rem 1.5rem;animation:slideUp .4s ease both}
+    .cv-skill-box-title{font-size:.65rem;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
+    .cv-skill-line{font-size:.75rem;color:var(--text2);padding:.45rem 0;padding-left:1rem;position:relative;line-height:1.5}
+    .cv-skill-line::before{content:'\203A';position:absolute;left:0;color:var(--accent);font-weight:700}
 
-    /* Timeline */
-    .cv-tbars { display:flex;flex-direction:column;gap:.8rem; }
-    .cv-tb { animation:slideUp .4s ease both; }
-    .cv-tb-hd { display:flex;align-items:baseline;gap:.5rem;margin-bottom:.3rem; }
-    .cv-tb-t { font-family:'Outfit';font-size:.82rem;font-weight:600;color:var(--text); }
-    .cv-tb-emp { font-family:'Outfit';font-size:.72rem;color:var(--accent); }
-    .cv-tb-mo { font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted2);margin-left:auto; }
-    .cv-tb-track { height:28px;background:var(--surface2);border-radius:4px;overflow:hidden;position:relative; }
-    .cv-tb-fill { height:100%;border-radius:4px;display:flex;align-items:center;padding-left:.8rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:500;color:#060a10;transition:width 1s ease; }
-    .cv-tb-fill.cur { background:linear-gradient(90deg,var(--accent),#4ac6b0); }
-    .cv-tb-fill.old { background:linear-gradient(90deg,var(--surface3),var(--border2));color:var(--text2); }
+    /* Projects (grid cards) */
+    .cv-proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+    .cv-proj-card{border:1px solid var(--border2);border-radius:6px;padding:1.4rem 1.5rem;animation:slideUp .4s ease both;transition:border-color .2s}
+    .cv-proj-card:hover{border-color:var(--accent)}
+    .cv-proj-label{font-size:.62rem;color:var(--muted2);letter-spacing:.08em;margin-bottom:.5rem}
+    .cv-proj-name{font-family:'Outfit';font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.15rem}
+    .cv-proj-sub{font-size:.72rem;color:var(--accent);margin-bottom:.7rem}
+    .cv-proj-techs{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.9rem}
+    .cv-proj-tech{font-size:.62rem;color:var(--accent);border:1px solid rgba(100,255,218,.2);padding:.2rem .5rem;border-radius:3px;background:var(--accent-dim)}
+    .cv-proj-bullets{display:flex;flex-direction:column;gap:.4rem}
+    .cv-proj-bullet{font-size:.7rem;color:var(--text2);padding-left:1rem;position:relative;line-height:1.5}
+    .cv-proj-bullet::before{content:'\2014';position:absolute;left:0;color:var(--accent)}
+
+    /* Work Experience (timeline) */
+    .cv-work-tl{display:flex;flex-direction:column;position:relative;padding-left:1.2rem}
+    .cv-work-tl::before{content:'';position:absolute;left:3px;top:8px;bottom:8px;width:2px;background:linear-gradient(to bottom,var(--accent),var(--border2))}
+    .cv-work-entry{position:relative;padding:0 0 2rem 1.8rem;animation:slideUp .4s ease both}
+    .cv-work-entry::before{content:'';position:absolute;left:-1.2rem;top:6px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+    .cv-work-entry.past::before{background:var(--muted2)}
+    .cv-work-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:.2rem}
+    .cv-work-company{font-family:'Outfit';font-size:1rem;font-weight:700;color:var(--text)}
+    .cv-work-date{font-size:.62rem;color:var(--accent);border:1px solid rgba(100,255,218,.25);padding:.2rem .6rem;border-radius:3px;white-space:nowrap;flex-shrink:0}
+    .cv-work-title{font-size:.78rem;color:var(--accent);margin-bottom:.15rem}
+    .cv-work-loc{font-size:.68rem;color:var(--muted2);margin-bottom:.7rem}
+    .cv-work-bullets{display:flex;flex-direction:column;gap:.4rem}
+    .cv-work-bullet{font-size:.72rem;color:var(--text2);padding-left:1rem;position:relative;line-height:1.5}
+    .cv-work-bullet::before{content:'\203A';position:absolute;left:0;color:var(--accent);font-weight:700}
 
     /* Hire Me */
-    .hire-banner { padding:2rem;text-align:center;animation:fadeIn .6s ease; }
-    .hire-banner h2 { font-family:'Outfit';font-size:1.5rem;font-weight:800;color:var(--accent);margin-bottom:.3rem;animation:slideUp .5s ease .15s both; }
-    .hire-banner .sub { font-family:'Outfit';font-size:.85rem;color:var(--text2);margin-bottom:1.5rem;animation:slideUp .5s ease .25s both; }
-    .hire-cards { display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem; }
-    .hire-card { background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:1rem 1.2rem;min-width:140px;animation:slideUp .5s ease both; }
-    .hire-card:nth-child(1){animation-delay:.35s;}.hire-card:nth-child(2){animation-delay:.43s;}.hire-card:nth-child(3){animation-delay:.51s;}.hire-card:nth-child(4){animation-delay:.59s;}.hire-card:nth-child(5){animation-delay:.67s;}
-    .hire-card .cl { font-family:'Outfit';font-size:.58rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:.4rem; }
-    .hire-card .cv_ { font-family:'Outfit';font-size:.85rem;font-weight:600;color:var(--text); }
-    .hire-card .cv_.ac { color:var(--accent); }
-    .hire-card .cv_.gd { color:var(--accent2); }
-    .hire-links { display:flex;gap:.8rem;justify-content:center;animation:slideUp .5s ease .8s both; }
-    .hire-link { display:inline-flex;align-items:center;gap:.4rem;padding:.45rem 1.1rem;font-family:'Outfit';font-size:.72rem;font-weight:600;border-radius:5px;text-decoration:none;transition:all .2s; }
-    .hire-link.pri { background:var(--accent);color:#060a10; }
-    .hire-link.pri:hover { box-shadow:0 4px 16px rgba(100,255,218,.25);transform:translateY(-1px); }
-    .hire-link.sec { background:transparent;border:1px solid var(--accent);color:var(--accent); }
-    .hire-link.sec:hover { background:var(--accent-dim); }
+    .hire-banner{padding:1.5rem 0;text-align:center;animation:fadeIn .6s ease}
+    .hire-banner h2{font-family:'Outfit';font-size:1.5rem;font-weight:800;color:var(--accent);margin-bottom:.3rem;animation:slideUp .5s ease .15s both}
+    .hire-banner .sub{font-family:'Outfit';font-size:.85rem;color:var(--text2);margin-bottom:1.5rem;animation:slideUp .5s ease .25s both}
+    .hire-cards{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem}
+    .hire-card{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:1rem 1.2rem;min-width:140px;animation:slideUp .5s ease both}
+    .hire-card:nth-child(1){animation-delay:.35s}.hire-card:nth-child(2){animation-delay:.43s}.hire-card:nth-child(3){animation-delay:.51s}.hire-card:nth-child(4){animation-delay:.59s}.hire-card:nth-child(5){animation-delay:.67s}
+    .hire-card .cl{font-family:'Outfit';font-size:.58rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:.4rem}
+    .hire-card .hv{font-family:'Outfit';font-size:.85rem;font-weight:600;color:var(--text)}
+    .hire-card .hv.ac{color:var(--accent)}.hire-card .hv.gd{color:var(--accent2)}
+    .hire-links{display:flex;gap:.8rem;justify-content:center;animation:slideUp .5s ease .8s both}
 
-    /* ERD main */
-    .erd-main { display:none;flex:1;overflow:auto;background:var(--bg); }
-    .erd-main.active { display:flex; }
-    .query-main { display:flex;flex-direction:column;flex:1; }
-    .query-main.hidden { display:none; }
+    /* ERD + Dict + secondary views */
+    .erd-main{display:none;flex:1;overflow:auto;background:var(--bg)}.erd-main.active{display:flex}
+    .dict-main{display:none;flex:1;overflow:auto;background:var(--bg);padding:2rem}.dict-main.active{display:block}
+    .query-main{display:flex;flex-direction:column;flex:1}.query-main.hidden{display:none}
 
-    /* Status */
-    .statusbar { position:relative;z-index:10;height:26px;background:linear-gradient(90deg,var(--accent),#4ac6b0);display:flex;align-items:center;padding:0 1.2rem;gap:1.5rem;flex-shrink:0; }
-    .status-item { font-family:'Outfit';font-size:.62rem;font-weight:600;color:#060a10; }
-    .status-item.right { margin-left:auto; }
+    .erd-container{width:100%;height:100%;overflow:scroll;padding:2rem}
+    .erd-table-bg{rx:6;fill:var(--surface2);stroke:var(--border2);stroke-width:1}
+    .erd-table-header{fill:var(--surface3);rx:6}
+    .erd-table-title{font-family:'Outfit';font-size:11px;font-weight:600;fill:var(--accent)}
+    .erd-col-name{font-family:'JetBrains Mono',monospace;font-size:9px;fill:var(--text2)}
+    .erd-col-type{font-family:'JetBrains Mono',monospace;font-size:8.5px;fill:var(--purple)}
+    .erd-col-pk{font-family:'JetBrains Mono',monospace;font-size:7.5px;fill:var(--yellow);font-weight:700}
+    .erd-col-fk{font-family:'JetBrains Mono',monospace;font-size:7.5px;fill:var(--blue);font-weight:700}
+    .erd-line{stroke:var(--border2);stroke-width:1.5;fill:none;opacity:.5}
+    .erd-line-label{font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--muted2)}
 
-    ::-webkit-scrollbar { width:6px;height:6px; }
-    ::-webkit-scrollbar-track { background:var(--panel); }
-    ::-webkit-scrollbar-thumb { background:var(--border2);border-radius:3px; }
-    ::-webkit-scrollbar-thumb:hover { background:var(--muted); }
+    /* Data dictionary */
+    .dict-table{margin-bottom:2rem;animation:slideUp .3s ease both}
+    .dict-table-name{font-family:'Outfit';font-size:.9rem;font-weight:700;color:var(--accent);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+    .dict-table-name span{font-size:.6rem;color:var(--muted2);font-weight:400}
+    .dict-cols{border:1px solid var(--border2);border-radius:6px;overflow:hidden}
+    .dict-row{display:flex;padding:.4rem 1rem;font-size:.7rem;border-bottom:1px solid var(--border)}
+    .dict-row:last-child{border-bottom:none}
+    .dict-row.head{background:var(--surface2);font-family:'Outfit';font-size:.6rem;font-weight:600;color:var(--muted2);letter-spacing:.08em;text-transform:uppercase}
+    .dict-row .dc-name{flex:2;color:var(--text)}.dict-row .dc-type{flex:1.2;color:var(--purple)}.dict-row .dc-key{flex:.8;color:var(--yellow)}.dict-row .dc-ref{flex:1.5;color:var(--blue);font-size:.65rem}.dict-row .dc-desc{flex:3;color:var(--text2);font-size:.65rem}
+    .dict-row.head .dc-name,.dict-row.head .dc-type,.dict-row.head .dc-key,.dict-row.head .dc-ref,.dict-row.head .dc-desc{color:var(--muted2)}
+
+    /* STATUS BAR */
+    .statusbar{position:relative;z-index:10;height:26px;background:linear-gradient(90deg,var(--accent),#4ac6b0);display:flex;align-items:center;padding:0 1.2rem;gap:1.5rem;flex-shrink:0}
+    .status-item{font-family:'Outfit';font-size:.62rem;font-weight:600;color:#060a10}.status-item.right{margin-left:auto}
+
+    ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:var(--panel)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:var(--muted)}
   </style>
 </head>
 <body>
   <div class="titlebar">
     <div class="titlebar-dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
     <div class="titlebar-name"><b>michael_martinez</b>.db — QueryStudio v2.0</div>
-    <div class="titlebar-conn"><div class="conn-dot"></div>Connected · 11 tables · 3NF normalized</div>
+    <div class="titlebar-conn"><div class="conn-dot"></div>Connected · 12 tables · 3NF</div>
   </div>
   <div class="menubar">
     <div class="menu-item">File</div><div class="menu-item">Edit</div><div class="menu-item">Query</div><div class="menu-item">Tools</div>
-    <div class="menu-sep"></div><div class="menu-item" style="color:var(--accent);">michael_martinez_db</div><div class="menu-sep"></div><div class="menu-item">public</div>
+    <div class="menu-sep"></div><div class="menu-item" style="color:var(--accent)">michael_martinez_db</div><div class="menu-sep"></div><div class="menu-item">public</div>
   </div>
   <div class="workspace">
-    <div class="sidebar">
-      <div class="sidebar-tabs">
-        <div class="sidebar-tab active" onclick="switchSidebarTab('schema')">Schema</div>
-        <div class="sidebar-tab" onclick="switchSidebarTab('erd')">ERD</div>
-      </div>
+    <div class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()">
+      <svg viewBox="0 0 12 12"><polygon points="4,1 10,6 4,11"/></svg>
+    </div>
+    <div class="sidebar collapsed" id="sidebar">
+      <div class="sidebar-header">Schema Explorer</div>
       <div class="sidebar-content">
-        <div class="sidebar-panel active" id="schema-panel">
-          <div class="db-header"><div class="db-icon">⬡</div><span class="db-label">michael_martinez_db</span><span class="db-sublabel">public</span></div>
-          <div class="schema-tree" id="schema-tree"></div>
-        </div>
-        <div class="sidebar-panel" id="erd-panel"><div class="erd-container" id="erd-sidebar-container"></div></div>
+        <div class="db-header"><div class="db-icon">⬡</div><span class="db-label">michael_martinez_db</span><span class="db-sublabel">12 tables</span></div>
+        <div class="schema-tree" id="schema-tree"></div>
       </div>
     </div>
     <div class="main-pane">
       <div class="tabs">
         <div class="tab active" id="tab-query" onclick="switchMainTab('query')"><div class="tab-dot sql"></div>query_1.sql</div>
         <div class="tab" id="tab-erd" onclick="switchMainTab('erd')"><div class="tab-dot erd"></div>schema_erd</div>
+        <div class="tab" id="tab-dict" onclick="switchMainTab('dict')"><div class="tab-dot dict"></div>data_dictionary</div>
       </div>
       <div class="query-main" id="query-view">
         <div class="editor-section">
@@ -331,19 +264,20 @@
             <div class="toolbar-sep"></div>
             <span class="preset-label">Presets:</span>
             <div class="preset-queries">
-              <button class="preset-btn" onclick="loadPreset('profile')">profile</button>
+              <button class="preset-btn" onclick="loadPreset('overview')">overview</button>
+              <button class="preset-btn" onclick="loadPreset('education')">education</button>
+              <button class="preset-btn" onclick="loadPreset('skills')">skills</button>
+              <button class="preset-btn" onclick="loadPreset('projects')">projects</button>
               <button class="preset-btn" onclick="loadPreset('experience')">experience</button>
-              <button class="preset-btn" onclick="loadPreset('skills_matrix')">skills</button>
-              <button class="preset-btn" onclick="loadPreset('tech_stack')">tech_stack</button>
-              <button class="preset-btn" onclick="loadPreset('timeline')">timeline</button>
               <button class="preset-btn hire" onclick="loadPreset('hire_me')">hire_me ✦</button>
             </div>
           </div>
           <div class="editor-wrap">
             <div class="line-nums" id="line-nums">1<br>2<br>3</div>
-            <textarea id="query-editor" rows="3" spellcheck="false" onkeydown="handleKey(event)" oninput="updateLineNums()" placeholder="-- Write a SQL query or select a preset above...&#10;-- Try: SELECT * FROM employers;&#10;-- Ctrl+Enter to execute"></textarea>
+            <textarea id="query-editor" rows="3" spellcheck="false" onkeydown="handleKey(event)" oninput="updateLineNums()" placeholder="-- Write a SQL query or select a preset...&#10;-- Try: SELECT * FROM employer;&#10;-- Ctrl+Enter to execute"></textarea>
           </div>
         </div>
+        <div class="editor-resizer" id="editor-resizer"></div>
         <div class="results-section">
           <div class="results-toolbar">
             <span class="results-label">Output</span>
@@ -362,206 +296,496 @@
           </div>
         </div>
       </div>
-      <div class="erd-main" id="erd-view"><div class="erd-container" id="erd-main-container" style="padding:2rem;"></div></div>
+      <div class="erd-main" id="erd-view"><div class="erd-container" id="erd-main-container"></div></div>
+      <div class="dict-main" id="dict-view"></div>
     </div>
   </div>
   <div class="statusbar">
     <span class="status-item">michael_martinez_db</span>
-    <span class="status-item">public · 11 tables</span>
+    <span class="status-item">public · 12 tables · 3NF</span>
     <span class="status-item" id="status-msg">Ready</span>
     <span class="status-item right">UTF-8 · SQL · Ln <span id="ln">1</span>, Col <span id="col">1</span></span>
   </div>
-
 <script>
-// ═══════════════════════════════════════
-//  DATABASE
-// ═══════════════════════════════════════
-const DB={person:{columns:[{name:'id',type:'INT',pk:1},{name:'full_name',type:'VARCHAR(100)'},{name:'title',type:'VARCHAR(100)'},{name:'location',type:'VARCHAR(50)'},{name:'available_date',type:'DATE'},{name:'tagline',type:'TEXT'},{name:'status',type:'VARCHAR(50)'}],rows:[[1,'Michael Martinez','Data Engineer','Logan, UT','2026-05-15','Building end-to-end data pipelines, NLP systems, and cloud architectures','Open to full-time DE roles']]},employers:{columns:[{name:'id',type:'INT',pk:1},{name:'name',type:'VARCHAR(100)'},{name:'short_name',type:'VARCHAR(30)'},{name:'location',type:'VARCHAR(50)'},{name:'sector',type:'VARCHAR(30)'}],rows:[[1,'Utah State University - Analytics Solutions Center','USU ASC','Logan, UT','Higher Education'],[2,'ASPIRE NSF Engineering Research Center','ASPIRE','Logan, UT','Research'],[3,'Vivint Smart Home','Vivint','Logan, UT','Technology']]},positions:{columns:[{name:'id',type:'INT',pk:1},{name:'employer_id',type:'INT',fk:'employers.id'},{name:'title',type:'VARCHAR(100)'},{name:'start_date',type:'DATE'},{name:'end_date',type:'DATE'},{name:'is_current',type:'BOOLEAN'}],rows:[[1,1,'Data Engineer','2026-01',null,true],[2,2,'Innovation Analyst','2025-06',null,true],[3,3,'Claims Manager','2024-07','2025-03',false],[4,3,'Customer Loyalty Specialist','2023-06','2024-07',false]]},highlights:{columns:[{name:'id',type:'INT',pk:1},{name:'position_id',type:'INT',fk:'positions.id'},{name:'description',type:'TEXT'},{name:'impact_metric',type:'VARCHAR(100)'}],rows:[[1,1,'Mapped data flows across 7 business systems identifying integration gaps and automation opportunities','7 systems mapped'],[2,1,'Led system redesign proposal: Power Automate + Azure SQL + Power BI architecture; presented to senior stakeholders','Architecture proposal'],[3,1,'Built ETL pipelines, dashboards, and system documentation for data modernization engagement','Client-facing delivery'],[4,1,'Coordinated Azure SQL config, Power Automate setup, and Business Central permissions for implementation','Implementation readiness'],[5,2,'Interviewed ASPIRE senior engineers to document data points for electrified roadway pilot — approved by State DOT','DOT pilot approved'],[6,2,'Translated engineering specs into structured RFP requirements for procurement and contracting','RFP development'],[7,2,'Designed pilot data library hub for cross-agency secure data sharing and collaboration','Data library built'],[8,2,'Built NLP analytics dashboard (NLTK + Streamlit) to process and quantify workshop themes via association analysis','NLP dashboard shipped'],[9,3,'Analyzed claims data to identify recurring service issues, reducing repeat claims by 15%','-15% repeat claims'],[10,3,'Identified technician errors through data analysis leading to new auditing standards','New audit standards'],[11,4,'Managed high-conflict interactions meeting 80% retention and $15 RPC goals consistently','80% retention']]},skill_categories:{columns:[{name:'id',type:'INT',pk:1},{name:'name',type:'VARCHAR(50)'},{name:'display_order',type:'INT'}],rows:[[1,'Data Engineering',1],[2,'Cloud & Infra',2],[3,'Programming',3],[4,'BI & Visualization',4],[5,'Development',5]]},skills:{columns:[{name:'id',type:'INT',pk:1},{name:'category_id',type:'INT',fk:'skill_categories.id'},{name:'name',type:'VARCHAR(80)'},{name:'proficiency',type:'VARCHAR(20)'}],rows:[[1,1,'SQL','Advanced'],[2,1,'Snowflake','Advanced'],[3,1,'PostgreSQL','Advanced'],[4,1,'ETL/ELT Design','Advanced'],[5,1,'Databricks','Advanced'],[6,1,'Delta Lake / Spark','Advanced'],[7,1,'DynamoDB','Proficient'],[8,1,'dbt','Familiar'],[9,1,'Fivetran','Familiar'],[10,1,'Power Automate','Proficient'],[11,2,'AWS','Proficient'],[12,2,'GCP / BigQuery','Proficient'],[13,2,'Azure','Proficient'],[14,2,'Azure Data Factory','Proficient'],[15,2,'Docker','Proficient'],[16,2,'Linux / Unix','Proficient'],[17,3,'Python','Advanced'],[18,3,'Pandas / NumPy','Advanced'],[19,3,'NLTK','Proficient'],[20,3,'Matplotlib / Plotly','Proficient'],[21,4,'Tableau','Proficient'],[22,4,'Power BI','Proficient'],[23,4,'Streamlit','Proficient'],[24,5,'Django','Proficient'],[25,5,'React Native','Proficient']]},projects:{columns:[{name:'id',type:'INT',pk:1},{name:'name',type:'VARCHAR(80)'},{name:'project_type',type:'VARCHAR(30)'},{name:'status',type:'VARCHAR(20)'},{name:'description',type:'TEXT'}],rows:[[1,'SoiMate','Personal','Active','End-to-end housing recommender with ETL pipelines on AWS'],[2,"Lee's Marketplace",'Client','Active','Data modernization & BI automation for regional grocer'],[3,'ASPIRE NLP Dashboard','Research','Delivered','NLP-powered workshop analytics with theme extraction'],[4,'Supply Chain Analytics','Hackathon','Delivered','Databricks-powered supply chain optimization tool'],[5,'Crypto Arbitrage Engine','Academic','Complete','Graph-based arbitrage detection with paper trading'],[6,'Star Schema Warehouse','Academic','Complete','Full OLTP → Star Schema → ELT → BI pipeline']]},project_skills:{columns:[{name:'project_id',type:'INT',fk:'projects.id',pk:1},{name:'skill_id',type:'INT',fk:'skills.id',pk:1}],rows:[[1,11],[1,7],[1,17],[1,24],[1,25],[1,15],[2,13],[2,14],[2,22],[2,10],[2,1],[3,17],[3,19],[3,23],[4,5],[4,6],[4,17],[5,17],[6,1],[6,2],[6,5],[6,8],[6,9],[6,21]]},education:{columns:[{name:'id',type:'INT',pk:1},{name:'institution',type:'VARCHAR(100)'},{name:'college',type:'VARCHAR(100)'},{name:'degree',type:'VARCHAR(80)'},{name:'emphasis',type:'VARCHAR(50)'},{name:'gpa',type:'DECIMAL(3,2)'},{name:'expected_grad',type:'DATE'}],rows:[[1,'Utah State University','Jon M. Huntsman School of Business','BS Information Systems','Data Engineering',3.90,'2026-05']]},honors:{columns:[{name:'id',type:'INT',pk:1},{name:'education_id',type:'INT',fk:'education.id'},{name:'name',type:'VARCHAR(100)'},{name:'type',type:'VARCHAR(30)'}],rows:[[1,1,"Dean's List — Fall 2024",'Academic'],[2,1,"Dean's List — Spring 2025",'Academic'],[3,1,"Dean's List — Fall 2025",'Academic'],[4,1,'Talent Development Scholarship','Financial'],[5,1,'Assoc. for Information Systems','Membership'],[6,1,'Analytics Solutions Center Innovation Labs','Membership']]},contact:{columns:[{name:'id',type:'INT',pk:1},{name:'platform',type:'VARCHAR(30)'},{name:'handle',type:'VARCHAR(80)'},{name:'url',type:'VARCHAR(200)'}],rows:[[1,'Email','michaelmartinez24628@gmail.com','mailto:michaelmartinez24628@gmail.com'],[2,'Phone','(435) 764-6679',null],[3,'GitHub','github.com/MMart221','https://github.com/MMart221'],[4,'LinkedIn','linkedin.com/in/mmartinez221','https://linkedin.com/in/mmartinez221'],[5,'Portfolio','mmart221.github.io','https://mmart221.github.io']]}};
-
-// ═══════════════════════════════════════
-//  STATE
-// ═══════════════════════════════════════
-let curView='clean', lastResult=null, lastPreset=null;
-
-// ═══════════════════════════════════════
-//  PRESETS
-// ═══════════════════════════════════════
-const PRESETS={
-profile:{
-sql:`SELECT p.full_name, p.title, p.status,\n       c.platform, c.handle\nFROM person p\nCROSS JOIN contact c\nWHERE p.id = 1\nORDER BY c.id;`,
-compute(){const p=DB.person.rows[0];return{cols:['full_name','title','status','platform','handle'],rows:DB.contact.rows.map(c=>[p[1],p[2],p[6],c[1],c[2]])}},
-clean(){
-  const p=DB.person.rows[0], icons={Email:'✉',Phone:'☎',GitHub:'⌥',LinkedIn:'◉',Portfolio:'◈'};
-  const links=DB.contact.rows.map(c=>c[3]?`<a href="${E(c[3])}" target="_blank" class="cv-link"><span>${icons[c[1]]||'•'}</span>${E(c[2])}</a>`:`<span class="cv-link"><span>${icons[c[1]]||'•'}</span>${E(c[2])}</span>`).join('');
-  return`<div class="cv"><div class="cv-profile"><div class="cv-p-name">${E(p[1])}</div><div class="cv-p-tag">${E(p[5])}</div><div class="cv-p-status">● ${E(p[6])}</div><div class="cv-p-links">${links}</div></div></div>`;
-}},
-
-experience:{
-sql:`SELECT e.short_name  AS employer,\n       p.title,\n       p.start_date,\n       p.end_date,\n       p.is_current,\n       h.description   AS highlight,\n       h.impact_metric  AS impact\nFROM positions p\n  JOIN employers e  ON p.employer_id = e.id\n  JOIN highlights h ON h.position_id = p.id\nORDER BY p.start_date DESC, h.id ASC;`,
-compute(){const rows=[];[...DB.positions.rows].sort((a,b)=>b[3].localeCompare(a[3])).forEach(pos=>{const emp=DB.employers.rows.find(e=>e[0]===pos[1]);DB.highlights.rows.filter(h=>h[1]===pos[0]).forEach(h=>{rows.push([emp[2],pos[2],pos[3],pos[4],pos[5],h[2],h[3]])})});return{cols:['employer','title','start_date','end_date','is_current','highlight','impact'],rows}},
-clean(){
-  const sorted=[...DB.positions.rows].sort((a,b)=>b[3].localeCompare(a[3]));
-  let h='<div class="cv"><div class="cv-tl">';
-  sorted.forEach((pos,i)=>{const emp=DB.employers.rows.find(e=>e[0]===pos[1]);const hlts=DB.highlights.rows.filter(x=>x[1]===pos[0]);const dt=pos[3]+(pos[4]?' → '+pos[4]:' → Present');
-    h+=`<div class="cv-role ${pos[5]?'':'past'}" style="animation-delay:${i*120}ms"><div class="cv-role-hd"><span class="cv-role-t">${E(pos[2])}</span><span class="cv-role-at">@ ${E(emp[1])}</span>${pos[5]?'<span class="cv-role-cur">Current</span>':''}<span class="cv-role-dt">${E(dt)}</span></div><ul class="cv-hls">${hlts.map(x=>`<li class="cv-hl">${E(x[2])}${x[3]?`<span class="cv-imp">${E(x[3])}</span>`:''}</li>`).join('')}</ul></div>`;
-  });
-  return h+'</div></div>';
-}},
-
-skills_matrix:{
-sql:`SELECT sc.name                AS category,\n       COUNT(*)               AS total_skills,\n       SUM(CASE WHEN s.proficiency = 'Advanced'\n            THEN 1 ELSE 0 END) AS advanced,\n       SUM(CASE WHEN s.proficiency = 'Proficient'\n            THEN 1 ELSE 0 END) AS proficient,\n       SUM(CASE WHEN s.proficiency = 'Familiar'\n            THEN 1 ELSE 0 END) AS familiar\nFROM skills s\n  JOIN skill_categories sc ON s.category_id = sc.id\nGROUP BY sc.name, sc.display_order\nORDER BY sc.display_order;`,
-compute(){const cats={};DB.skills.rows.forEach(s=>{const cat=DB.skill_categories.rows.find(c=>c[0]===s[1]);const k=cat[1];if(!cats[k])cats[k]={o:cat[2],t:0,a:0,p:0,f:0};cats[k].t++;if(s[3]==='Advanced')cats[k].a++;else if(s[3]==='Proficient')cats[k].p++;else cats[k].f++});return{cols:['category','total_skills','advanced','proficient','familiar'],rows:Object.entries(cats).sort((a,b)=>a[1].o-b[1].o).map(([k,v])=>[k,v.t,v.a,v.p,v.f])}},
-clean(){
-  const cats={};DB.skills.rows.forEach(s=>{const cat=DB.skill_categories.rows.find(c=>c[0]===s[1]);if(!cats[cat[0]])cats[cat[0]]={name:cat[1],order:cat[2],skills:[]};cats[cat[0]].skills.push({name:s[2],prof:s[3]})});
-  const sorted=Object.values(cats).sort((a,b)=>a.order-b.order);
-  let h='<div class="cv"><div class="cv-skills">';
-  sorted.forEach((cat,i)=>{const a=cat.skills.filter(s=>s.prof==='Advanced').length,p=cat.skills.filter(s=>s.prof==='Proficient').length,f=cat.skills.filter(s=>s.prof==='Familiar').length,t=cat.skills.length;
-    h+=`<div class="cv-scat" style="animation-delay:${i*100}ms"><div class="cv-scat-hd"><span class="cv-scat-nm">${E(cat.name)}</span><span class="cv-scat-ct">${t} skills</span></div><div class="cv-sbar"><div class="cv-sbar-a" style="width:${a/t*100}%"></div><div class="cv-sbar-p" style="width:${p/t*100}%"></div><div class="cv-sbar-f" style="width:${f/t*100}%"></div></div><div class="cv-spills">${cat.skills.sort((x,y)=>{const o={Advanced:0,Proficient:1,Familiar:2};return o[x.prof]-o[y.prof]}).map(s=>`<span class="cv-sp ${s.prof==='Advanced'?'a':s.prof==='Proficient'?'p':'f'}">${E(s.name)}</span>`).join('')}</div></div>`;
-  });
-  return h+'</div></div>';
-}},
-
-tech_stack:{
-sql:`SELECT p.name          AS project,\n       p.project_type   AS type,\n       p.status,\n       STRING_AGG(s.name, ', '\n         ORDER BY s.name) AS technologies,\n       COUNT(s.id)       AS tech_count\nFROM projects p\n  JOIN project_skills ps ON ps.project_id = p.id\n  JOIN skills s          ON ps.skill_id = s.id\nGROUP BY p.id, p.name, p.project_type, p.status\nORDER BY tech_count DESC;`,
-compute(){const pj={};DB.project_skills.rows.forEach(ps=>{if(!pj[ps[0]]){const pr=DB.projects.rows.find(p=>p[0]===ps[0]);pj[ps[0]]={name:pr[1],type:pr[2],status:pr[3],desc:pr[4],skills:[]}}const sk=DB.skills.rows.find(s=>s[0]===ps[1]);pj[ps[0]].skills.push(sk[2])});return{cols:['project','type','status','technologies','tech_count'],rows:Object.values(pj).sort((a,b)=>b.skills.length-a.skills.length).map(p=>[p.name,p.type,p.status,p.skills.sort().join(', '),p.skills.length])}},
-clean(){
-  const pj={};DB.project_skills.rows.forEach(ps=>{if(!pj[ps[0]]){const pr=DB.projects.rows.find(p=>p[0]===ps[0]);pj[ps[0]]={name:pr[1],type:pr[2],status:pr[3],desc:pr[4],skills:[]}}const sk=DB.skills.rows.find(s=>s[0]===ps[1]);pj[ps[0]].skills.push(sk[2])});
-  const sorted=Object.values(pj).sort((a,b)=>b.skills.length-a.skills.length);
-  let h='<div class="cv"><div class="cv-projs">';
-  sorted.forEach((p,i)=>{const sc=p.status.toLowerCase();
-    h+=`<div class="cv-pcard" style="animation-delay:${i*100}ms"><div class="cv-pcard-hd"><span class="cv-pcard-nm">${E(p.name)}</span><span class="cv-pcard-st ${sc}">${E(p.status)}</span></div><div class="cv-pcard-ty">${E(p.type)} Project</div><div class="cv-pcard-desc">${E(p.desc)}</div><div class="cv-pcard-tech">${p.skills.sort().map(s=>`<span class="cv-tpill">${E(s)}</span>`).join('')}</div></div>`;
-  });
-  return h+'</div></div>';
-}},
-
-timeline:{
-sql:`WITH tenure AS (\n  SELECT e.short_name          AS employer,\n         p.title,\n         p.start_date,\n         COALESCE(p.end_date,\n           CURRENT_DATE)       AS end_date,\n         EXTRACT(MONTH FROM AGE(\n           COALESCE(p.end_date, CURRENT_DATE),\n           p.start_date\n         ))                    AS months_tenure\n  FROM positions p\n    JOIN employers e ON p.employer_id = e.id\n)\nSELECT employer, title, start_date,\n       months_tenure,\n       SUM(months_tenure) OVER (\n         ORDER BY start_date\n         ROWS UNBOUNDED PRECEDING\n       ) AS cumulative_months,\n       ROUND(months_tenure::NUMERIC /\n         SUM(months_tenure) OVER () * 100, 1\n       ) AS pct_of_career\nFROM tenure\nORDER BY start_date DESC;`,
-compute(){const now=new Date();const pos=DB.positions.rows.map(p=>{const emp=DB.employers.rows.find(e=>e[0]===p[1]);const s=new Date(p[3]+'-01'),e=p[4]?new Date(p[4]+'-01'):now;const m=Math.max(1,Math.round((e-s)/(1000*60*60*24*30.44)));return{emp:emp[2],title:p[2],sd:p[3],m,cur:p[5]}});const tot=pos.reduce((s,p)=>s+p.m,0);const asc=[...pos].sort((a,b)=>a.sd.localeCompare(b.sd));let c=0;const wc=asc.map(p=>{c+=p.m;return{...p,c,pct:Math.round(p.m/tot*1000)/10}});wc.reverse();return{cols:['employer','title','start_date','months_tenure','cumulative_months','pct_of_career'],rows:wc.map(p=>[p.emp,p.title,p.sd,p.m,p.c,p.pct+'%'])}},
-clean(){
-  const now=new Date();const pos=DB.positions.rows.map(p=>{const emp=DB.employers.rows.find(e=>e[0]===p[1]);const s=new Date(p[3]+'-01'),e=p[4]?new Date(p[4]+'-01'):now;return{emp:emp[2],title:p[2],m:Math.max(1,Math.round((e-s)/(1000*60*60*24*30.44))),cur:p[5],sd:p[3]}});
-  const mx=Math.max(...pos.map(p=>p.m));const sorted=[...pos].sort((a,b)=>b.sd.localeCompare(a.sd));
-  let h='<div class="cv"><div class="cv-tbars">';
-  sorted.forEach((p,i)=>{const pct=Math.max(8,p.m/mx*100);
-    h+=`<div class="cv-tb" style="animation-delay:${i*120}ms"><div class="cv-tb-hd"><span class="cv-tb-t">${E(p.title)}</span><span class="cv-tb-emp">@ ${E(p.emp)}</span><span class="cv-tb-mo">${p.m} mo</span></div><div class="cv-tb-track"><div class="cv-tb-fill ${p.cur?'cur':'old'}" style="width:${pct}%">${p.m} months</div></div></div>`;
-  });
-  return h+'</div></div>';
-}},
-
-hire_me:{
-sql:`-- ✦ HIRE ME? Let's aggregate the case for it.\nWITH candidate AS (\n  SELECT full_name, title, status,\n         available_date\n  FROM person WHERE id = 1\n),\ncurrent_roles AS (\n  SELECT STRING_AGG(\n    e.short_name || ' → ' || p.title, ' | '\n  ) AS positions\n  FROM positions p\n    JOIN employers e ON p.employer_id = e.id\n  WHERE p.is_current = TRUE\n),\nskill_summary AS (\n  SELECT COUNT(*)                              AS total,\n         SUM(CASE WHEN proficiency = 'Advanced'\n              THEN 1 ELSE 0 END)               AS advanced\n  FROM skills\n),\nproject_summary AS (\n  SELECT COUNT(*)                              AS total,\n         SUM(CASE WHEN status = 'Active'\n              THEN 1 ELSE 0 END)               AS active\n  FROM projects\n),\nedu AS (\n  SELECT degree || ' — ' || emphasis AS program,\n         gpa FROM education WHERE id = 1\n)\nSELECT c.full_name,\n       c.title,\n       cr.positions       AS current_roles,\n       ss.total || ' skills (' || ss.advanced || ' advanced)' AS skill_depth,\n       ps.total || ' projects (' || ps.active || ' active)'   AS portfolio,\n       edu.program,\n       edu.gpa,\n       c.status            AS availability\nFROM candidate c, current_roles cr,\n     skill_summary ss, project_summary ps, edu;`,
-compute(){const p=DB.person.rows[0];const cr=DB.positions.rows.filter(x=>x[5]).map(x=>{const emp=DB.employers.rows.find(e=>e[0]===x[1]);return emp[2]+' → '+x[2]}).join(' | ');const adv=DB.skills.rows.filter(s=>s[3]==='Advanced').length;const ts=DB.skills.rows.length;const tp=DB.projects.rows.length;const ap=DB.projects.rows.filter(x=>x[3]==='Active').length;const edu=DB.education.rows[0];return{cols:['full_name','title','current_roles','skill_depth','portfolio','program','gpa','availability'],rows:[[p[1],p[2],cr,ts+' skills ('+adv+' advanced)',tp+' projects ('+ap+' active)',edu[3]+' — '+edu[4],edu[5],p[6]]]}},
-clean(){
-  const p=DB.person.rows[0];const cr=DB.positions.rows.filter(x=>x[5]).map(x=>{const emp=DB.employers.rows.find(e=>e[0]===x[1]);return emp[2]+' → '+x[2]}).join(' · ');
-  const adv=DB.skills.rows.filter(s=>s[3]==='Advanced').length,ts=DB.skills.rows.length,tp=DB.projects.rows.length,ap=DB.projects.rows.filter(x=>x[3]==='Active').length,edu=DB.education.rows[0];
-  return`<div class="cv"><div class="hire-banner"><h2>${E(p[1])}</h2><div class="sub">${E(p[5])}</div><div class="hire-cards"><div class="hire-card"><div class="cl">Current Roles</div><div class="cv_">${E(cr)}</div></div><div class="hire-card"><div class="cl">Skills</div><div class="cv_ ac">${ts} total · ${adv} advanced</div></div><div class="hire-card"><div class="cl">Projects</div><div class="cv_ ac">${tp} built · ${ap} active</div></div><div class="hire-card"><div class="cl">Education</div><div class="cv_">${E(edu[3])} — ${E(edu[4])}</div></div><div class="hire-card"><div class="cl">GPA / Availability</div><div class="cv_ gd">${edu[5]} · ${E(p[4])}</div></div></div><div class="hire-links"><a class="hire-link pri" href="mailto:michaelmartinez24628@gmail.com">✉ Email Me</a><a class="hire-link sec" href="https://linkedin.com/in/mmartinez221" target="_blank">LinkedIn →</a><a class="hire-link sec" href="https://github.com/MMart221" target="_blank">GitHub →</a></div></div></div>`;
-}}
+// ═══ DATABASE ═══
+const DB={
+person:{columns:[{name:'person_id',type:'INT',pk:1},{name:'fname',type:'VARCHAR'},{name:'lname',type:'VARCHAR'},{name:'title',type:'VARCHAR'},{name:'phone',type:'VARCHAR'},{name:'email',type:'VARCHAR'},{name:'linkedin',type:'VARCHAR'},{name:'github',type:'VARCHAR'},{name:'city',type:'VARCHAR'},{name:'state',type:'VARCHAR'},{name:'will_relocate',type:'BOOLEAN'},{name:'available_date',type:'DATE'},{name:'tagline',type:'TEXT'},{name:'status',type:'VARCHAR'}],rows:[[1,'Michael','Martinez','Data Engineer','(435) 764-6679','michaelmartinez24628@gmail.com','linkedin.com/in/mmartinez221','github.com/MMart221','Logan','UT',true,'2026-05-15','Building end-to-end data pipelines, NLP systems, and cloud architectures','Open to full-time DE roles']]},
+edu_institutions:{columns:[{name:'institution_id',type:'INT',pk:1},{name:'institution_name',type:'VARCHAR'},{name:'college',type:'VARCHAR'}],rows:[[1,'Utah State University','Jon M. Huntsman School of Business']]},
+degrees:{columns:[{name:'degree_id',type:'INT',pk:1},{name:'person_id',type:'INT',fk:'person'},{name:'institution_id',type:'INT',fk:'edu_institutions'},{name:'degree',type:'VARCHAR'},{name:'track',type:'VARCHAR'},{name:'gpa',type:'DECIMAL'},{name:'graduation_date',type:'DATE'}],rows:[[1,1,1,'BS Information Systems','Data Engineering',3.90,'2026-05']]},
+honors:{columns:[{name:'honor_id',type:'INT',pk:1},{name:'degree_id',type:'INT',fk:'degrees'},{name:'honor_name',type:'VARCHAR'},{name:'honor_type',type:'VARCHAR'}],rows:[[1,1,"Dean's List - Fall 2024",'Academic'],[2,1,"Dean's List - Spring 2025",'Academic'],[3,1,"Dean's List - Fall 2025",'Academic'],[4,1,'Talent Development Scholarship','Financial'],[5,1,'Assoc. for Information Systems','Membership'],[6,1,'Analytics Solutions Center Innovation Labs','Membership']]},
+employer:{columns:[{name:'employer_id',type:'INT',pk:1},{name:'empname',type:'VARCHAR'},{name:'empname_short',type:'VARCHAR'},{name:'city',type:'VARCHAR'},{name:'state',type:'VARCHAR'},{name:'sector',type:'VARCHAR'}],rows:[[1,'Utah State University - Analytics Solutions Center','USU ASC','Logan','UT','Higher Education'],[2,'ASPIRE NSF Engineering Research Center','ASPIRE','Logan','UT','Research'],[3,'Vivint Smart Home','Vivint','Logan','UT','Technology']]},
+position:{columns:[{name:'position_id',type:'INT',pk:1},{name:'person_id',type:'INT',fk:'person'},{name:'employer_id',type:'INT',fk:'employer'},{name:'position_title',type:'VARCHAR'},{name:'start_date',type:'DATE'},{name:'end_date',type:'DATE'}],rows:[[1,1,1,'Data Engineer','2026-01',null],[2,1,2,'Innovation Analyst','2025-06',null],[3,1,3,'Claims Manager','2024-07','2025-03'],[4,1,3,'Customer Loyalty Specialist','2023-06','2024-07']]},
+work_highlights:{columns:[{name:'highlight_id',type:'INT',pk:1},{name:'position_id',type:'INT',fk:'position'},{name:'accomplishment',type:'TEXT'},{name:'impact',type:'VARCHAR'}],rows:[[1,1,'Mapped data flows across 7 business systems identifying integration gaps and automation opportunities','7 systems mapped'],[2,1,'Led system redesign proposal: Power Automate + Azure SQL + Power BI architecture; presented to senior stakeholders','Architecture proposal'],[3,1,'Built ETL pipelines, dashboards, and system documentation for data modernization engagement','Client-facing delivery'],[4,1,'Coordinated Azure SQL config, Power Automate setup, and Business Central permissions for implementation','Implementation readiness'],[5,2,'Interviewed ASPIRE senior engineers to document data points for electrified roadway pilot - approved by State DOT','DOT pilot approved'],[6,2,'Translated engineering specs into structured RFP requirements for procurement and contracting','RFP development'],[7,2,'Designed pilot data library hub for cross-agency secure data sharing and collaboration','Data library built'],[8,2,'Built NLP analytics dashboard (NLTK + Streamlit) to process and quantify workshop themes via association analysis','NLP dashboard shipped'],[9,3,'Analyzed claims data to identify recurring service issues, reducing repeat claims by 15%','-15% repeat claims'],[10,3,'Identified technician errors through data analysis leading to new auditing standards','New audit standards'],[11,4,'Managed high-conflict interactions meeting 80% retention and $15 RPC goals consistently','80% retention']]},
+skill_category:{columns:[{name:'category_id',type:'INT',pk:1},{name:'category_name',type:'VARCHAR'},{name:'display_order',type:'INT'}],rows:[[1,'Data Engineering',1],[2,'Cloud & Infra',2],[3,'Programming',3],[4,'BI & Visualization',4],[5,'Development',5]]},
+skills:{columns:[{name:'skill_id',type:'INT',pk:1},{name:'category_id',type:'INT',fk:'skill_category'},{name:'skill_name',type:'VARCHAR'},{name:'proficiency',type:'INT'}],rows:[[1,1,'SQL',3],[2,1,'Snowflake',3],[3,1,'PostgreSQL',3],[4,1,'ETL/ELT Design',3],[5,1,'Databricks',3],[6,1,'Delta Lake / Spark',3],[7,1,'DynamoDB',2],[8,1,'dbt',1],[9,1,'Fivetran',1],[10,1,'Power Automate',2],[11,2,'AWS',2],[12,2,'GCP / BigQuery',2],[13,2,'Azure',2],[14,2,'Azure Data Factory',2],[15,2,'Docker',2],[16,2,'Linux / Unix',2],[17,3,'Python',3],[18,3,'Pandas / NumPy',3],[19,3,'NLTK',2],[20,3,'Matplotlib / Plotly',2],[21,4,'Tableau',2],[22,4,'Power BI',2],[23,4,'Streamlit',2],[24,5,'Django',2],[25,5,'React Native',2]]},
+position_skills:{columns:[{name:'skill_id',type:'INT',fk:'skills',pk:1},{name:'position_id',type:'INT',fk:'position',pk:1}],rows:[[1,1],[13,1],[14,1],[22,1],[10,1],[17,2],[19,2],[23,2],[1,3]]},
+projects:{columns:[{name:'project_id',type:'INT',pk:1},{name:'project_name',type:'VARCHAR'},{name:'project_type',type:'VARCHAR'},{name:'status',type:'VARCHAR'},{name:'description',type:'TEXT'},{name:'link',type:'VARCHAR'}],rows:[[1,'SoiMate','Personal','Active','End-to-end housing recommender with ETL pipelines on AWS','github.com/MMart221/soimate'],[2,'ASPIRE NLP Dashboard','Research','Delivered','NLP-powered workshop analytics with theme extraction',null],[3,'Supply Chain Analytics','Hackathon','Delivered','Databricks-powered supply chain optimization tool',null],[4,'Crypto Arbitrage Engine','Academic','Complete','Graph-based arbitrage detection with paper trading',null],[5,'Star Schema Warehouse','Academic','Complete','Full OLTP to Star Schema to ELT to BI pipeline',null]]},
+project_skills:{columns:[{name:'skill_id',type:'INT',fk:'skills',pk:1},{name:'project_id',type:'INT',fk:'projects',pk:1}],rows:[[11,1],[7,1],[17,1],[24,1],[25,1],[15,1],[17,2],[19,2],[23,2],[5,3],[6,3],[17,3],[17,4],[1,5],[2,5],[5,5],[8,5],[9,5],[21,5]]}
 };
 
-// ═══════════════════════════════════════
-//  QUERY RUNNER
-// ═══════════════════════════════════════
+// ═══ STATE ═══
+let curView='clean',lastResult=null,lastPreset=null,typeTimer=null;
+
+// ═══ PRESETS ═══
+const PRESETS={
+overview:{
+sql:`SELECT p.fname || ' ' || p.lname AS full_name,
+       p.title, p.tagline, p.status,
+       p.available_date,
+       p.email, p.phone,
+       p.linkedin, p.github,
+       d.degree || ' @ ' || ei.institution_name AS program,
+       d.gpa
+FROM person p
+  JOIN degrees d ON d.person_id = p.person_id
+  JOIN edu_institutions ei ON d.institution_id = ei.institution_id
+WHERE p.person_id = 1;`,
+compute(){const p=DB.person.rows[0],d=DB.degrees.rows[0],ei=DB.edu_institutions.rows[0];return{cols:['full_name','title','tagline','status','available_date','email','phone','linkedin','github','program','gpa'],rows:[[p[1]+' '+p[2],p[3],p[12],p[13],p[11],p[5],p[4],p[6],p[7],d[3]+' @ '+ei[1],d[5]]]}},
+clean(){const p=DB.person.rows[0],d=DB.degrees.rows[0];return`<div class="cv">
+<div class="cv-avail"><span class="cv-avail-dot"></span>AVAILABLE MAY 2026</div>
+<div class="cv-bigname">Michael<br><em>Martinez</em></div>
+<div class="cv-bio">Data Engineer building end-to-end pipelines, NLP systems, and cloud architectures.<br>${E(d[3])} @ Utah State \u00B7 GPA ${d[5]} \u00B7 Graduating May 2026.</div>
+<div class="cv-actions">
+  <button class="cv-btn primary" onclick="loadPreset('projects')">View My Work</button>
+  <a class="cv-btn secondary" href="mailto:${E(p[5])}">Get In Touch</a>
+</div>
+<div class="cv-contact-row">
+  <span class="cv-contact-item">\u260E ${E(p[4])}</span>
+  <span class="cv-contact-item">\u2709 <a href="mailto:${E(p[5])}">${E(p[5])}</a></span>
+  <span class="cv-contact-item">\u25C9 <a href="https://${E(p[6])}" target="_blank">LinkedIn</a></span>
+  <span class="cv-contact-item">\u2325 <a href="https://${E(p[7])}" target="_blank">GitHub</a></span>
+</div>
+</div>`}},
+
+education:{
+sql:`SELECT ei.institution_name,
+       d.degree || ' \u2014 ' || d.track AS program,
+       ei.college,
+       d.gpa,
+       d.graduation_date,
+       STRING_AGG(h.honor_name, ', '
+         ORDER BY h.honor_id) AS honors
+FROM degrees d
+  JOIN edu_institutions ei ON d.institution_id = ei.institution_id
+  LEFT JOIN honors h ON h.degree_id = d.degree_id
+GROUP BY ei.institution_name, d.degree, d.track,
+         ei.college, d.gpa, d.graduation_date;`,
+compute(){const d=DB.degrees.rows[0],ei=DB.edu_institutions.rows[0],hs=DB.honors.rows.filter(h=>h[1]===d[0]).map(h=>h[2]).join(', ');return{cols:['institution_name','program','college','gpa','graduation_date','honors'],rows:[[ei[1],d[3]+' \u2014 '+d[4],ei[2],d[5],d[6],hs]]}},
+clean(){const d=DB.degrees.rows[0],ei=DB.edu_institutions.rows[0],hs=DB.honors.rows,deans=hs.filter(h=>h[3]==='Academic').length;
+return`<div class="cv">
+<div class="cv-section-label">// 01 \u2014 ACADEMIC BACKGROUND</div>
+<div class="cv-section-title">Edu<em>cation</em></div>
+<div class="cv-edu-card">
+  <div class="cv-edu-name">${E(ei[1])}</div>
+  <div class="cv-edu-degree">${E(d[3])} \u2014 ${E(d[4])} Emphasis \u00B7 ${E(ei[2])}</div>
+  <div class="cv-edu-detail">Graduating May 2026 \u00B7 Logan, UT</div>
+  <div class="cv-stats">
+    <div class="cv-stat"><div class="cv-stat-val">${d[5]}</div><div class="cv-stat-label">USU GPA</div></div>
+    <div class="cv-stat"><div class="cv-stat-val">20+</div><div class="cv-stat-label">Hrs/Wk Worked</div></div>
+    <div class="cv-stat"><div class="cv-stat-val">${deans}x</div><div class="cv-stat-label">Dean's List</div></div>
+  </div>
+  <div class="cv-pills">
+    <span class="cv-pill">Dean's List: Fall '24, Spring '25, Fall '25</span>
+    <span class="cv-pill">Talent Development Scholarship</span>
+    <span class="cv-pill">Association for Information Systems</span>
+    <span class="cv-pill">Analytics Solutions Center Innovation Labs</span>
+  </div>
+</div>
+</div>`}},
+
+skills:{
+sql:`SELECT sc.category_name,
+       s.skill_name,
+       CASE s.proficiency
+         WHEN 3 THEN 'Advanced'
+         WHEN 2 THEN 'Proficient'
+         WHEN 1 THEN 'Familiar'
+       END AS proficiency_label
+FROM skills s
+  JOIN skill_category sc ON s.category_id = sc.category_id
+ORDER BY sc.display_order,
+  CASE s.proficiency WHEN 3 THEN 1 WHEN 2 THEN 2 ELSE 3 END;`,
+compute(){const rows=[];DB.skills.rows.forEach(s=>{const cat=DB.skill_category.rows.find(c=>c[0]===s[1]);rows.push([cat[1],s[2],s[3]===3?'Advanced':s[3]===2?'Proficient':'Familiar'])});rows.sort((a,b)=>{const co={};DB.skill_category.rows.forEach(c=>co[c[1]]=c[2]);const d=co[a[0]]-co[b[0]];if(d!==0)return d;const po={Advanced:1,Proficient:2,Familiar:3};return po[a[2]]-po[b[2]]});return{cols:['category_name','skill_name','proficiency_label'],rows}},
+clean(){return`<div class="cv">
+<div class="cv-section-label">// 02 \u2014 CAPABILITIES</div>
+<div class="cv-section-title">Tools & <em>Skills</em></div>
+<div class="cv-skills-grid">
+  <div class="cv-skill-box" style="animation-delay:.15s">
+    <div class="cv-skill-box-title">ADVANCED</div>
+    <div class="cv-skill-line">SQL (Snowflake, SSMS, PostgreSQL)</div>
+    <div class="cv-skill-line">ETL/ELT Design & Integrations (AWS, GCP, Azure Data Factory, Databricks)</div>
+    <div class="cv-skill-line">Python (Pandas, NumPy, Matplotlib, Plotly, NLP)</div>
+    <div class="cv-skill-line">Databricks (Delta Lake, Spark, Notebooks)</div>
+  </div>
+  <div class="cv-skill-box" style="animation-delay:.25s">
+    <div class="cv-skill-box-title">PROFICIENT</div>
+    <div class="cv-skill-line">Cloud Administration (AWS, GCP, Azure)</div>
+    <div class="cv-skill-line">Data Visualization (Tableau, Power BI)</div>
+    <div class="cv-skill-line">Software & Web Development (Django, React Native, Docker, Cloud Deployment)</div>
+    <div class="cv-skill-line">Linux & Unix Systems (Cron Jobs, Shell Scripts, RDP)</div>
+  </div>
+</div>
+</div>`}},
+
+projects:{
+sql:`SELECT pr.project_name,
+       pr.project_type,
+       pr.status,
+       pr.description,
+       STRING_AGG(s.skill_name, ', '
+         ORDER BY s.skill_name) AS technologies
+FROM projects pr
+  JOIN project_skills ps ON ps.project_id = pr.project_id
+  JOIN skills s ON ps.skill_id = s.skill_id
+GROUP BY pr.project_id, pr.project_name,
+         pr.project_type, pr.status, pr.description
+ORDER BY pr.project_id;`,
+compute(){const pj={};DB.project_skills.rows.forEach(ps=>{if(!pj[ps[1]]){const pr=DB.projects.rows.find(p=>p[0]===ps[1]);pj[ps[1]]={name:pr[1],type:pr[2],status:pr[3],desc:pr[4],skills:[]}}const sk=DB.skills.rows.find(s=>s[0]===ps[0]);pj[ps[1]].skills.push(sk[2])});return{cols:['project_name','project_type','status','description','technologies'],rows:Object.values(pj).map(p=>[p.name,p.type,p.status,p.desc,p.skills.sort().join(', ')])}},
+clean(){
+const pj={};DB.project_skills.rows.forEach(ps=>{if(!pj[ps[1]]){const pr=DB.projects.rows.find(p=>p[0]===ps[1]);pj[ps[1]]={id:pr[0],name:pr[1],type:pr[2],status:pr[3],desc:pr[4],link:pr[5],skills:[]}}const sk=DB.skills.rows.find(s=>s[0]===ps[0]);pj[ps[1]].skills.push(sk[2])});
+const sorted=Object.values(pj).sort((a,b)=>a.id-b.id);
+let h=`<div class="cv"><div class="cv-section-label">// 03 \u2014 BUILT THINGS</div><div class="cv-section-title">Personal <em>Projects</em></div><div class="cv-proj-grid">`;
+sorted.forEach((p,i)=>{
+  h+=`<div class="cv-proj-card" style="animation-delay:${(i+1)*100}ms">
+    <div class="cv-proj-label">0${i+1} / ${p.type.toUpperCase()} PROJECT</div>
+    <div class="cv-proj-name">${E(p.name)}</div>
+    <div class="cv-proj-sub">${E(p.desc)}</div>
+    <div class="cv-proj-techs">${p.skills.sort().map(s=>`<span class="cv-proj-tech">${E(s)}</span>`).join('')}</div>
+  </div>`;
+});
+return h+'</div></div>'}},
+
+experience:{
+sql:`SELECT e.empname            AS company,
+       p.position_title     AS title,
+       e.city || ', ' || e.state AS location,
+       p.start_date,
+       p.end_date,
+       wh.accomplishment
+FROM position p
+  JOIN employer e ON p.employer_id = e.employer_id
+  JOIN work_highlights wh ON wh.position_id = p.position_id
+WHERE p.end_date IS NULL
+   OR p.end_date IS NOT NULL
+ORDER BY p.start_date DESC, wh.highlight_id;`,
+compute(){const rows=[];[...DB.position.rows].sort((a,b)=>b[4].localeCompare(a[4])).forEach(pos=>{const emp=DB.employer.rows.find(e=>e[0]===pos[2]);DB.work_highlights.rows.filter(h=>h[1]===pos[0]).forEach(h=>{rows.push([emp[1],pos[3],emp[3]+', '+emp[4],pos[4],pos[5],h[2]])})});return{cols:['company','title','location','start_date','end_date','accomplishment'],rows}},
+clean(){
+const sorted=[...DB.position.rows].sort((a,b)=>b[4].localeCompare(a[4]));
+let h=`<div class="cv"><div class="cv-section-label">// 04 \u2014 WHERE I'VE WORKED</div><div class="cv-section-title">Work <em>Experience</em></div><div class="cv-work-tl">`;
+sorted.forEach((pos,i)=>{
+  const emp=DB.employer.rows.find(e=>e[0]===pos[2]);
+  const hlts=DB.work_highlights.rows.filter(x=>x[1]===pos[0]);
+  const isCur=pos[5]===null;
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const fmtDate=(d)=>{if(!d)return'Present';const[y,m]=d.split('-');return months[parseInt(m)-1]+' '+y};
+  const dateStr=fmtDate(pos[4])+' \u2013 '+fmtDate(pos[5]);
+  h+=`<div class="cv-work-entry ${isCur?'':'past'}" style="animation-delay:${i*120}ms">
+    <div class="cv-work-head">
+      <span class="cv-work-company">${E(emp[1])}</span>
+      <span class="cv-work-date">${dateStr}</span>
+    </div>
+    <div class="cv-work-title">${E(pos[3])}</div>
+    <div class="cv-work-loc">${E(emp[3])}, ${E(emp[4])}</div>
+    <div class="cv-work-bullets">${hlts.map(x=>`<div class="cv-work-bullet">${E(x[2])}</div>`).join('')}</div>
+  </div>`;
+});
+return h+'</div></div>'}},
+
+hire_me:{
+sql:`-- \u2726 HIRE ME? Let's aggregate the case.
+WITH candidate AS (
+  SELECT fname || ' ' || lname AS full_name,
+         title, tagline, status, available_date,
+         email, linkedin, github
+  FROM person WHERE person_id = 1
+),
+current_roles AS (
+  SELECT STRING_AGG(
+    e.empname_short || ' \u2192 ' || p.position_title, ' | '
+  ) AS positions
+  FROM position p
+    JOIN employer e ON p.employer_id = e.employer_id
+  WHERE p.end_date IS NULL
+),
+skill_summary AS (
+  SELECT COUNT(*) AS total,
+         SUM(CASE WHEN proficiency = 3
+              THEN 1 ELSE 0 END) AS advanced
+  FROM skills
+),
+project_count AS (
+  SELECT COUNT(*) AS total,
+         SUM(CASE WHEN status = 'Active'
+              THEN 1 ELSE 0 END) AS active
+  FROM projects
+),
+edu AS (
+  SELECT d.degree || ' \u2014 ' || d.track AS program,
+         d.gpa FROM degrees d WHERE degree_id = 1
+)
+SELECT c.full_name, c.title,
+       cr.positions AS current_roles,
+       ss.total || ' skills (' || ss.advanced
+         || ' advanced)' AS skill_depth,
+       pc.total || ' projects (' || pc.active
+         || ' active)' AS portfolio,
+       edu.program, edu.gpa,
+       c.status AS availability
+FROM candidate c, current_roles cr,
+     skill_summary ss, project_count pc, edu;`,
+compute(){const p=DB.person.rows[0];const cr=DB.position.rows.filter(x=>x[5]===null).map(x=>{const emp=DB.employer.rows.find(e=>e[0]===x[2]);return emp[2]+' \u2192 '+x[3]}).join(' | ');const adv=DB.skills.rows.filter(s=>s[3]===3).length,ts=DB.skills.rows.length,tp=DB.projects.rows.length,ap=DB.projects.rows.filter(x=>x[3]==='Active').length;const edu=DB.degrees.rows[0];return{cols:['full_name','title','current_roles','skill_depth','portfolio','program','gpa','availability'],rows:[[p[1]+' '+p[2],p[3],cr,ts+' skills ('+adv+' advanced)',tp+' projects ('+ap+' active)',edu[3]+' \u2014 '+edu[4],edu[5],p[13]]]}},
+clean(){const p=DB.person.rows[0];const cr=DB.position.rows.filter(x=>x[5]===null).map(x=>{const emp=DB.employer.rows.find(e=>e[0]===x[2]);return emp[2]+' \u2192 '+x[3]}).join(' \u00B7 ');const adv=DB.skills.rows.filter(s=>s[3]===3).length,ts=DB.skills.rows.length,tp=DB.projects.rows.length,ap=DB.projects.rows.filter(x=>x[3]==='Active').length,edu=DB.degrees.rows[0];
+return`<div class="cv"><div class="hire-banner"><h2>${E(p[1]+' '+p[2])}</h2><div class="sub">${E(p[12])}</div><div class="hire-cards"><div class="hire-card"><div class="cl">Current Roles</div><div class="hv">${E(cr)}</div></div><div class="hire-card"><div class="cl">Skills</div><div class="hv ac">${ts} total \u00B7 ${adv} advanced</div></div><div class="hire-card"><div class="cl">Projects</div><div class="hv ac">${tp} built \u00B7 ${ap} active</div></div><div class="hire-card"><div class="cl">Education</div><div class="hv">${E(edu[3])} \u2014 ${E(edu[4])}</div></div><div class="hire-card"><div class="cl">GPA / Availability</div><div class="hv gd">${edu[5]} \u00B7 ${E(p[11])}</div></div></div><div class="hire-links"><a class="cv-btn primary" href="mailto:${E(p[5])}">\u2709 Email Me</a><a class="cv-btn secondary" href="https://${E(p[6])}" target="_blank">LinkedIn \u2192</a><a class="cv-btn secondary" href="https://${E(p[7])}" target="_blank">GitHub \u2192</a></div></div></div>`}}
+};
+
+// ═══ QUERY RUNNER ═══
 function runQuery(){
   const q=document.getElementById('query-editor').value.trim();if(!q)return;
-  const start=performance.now();
-  let matchedPreset=null,result=null;
-  for(const[key,pr]of Object.entries(PRESETS)){if(norm(q)===norm(pr.sql)){matchedPreset=key;result=pr.compute();break;}}
-  if(!matchedPreset)result=parseBasic(q);
+  const start=performance.now();let mp=null,result=null;
+  for(const[key,pr]of Object.entries(PRESETS)){if(norm(q)===norm(pr.sql)){mp=key;result=pr.compute();break;}}
+  if(!mp)result=parseBasic(q);
   const elapsed=Math.round(performance.now()-start)+Math.floor(Math.random()*6)+3;
   document.getElementById('exec-time').textContent=elapsed+'ms';
-  lastPreset=matchedPreset;lastResult=result;
-
-  const toggle=document.getElementById('view-toggle');
-  toggle.classList.toggle('visible',!!matchedPreset);
-
+  lastPreset=mp;lastResult=result;
+  document.getElementById('view-toggle').classList.toggle('visible',!!mp);
   if(result&&result.error){document.getElementById('status-msg').textContent='ERROR: '+result.error;document.getElementById('results-meta').classList.remove('visible');renderErr(result.error);return;}
-
-  document.getElementById('status-msg').textContent=(matchedPreset==='hire_me'?'✦ ':'')+`${result.rows.length} row(s) returned in ${elapsed}ms`;
+  document.getElementById('status-msg').textContent=(mp==='hire_me'?'\u2726 ':'')+result.rows.length+' row(s) returned in '+elapsed+'ms';
   document.getElementById('row-count').textContent=result.rows.length;
   document.getElementById('col-count').textContent=result.cols.length;
   document.getElementById('results-meta').classList.add('visible');
-
-  if(matchedPreset){curView='clean';document.getElementById('btn-clean').classList.add('active');document.getElementById('btn-table').classList.remove('active');renderCur();}
+  if(mp){curView='clean';document.getElementById('btn-clean').classList.add('active');document.getElementById('btn-table').classList.remove('active');renderCur();}
   else{curView='table';renderTable(result);}
 }
-
 function switchView(v){curView=v;document.getElementById('btn-clean').classList.toggle('active',v==='clean');document.getElementById('btn-table').classList.toggle('active',v==='table');renderCur();}
-
-function renderCur(){if(curView==='clean'&&lastPreset&&PRESETS[lastPreset].clean){document.getElementById('results-container').innerHTML=PRESETS[lastPreset].clean();}else if(lastResult&&!lastResult.error){renderTable(lastResult);}}
-
+function renderCur(){if(curView==='clean'&&lastPreset&&PRESETS[lastPreset].clean)document.getElementById('results-container').innerHTML=PRESETS[lastPreset].clean();else if(lastResult&&!lastResult.error)renderTable(lastResult);}
 function norm(s){return s.replace(/--[^\n]*/g,'').replace(/\s+/g,' ').trim().toLowerCase();}
-
 function parseBasic(q){
   const cl=norm(q);let tn=null;const fm=cl.match(/from\s+(\w+)/);if(fm)tn=fm[1];
-  if(!tn||!DB[tn])return{error:`relation "${fm?fm[1]:'?'}" does not exist. Available: ${Object.keys(DB).join(', ')}`};
+  if(!tn||!DB[tn])return{error:'relation "'+(fm?fm[1]:'?')+'" does not exist. Available: '+Object.keys(DB).join(', ')};
   const table=DB[tn];let rows=table.rows.map(r=>[...r]);const cn=table.columns.map(c=>c.name);
   const wm=cl.match(/where\s+(.+?)(?:\s+order|\s+group|\s+limit|\s*;?\s*$)/);
   if(wm){const cond=wm[1].trim();
-    if(cond.includes('is_current')&&cond.includes('true')){const i=cn.indexOf('is_current');if(i>=0)rows=rows.filter(r=>r[i]===true);}
-    else if(cond.includes('is_current')&&cond.includes('false')){const i=cn.indexOf('is_current');if(i>=0)rows=rows.filter(r=>r[i]===false);}
+    const nm=cond.match(/(\w+)\s+is\s+null/);if(nm){const i=cn.indexOf(nm[1]);if(i>=0)rows=rows.filter(r=>r[i]===null);}
+    const nnm=cond.match(/(\w+)\s+is\s+not\s+null/);if(nnm){const i=cn.indexOf(nnm[1]);if(i>=0)rows=rows.filter(r=>r[i]!==null);}
     const im=cond.match(/(\w+)\s*=\s*(\d+)/);if(im){const i=cn.indexOf(im[1]);if(i>=0)rows=rows.filter(r=>r[i]==parseInt(im[2]));}
     const sm=cond.match(/(\w+)\s*=\s*'([^']+)'/);if(sm){const i=cn.indexOf(sm[1]);if(i>=0)rows=rows.filter(r=>String(r[i]).toLowerCase()===sm[2].toLowerCase());}
   }
   const om=cl.match(/order\s+by\s+(\w+)(?:\s+(asc|desc))?/);
-  if(om){const i=cn.indexOf(om[1]);const d=om[2]==='desc';if(i>=0)rows.sort((a,b)=>{if(a[i]===null)return 1;if(b[i]===null)return -1;const c=String(a[i]).localeCompare(String(b[i]),undefined,{numeric:true});return d?-c:c;});}
+  if(om){const i=cn.indexOf(om[1]);const d=om[2]==='desc';if(i>=0)rows.sort((a,b)=>{if(a[i]===null)return 1;if(b[i]===null)return-1;const c=String(a[i]).localeCompare(String(b[i]),undefined,{numeric:true});return d?-c:c;});}
   const lm=cl.match(/limit\s+(\d+)/);if(lm)rows=rows.slice(0,parseInt(lm[1]));
-  let sc=cn;
-  if(!cl.match(/select\s+\*/)){const sel=q.match(/SELECT\s+([\s\S]+?)\s+FROM/i);if(sel){const req=sel[1].split(',').map(c=>c.trim().split(/\s+as\s+/i).pop().trim().toLowerCase().replace(/\w+\./g,''));const idx=req.map(r=>cn.findIndex(c=>c===r)).filter(i=>i>=0);if(idx.length>0){sc=idx.map(i=>cn[i]);rows=rows.map(r=>idx.map(i=>r[i]));}}}
+  let sc=cn;if(!cl.match(/select\s+\*/)){const sel=q.match(/SELECT\s+([\s\S]+?)\s+FROM/i);if(sel){const req=sel[1].split(',').map(c=>c.trim().split(/\s+as\s+/i).pop().trim().toLowerCase().replace(/\w+\./g,''));const idx=req.map(r=>cn.findIndex(c=>c===r)).filter(i=>i>=0);if(idx.length>0){sc=idx.map(i=>cn[i]);rows=rows.map(r=>idx.map(i=>r[i]));}}}
   return{cols:sc,rows};
 }
 
-// ═══════════════════════════════════════
-//  RENDERING
-// ═══════════════════════════════════════
+// ═══ RENDERING ═══
 function renderTable({cols,rows}){
   const c=document.getElementById('results-container');
-  if(!rows||!rows.length){c.innerHTML='<div class="results-empty"><div class="results-empty-icon">∅</div><p>0 rows returned</p></div>';return;}
-  let h=`<table class="rt"><thead><tr><th>#</th>${cols.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>`;
-  rows.forEach((row,ri)=>{h+=`<tr style="animation-delay:${Math.min(ri*30,600)}ms"><td class="rn">${ri+1}</td>`;row.forEach(cell=>{
-    if(cell===null||cell===undefined)h+=`<td class="nl">NULL</td>`;
-    else if(cell===true)h+=`<td class="bt">TRUE</td>`;
-    else if(cell===false)h+=`<td class="bf">FALSE</td>`;
-    else if(typeof cell==='number')h+=`<td class="nm">${cell}</td>`;
-    else if(typeof cell==='string'&&/^\d{4}-\d{2}/.test(cell)&&cell.length<=10)h+=`<td class="dt">${cell}</td>`;
-    else h+=`<td>${E(String(cell))}</td>`;
-  });h+=`</tr>`;});
-  h+=`</tbody></table>`;c.innerHTML=h;
+  if(!rows||!rows.length){c.innerHTML='<div class="results-empty"><div class="results-empty-icon">\u2205</div><p>0 rows returned</p></div>';return;}
+  let h='<table class="rt"><thead><tr><th>#</th>'+cols.map(x=>'<th>'+x+'</th>').join('')+'</tr></thead><tbody>';
+  rows.forEach((row,ri)=>{h+='<tr style="animation-delay:'+Math.min(ri*30,600)+'ms"><td class="rn">'+(ri+1)+'</td>';row.forEach(cell=>{
+    if(cell===null||cell===undefined)h+='<td class="nl">NULL</td>';
+    else if(cell===true)h+='<td style="color:var(--green)">TRUE</td>';
+    else if(cell===false)h+='<td style="color:var(--red)">FALSE</td>';
+    else if(typeof cell==='number')h+='<td style="color:var(--green)">'+cell+'</td>';
+    else if(typeof cell==='string'&&/^\d{4}-\d{2}/.test(cell)&&cell.length<=10)h+='<td style="color:var(--purple)">'+cell+'</td>';
+    else h+='<td>'+E(String(cell))+'</td>';
+  });h+='</tr>';});
+  c.innerHTML=h+'</tbody></table>';
 }
-function renderErr(m){document.getElementById('results-container').innerHTML=`<div class="results-empty"><div class="results-empty-icon">⚠</div><p style="color:var(--red);">ERROR: ${E(m)}</p></div>`;}
+function renderErr(m){document.getElementById('results-container').innerHTML='<div class="results-empty"><div class="results-empty-icon">\u26A0</div><p style="color:var(--red)">ERROR: '+E(m)+'</p></div>';}
 function E(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-// ═══════════════════════════════════════
-//  UI
-// ═══════════════════════════════════════
-function loadPreset(key){switchMainTab('query');const ed=document.getElementById('query-editor');const txt=PRESETS[key].sql;ed.value='';let i=0;const iv=setInterval(()=>{ed.value+=txt[i];i++;updateLineNums();if(i>=txt.length){clearInterval(iv);setTimeout(runQuery,180);}},8);}
-function switchMainTab(t){document.getElementById('tab-query').classList.toggle('active',t==='query');document.getElementById('tab-erd').classList.toggle('active',t==='erd');document.getElementById('query-view').classList.toggle('hidden',t!=='query');document.getElementById('erd-view').classList.toggle('active',t==='erd');}
-function switchSidebarTab(t){document.querySelectorAll('.sidebar-tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.sidebar-panel').forEach(x=>x.classList.remove('active'));if(t==='schema'){document.querySelectorAll('.sidebar-tab')[0].classList.add('active');document.getElementById('schema-panel').classList.add('active');}else{document.querySelectorAll('.sidebar-tab')[1].classList.add('active');document.getElementById('erd-panel').classList.add('active');}}
-
-// Schema tree
-function buildSchemaTree(){const tree=document.getElementById('schema-tree');let h='';for(const[n,d]of Object.entries(DB)){h+=`<div class="table-item" data-table="${n}" onclick="toggleTable(this)"><span class="table-icon">T</span>${n}<span class="table-row-count">${d.rows.length}</span></div><div class="col-list">`;for(const col of d.columns){let b='';if(col.pk)b='<span class="col-badge pk">PK</span>';if(col.fk)b='<span class="col-badge fk">FK</span>';h+=`<div class="col-item"><span class="col-name">${col.name}</span><span class="col-type">${col.type.split('(')[0]}</span>${b}</div>`;}h+='</div>';}tree.innerHTML=h;}
-function toggleTable(el){const was=el.classList.contains('expanded');document.querySelectorAll('.table-item').forEach(t=>t.classList.remove('expanded','active'));if(!was){el.classList.add('expanded','active');}}
-
-// ERD
-function buildERD(cid){
-  const isMain=cid==='erd-main-container',sc=isMain?1:.6;
-  const L={person:{x:20,y:20},contact:{x:20,y:170},employers:{x:260,y:20},positions:{x:260,y:180},highlights:{x:260,y:370},skill_categories:{x:540,y:20},skills:{x:540,y:150},projects:{x:540,y:350},project_skills:{x:770,y:240},education:{x:20,y:350},honors:{x:20,y:520}};
-  const CH=18,HH=28,TW=200,PD=8;const tH=t=>HH+DB[t].columns.length*CH+PD;
-  let mx=0,my=0;for(const[t,p]of Object.entries(L)){mx=Math.max(mx,p.x+TW+40);my=Math.max(my,p.y+tH(t)+40);}
-  let svg=`<svg width="${mx*sc}" height="${my*sc}" viewBox="0 0 ${mx} ${my}" xmlns="http://www.w3.org/2000/svg" style="font-family:'JetBrains Mono',monospace">`;
-  const rels=[{f:'positions',fc:'employer_id',t:'employers',tc:'id',l:'N:1'},{f:'highlights',fc:'position_id',t:'positions',tc:'id',l:'N:1'},{f:'skills',fc:'category_id',t:'skill_categories',tc:'id',l:'N:1'},{f:'project_skills',fc:'project_id',t:'projects',tc:'id',l:'N:M'},{f:'project_skills',fc:'skill_id',t:'skills',tc:'id',l:'N:M'},{f:'honors',fc:'education_id',t:'education',tc:'id',l:'N:1'}];
-  for(const r of rels){const fp=L[r.f],tp=L[r.t];const fi=DB[r.f].columns.findIndex(c=>c.name===r.fc),ti=DB[r.t].columns.findIndex(c=>c.name===r.tc);const fY=fp.y+HH+fi*CH+CH/2,tY=tp.y+HH+ti*CH+CH/2;let fX,tX;if(fp.x>tp.x){fX=fp.x;tX=tp.x+TW;}else if(fp.x<tp.x){fX=fp.x+TW;tX=tp.x;}else{fX=fp.x+TW;tX=tp.x+TW;}const mX=(fX+tX)/2;svg+=`<path class="erd-line" d="M${fX},${fY} C${mX},${fY} ${mX},${tY} ${tX},${tY}"/>`;svg+=`<text class="erd-line-label" x="${mX}" y="${(fY+tY)/2-5}" text-anchor="middle">${r.l}</text>`;}
-  for(const[t,pos]of Object.entries(L)){const h=tH(t);svg+=`<g transform="translate(${pos.x},${pos.y})"><rect class="erd-table-bg" width="${TW}" height="${h}"/><rect class="erd-table-header" width="${TW}" height="${HH}"/><text class="erd-table-title" x="10" y="18">${t}</text>`;DB[t].columns.forEach((col,i)=>{const y=HH+i*CH+13;svg+=`<text class="erd-col-name" x="10" y="${y}">${col.name}</text><text class="erd-col-type" x="${TW-10}" y="${y}" text-anchor="end">${col.type.split('(')[0]}</text>`;if(col.pk)svg+=`<text class="erd-col-pk" x="${TW-10-(col.type.split('(')[0].length*6+8)}" y="${y}" text-anchor="end">PK</text>`;if(col.fk)svg+=`<text class="erd-col-fk" x="${TW-10-(col.type.split('(')[0].length*6+8)}" y="${y}" text-anchor="end">FK</text>`;});svg+=`</g>`;}
-  svg+='</svg>';document.getElementById(cid).innerHTML=svg;
+// ═══ UI ═══
+function loadPreset(key){
+  switchMainTab('query');
+  // Cancel any running animation
+  if(typeTimer){clearInterval(typeTimer);typeTimer=null;}
+  const ed=document.getElementById('query-editor');
+  const txt=PRESETS[key].sql;
+  ed.value='';
+  let i=0;
+  typeTimer=setInterval(()=>{ed.value+=txt[i];i++;updateLineNums();scrollEditorToBottom();if(i>=txt.length){clearInterval(typeTimer);typeTimer=null;setTimeout(runQuery,120);}},4);
+}
+function switchMainTab(t){
+  document.getElementById('tab-query').classList.toggle('active',t==='query');
+  document.getElementById('tab-erd').classList.toggle('active',t==='erd');
+  document.getElementById('tab-dict').classList.toggle('active',t==='dict');
+  document.getElementById('query-view').classList.toggle('hidden',t!=='query');
+  document.getElementById('erd-view').classList.toggle('active',t==='erd');
+  document.getElementById('dict-view').classList.toggle('active',t==='dict');
 }
 
-// Editor
-function updateLineNums(){const ed=document.getElementById('query-editor');const n=ed.value.split('\n').length;document.getElementById('line-nums').innerHTML=Array.from({length:n},(_,i)=>i+1).join('<br>');ed.rows=Math.max(3,n+1);updateCursor();}
+// ═══ SCHEMA TREE ═══
+function buildSchemaTree(){
+  const tree=document.getElementById('schema-tree');let h='';
+  for(const[n,d]of Object.entries(DB)){
+    h+='<div class="table-item" data-table="'+n+'" onclick="toggleTable(this)"><span class="table-icon">T</span>'+n+'<span class="table-row-count">'+d.rows.length+'</span></div><div class="col-list">';
+    for(const col of d.columns){let b='';if(col.pk)b='<span class="col-badge pk">PK</span>';if(col.fk)b='<span class="col-badge fk">FK</span>';h+='<div class="col-item"><span class="col-name">'+col.name+'</span><span class="col-type">'+col.type+'</span>'+b+'</div>';}
+    h+='</div>';}
+  tree.innerHTML=h;
+}
+function toggleTable(el){const was=el.classList.contains('expanded');document.querySelectorAll('.table-item').forEach(t=>t.classList.remove('expanded','active'));if(!was)el.classList.add('expanded','active');}
+
+// ═══ DATA DICTIONARY ═══
+// Column descriptions
+const COL_DESC={
+person:{person_id:'Unique identifier for each person',fname:'First name',lname:'Last name',title:'Professional title / target role',phone:'Primary phone number',email:'Primary email address',linkedin:'LinkedIn profile URL handle',github:'GitHub profile URL handle',city:'Current city of residence',state:'Current state of residence',will_relocate:'Willing to relocate for work',available_date:'Earliest start date for new role',tagline:'One-line professional summary',status:'Current job search status'},
+edu_institutions:{institution_id:'Unique identifier for institution',institution_name:'Full name of the university',college:'Specific college or school within the university'},
+degrees:{degree_id:'Unique identifier for each degree',person_id:'Person who earned this degree',institution_id:'Institution where degree was earned',degree:'Degree type and major',track:'Specialization or emphasis area',gpa:'Cumulative grade point average',graduation_date:'Expected or actual graduation date'},
+honors:{honor_id:'Unique identifier for each honor',degree_id:'Associated degree',honor_name:'Name of the honor or award',honor_type:'Category: Academic, Financial, or Membership'},
+employer:{employer_id:'Unique identifier for employer',empname:'Full legal / official employer name',empname_short:'Abbreviated name for display',city:'City where position was held',state:'State where position was held',sector:'Industry sector classification'},
+position:{position_id:'Unique identifier for each position',person_id:'Person who held this position',employer_id:'Employer for this position',position_title:'Official job title',start_date:'Date employment began (YYYY-MM)',end_date:'Date employment ended; NULL = current role'},
+work_highlights:{highlight_id:'Unique identifier for each highlight',position_id:'Position this accomplishment belongs to',accomplishment:'Description of work performed and results',impact:'Quantified metric or outcome label'},
+skill_category:{category_id:'Unique identifier for category',category_name:'Display name of the skill group',display_order:'Sort order for presentation'},
+skills:{skill_id:'Unique identifier for each skill',category_id:'Parent category for this skill',skill_name:'Name of the tool or technology',proficiency:'Proficiency rank: 1=Familiar, 2=Proficient, 3=Advanced'},
+position_skills:{skill_id:'Skill used in this position',position_id:'Position where skill was applied'},
+projects:{project_id:'Unique identifier for each project',project_name:'Name of the project',project_type:'Category: Personal, Research, Hackathon, Academic',status:'Current state: Active, Delivered, Complete',description:'Brief summary of the project',link:'URL to project repo or demo'},
+project_skills:{skill_id:'Skill used in this project',project_id:'Project where skill was applied'}
+};
+
+function buildDict(){
+  const container=document.getElementById('dict-view');let h='<div class="cv-section-label">// REFERENCE</div><div class="cv-section-title">Data <em>Dictionary</em></div>';
+  let i=0;
+  for(const[tname,tdata]of Object.entries(DB)){
+    h+='<div class="dict-table" style="animation-delay:'+(i*50)+'ms"><div class="dict-table-name">'+tname+' <span>'+tdata.rows.length+' row'+(tdata.rows.length!==1?'s':'')+'</span></div>';
+    h+='<div class="dict-cols"><div class="dict-row head"><span class="dc-name">Column</span><span class="dc-type">Type</span><span class="dc-key">Key</span><span class="dc-ref">References</span><span class="dc-desc">Description</span></div>';
+    for(const col of tdata.columns){
+      let key='';if(col.pk)key='PK';if(col.fk)key+=(key?' / ':'')+'FK';
+      const desc=(COL_DESC[tname]&&COL_DESC[tname][col.name])||'';
+      h+='<div class="dict-row"><span class="dc-name">'+col.name+'</span><span class="dc-type">'+col.type+'</span><span class="dc-key">'+(key||'\u2014')+'</span><span class="dc-ref">'+(col.fk||'\u2014')+'</span><span class="dc-desc">'+desc+'</span></div>';
+    }
+    h+='</div></div>';i++;
+  }
+  container.innerHTML=h;
+}
+
+// ═══ ERD (cleaned layout) ═══
+function buildERD(cid){
+  const L={
+    edu_institutions:{x:20,y:20},
+    degrees:{x:20,y:150},
+    honors:{x:20,y:340},
+    person:{x:300,y:20},
+    employer:{x:300,y:310},
+    position:{x:580,y:20},
+    work_highlights:{x:580,y:200},
+    skill_category:{x:880,y:20},
+    skills:{x:880,y:130},
+    position_skills:{x:580,y:380},
+    projects:{x:880,y:380},
+    project_skills:{x:880,y:290}
+  };
+  const CH=16,HH=26,TW=230,PD=6;
+  const tH=t=>HH+DB[t].columns.length*CH+PD;
+  let mx=0,my=0;for(const[t,p]of Object.entries(L)){mx=Math.max(mx,p.x+TW+50);my=Math.max(my,p.y+tH(t)+50);}
+
+  let svg='<svg width="'+mx+'" height="'+my+'" viewBox="0 0 '+mx+' '+my+'" xmlns="http://www.w3.org/2000/svg" style="font-family:\'JetBrains Mono\',monospace">';
+
+  const rels=[
+    {f:'degrees',fc:'person_id',t:'person',tc:'person_id'},
+    {f:'degrees',fc:'institution_id',t:'edu_institutions',tc:'institution_id'},
+    {f:'honors',fc:'degree_id',t:'degrees',tc:'degree_id'},
+    {f:'position',fc:'person_id',t:'person',tc:'person_id'},
+    {f:'position',fc:'employer_id',t:'employer',tc:'employer_id'},
+    {f:'work_highlights',fc:'position_id',t:'position',tc:'position_id'},
+    {f:'skills',fc:'category_id',t:'skill_category',tc:'category_id'},
+    {f:'position_skills',fc:'position_id',t:'position',tc:'position_id'},
+    {f:'position_skills',fc:'skill_id',t:'skills',tc:'skill_id'},
+    {f:'project_skills',fc:'project_id',t:'projects',tc:'project_id'},
+    {f:'project_skills',fc:'skill_id',t:'skills',tc:'skill_id'}
+  ];
+  for(const r of rels){
+    const fp=L[r.f],tp=L[r.t];
+    const fi=DB[r.f].columns.findIndex(c=>c.name===r.fc);
+    const ti=DB[r.t].columns.findIndex(c=>c.name===r.tc);
+    const fY=fp.y+HH+fi*CH+CH/2,tY=tp.y+HH+ti*CH+CH/2;
+    let fX,tX;
+    if(fp.x>tp.x+TW){fX=fp.x;tX=tp.x+TW;}
+    else if(tp.x>fp.x+TW){fX=fp.x+TW;tX=tp.x;}
+    else if(fp.x<=tp.x){fX=fp.x+TW;tX=tp.x;}
+    else{fX=fp.x;tX=tp.x+TW;}
+    const mX=(fX+tX)/2;
+    svg+='<path class="erd-line" d="M'+fX+','+fY+' C'+mX+','+fY+' '+mX+','+tY+' '+tX+','+tY+'"/>';
+  }
+  for(const[t,pos]of Object.entries(L)){
+    const h=tH(t);
+    svg+='<g transform="translate('+pos.x+','+pos.y+')"><rect class="erd-table-bg" width="'+TW+'" height="'+h+'"/><rect class="erd-table-header" width="'+TW+'" height="'+HH+'"/><text class="erd-table-title" x="10" y="17">'+t+'</text>';
+    DB[t].columns.forEach((col,i)=>{
+      const y=HH+i*CH+12;
+      svg+='<text class="erd-col-name" x="10" y="'+y+'">'+col.name+'</text>';
+      svg+='<text class="erd-col-type" x="'+(TW-10)+'" y="'+y+'" text-anchor="end">'+col.type+'</text>';
+      if(col.pk)svg+='<text class="erd-col-pk" x="'+(TW-10-col.type.length*5.5-10)+'" y="'+y+'" text-anchor="end">PK</text>';
+      if(col.fk)svg+='<text class="erd-col-fk" x="'+(TW-10-col.type.length*5.5-10)+'" y="'+y+'" text-anchor="end">FK</text>';
+    });
+    svg+='</g>';
+  }
+  svg+='</svg>';
+  document.getElementById(cid).innerHTML=svg;
+}
+
+// ═══ EDITOR ═══
+function updateLineNums(){
+  const ed=document.getElementById('query-editor');
+  const n=ed.value.split('\n').length;
+  const nums=Array.from({length:n},(_,i)=>i+1).join('<br>');
+  document.getElementById('line-nums').innerHTML='<div id="ln-inner" style="padding:.8rem 0;padding-right:.7rem">'+nums+'</div>';
+  syncLineNums();
+  updateCursor();
+}
+function syncLineNums(){
+  const ed=document.getElementById('query-editor');
+  const inner=document.getElementById('ln-inner');
+  if(inner)inner.style.marginTop=-ed.scrollTop+'px';
+}
 function updateCursor(){const ed=document.getElementById('query-editor');const lines=ed.value.substring(0,ed.selectionStart).split('\n');document.getElementById('ln').textContent=lines.length;document.getElementById('col').textContent=lines[lines.length-1].length+1;}
 function handleKey(e){if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();runQuery();}if(e.key==='Tab'){e.preventDefault();const el=e.target,s=el.selectionStart;el.value=el.value.substring(0,s)+'  '+el.value.substring(el.selectionEnd);el.selectionStart=el.selectionEnd=s+2;}setTimeout(updateCursor,0);}
+function scrollEditorToBottom(){const ed=document.getElementById('query-editor');ed.scrollTop=ed.scrollHeight;}
 
-// INIT
-buildSchemaTree();buildERD('erd-main-container');buildERD('erd-sidebar-container');updateLineNums();
+// Sync line-nums on editor scroll
+document.addEventListener('DOMContentLoaded',()=>{
+  const ed=document.getElementById('query-editor');
+  ed.addEventListener('scroll',syncLineNums);
+});
+
+// ═══ SIDEBAR TOGGLE ═══
+function toggleSidebar(){
+  const sb=document.getElementById('sidebar');
+  const tog=document.getElementById('sidebar-toggle');
+  sb.classList.toggle('collapsed');
+  tog.classList.toggle('open');
+}
+
+// ═══ RESIZER DRAG ═══
+(function(){
+  const resizer=document.getElementById('editor-resizer');
+  const editorSection=document.querySelector('.editor-section');
+  let startY,startH,dragging=false;
+  resizer.addEventListener('mousedown',e=>{
+    e.preventDefault();
+    dragging=true;startY=e.clientY;startH=editorSection.offsetHeight;
+    resizer.classList.add('active');
+    document.body.style.cursor='ns-resize';document.body.style.userSelect='none';
+  });
+  document.addEventListener('mousemove',e=>{
+    if(!dragging)return;
+    const dy=e.clientY-startY;
+    const newH=Math.max(60,Math.min(startH+dy,window.innerHeight*0.7));
+    editorSection.style.height=newH+'px';
+  });
+  document.addEventListener('mouseup',()=>{
+    if(!dragging)return;
+    dragging=false;resizer.classList.remove('active');
+    document.body.style.cursor='';document.body.style.userSelect='';
+  });
+})();
+
+// ═══ INIT ═══
+buildSchemaTree();
+buildERD('erd-main-container');
+buildDict();
+updateLineNums();
 document.getElementById('query-editor').addEventListener('click',updateCursor);
-setTimeout(()=>loadPreset('profile'),400);
+setTimeout(()=>loadPreset('overview'),400);
 </script>
 </body>
 </html>
