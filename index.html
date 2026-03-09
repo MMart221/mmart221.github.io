@@ -289,6 +289,9 @@
     .toolbar-sep   { width: 1px; height: 18px; background: var(--border2); }
     .preset-label  { font-family: 'Outfit'; font-size: .62rem; font-weight: 500; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
     .preset-queries { display: flex; gap: .35rem; flex-wrap: wrap; }
+    .toolbar-end { margin-left: auto; display: flex; align-items: center; gap: .5rem; flex-shrink: 0; }
+    .custom-query-btn { padding: .26rem .7rem; font-family: 'Outfit'; font-size: .62rem; font-weight: 500; background: transparent; color: var(--muted2); border: 1px solid rgba(255,255,255,.1); border-radius: 4px; cursor: pointer; transition: all .15s; white-space: nowrap; }
+    .custom-query-btn:hover { color: var(--text); border-color: rgba(255,255,255,.25); background: rgba(255,255,255,.04); }
     .preset-btn {
       padding: .35rem .85rem;
       font-family: 'JetBrains Mono', monospace;
@@ -669,23 +672,21 @@
     /* min-height: 0 on all flex-column children that need to scroll —
        without it, flex items default to min-height: auto and refuse to
        shrink below their content, so overflow: auto never triggers. */
-    .erd-main          { display: none; flex: 1; min-height: 0; overflow: scroll; background: var(--bg); }
+    .erd-main          { display: none; flex: 1; flex-direction: column; min-height: 0; background: var(--bg); }
     .erd-main.active   { display: flex; }
+    .erd-controls      { flex-shrink: 0; display: flex; align-items: center; gap: .45rem; padding: .35rem .9rem; background: var(--surface); border-bottom: 1px solid var(--border); }
+    .erd-ctrl-btn      { padding: .22rem .65rem; font-family: 'Outfit'; font-size: .65rem; font-weight: 500; background: transparent; color: var(--text2); border: 1px solid var(--border2); border-radius: 3px; cursor: pointer; transition: all .15s; }
+    .erd-ctrl-btn:hover { color: var(--text); border-color: var(--accent); }
+    .erd-ctrl-level    { font-family: 'Outfit'; font-size: .63rem; color: var(--muted2); min-width: 2.8rem; text-align: center; }
+    .erd-scroll        { flex: 1; overflow: auto; }
+    .erd-container     { min-width: max-content; padding: 2.5rem; }
     .dict-main         { display: none; flex: 1; min-height: 0; overflow: auto; background: var(--bg); padding: 2rem; }
     .dict-main.active  { display: block; }
     .query-main        { display: flex; flex-direction: column; flex: 1; min-height: 0; }
     .query-main.hidden { display: none; }
-    .erd-container     { min-width: max-content; padding: 2rem; }
 
     /* ERD SVG styles */
-    .erd-table-bg     { rx: 6; fill: var(--surface2); stroke: var(--border2); stroke-width: 1; }
-    .erd-table-header { fill: var(--surface3); rx: 6; }
-    .erd-table-title  { font-family: 'Outfit'; font-size: 11px; font-weight: 600; fill: var(--accent); }
-    .erd-col-name     { font-family: 'JetBrains Mono', monospace; font-size: 9px;   fill: var(--text2); }
-    .erd-col-type     { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; fill: var(--purple); }
-    .erd-col-pk       { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; fill: var(--yellow); font-weight: 700; }
-    .erd-col-fk       { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; fill: var(--blue);   font-weight: 700; }
-    .erd-line         { stroke: var(--border2); stroke-width: 1.5; fill: none; opacity: .5; }
+    /* ERD styles are inlined in the SVG; no CSS classes needed */
 
     /* Data dictionary */
     .dict-table      { margin-bottom: 2rem; animation: slideUp .3s ease both; }
@@ -753,7 +754,8 @@
         row-gap: .4rem;
         padding: .5rem .8rem;
       }
-      .run-btn      { display: none; }
+      .run-btn          { display: none; }
+      .toolbar-end      { display: none; }
       .toolbar-sep  { display: none; }
       .preset-label { display: none; }
       .preset-btn   { padding: .4rem .75rem; font-size: .7rem; }
@@ -858,6 +860,10 @@
               <button class="preset-btn" onclick="loadPreset('education')">Education</button>
               <button class="preset-btn hire" onclick="loadPreset('hire_me')">Hire Me &#x2726;</button>
             </div>
+            <div class="toolbar-end">
+              <div class="toolbar-sep"></div>
+              <button class="custom-query-btn" onclick="openCustomQuery()">Custom Query</button>
+            </div>
           </div>
           <div class="editor-wrap">
             <div class="line-nums" id="line-nums">1</div>
@@ -883,7 +889,15 @@
           </div>
         </div>
       </div>
-      <div class="erd-main" id="erd-view"><div class="erd-container" id="erd-main-container"></div></div>
+      <div class="erd-main" id="erd-view">
+        <div class="erd-controls">
+          <button class="erd-ctrl-btn" onclick="erdZoom(-0.2)">&#8722; Zoom Out</button>
+          <span class="erd-ctrl-level" id="erd-zoom-lvl">100%</span>
+          <button class="erd-ctrl-btn" onclick="erdZoom(+0.2)">&#43; Zoom In</button>
+          <button class="erd-ctrl-btn" onclick="erdZoom(0)" style="margin-left:.3rem">&#8635; Reset</button>
+        </div>
+        <div class="erd-scroll"><div class="erd-container" id="erd-main-container"></div></div>
+      </div>
       <div class="dict-main" id="dict-view"></div>
     </div>
   </div>
@@ -898,7 +912,7 @@
 //  13-TABLE NORMALIZED DATABASE (3NF) — Round 2
 // ═══════════════════════════════════════════════════════
 const DB={
-person:{columns:[{name:'person_id',type:'INT',pk:1},{name:'fname',type:'VARCHAR'},{name:'lname',type:'VARCHAR'},{name:'title',type:'VARCHAR'},{name:'email',type:'VARCHAR'},{name:'linkedin',type:'VARCHAR'},{name:'github',type:'VARCHAR'},{name:'city',type:'VARCHAR'},{name:'state',type:'VARCHAR'},{name:'will_relocate',type:'BOOLEAN'},{name:'available_date',type:'DATE'},{name:'tagline',type:'TEXT'},{name:'status',type:'VARCHAR'}],rows:[[1,'Michael','Martinez','Data Engineer','michaelmartinez24628@gmail.com','linkedin.com/in/mmartinez221','github.com/MMart221','Logan','UT',true,'2026-05-15','Building end-to-end data pipelines, NLP systems, and cloud architectures','Open to full-time DE roles']]},
+person:{columns:[{name:'person_id',type:'INT',pk:1},{name:'fname',type:'VARCHAR'},{name:'lname',type:'VARCHAR'},{name:'title',type:'VARCHAR'},{name:'email',type:'VARCHAR'},{name:'linkedin',type:'VARCHAR'},{name:'github',type:'VARCHAR'},{name:'city',type:'VARCHAR'},{name:'state',type:'VARCHAR'},{name:'will_relocate',type:'BOOLEAN'},{name:'available_date',type:'DATE'},{name:'tagline',type:'TEXT'},{name:'status',type:'VARCHAR'}],rows:[[1,'Michael','Martinez','Data Engineer','michaelmartinez24628@gmail.com','linkedin.com/in/mmartinez221','github.com/MMart221','Logan','UT',true,'2026-05-15','Data engineer focused on SQL pipelines, automation, and practical data applications.','Open to full-time roles']]},
 edu_institutions:{columns:[{name:'institution_id',type:'INT',pk:1},{name:'institution_name',type:'VARCHAR'},{name:'college',type:'VARCHAR'}],rows:[[1,'Utah State University','Jon M. Huntsman School of Business']]},
 degrees:{columns:[{name:'degree_id',type:'INT',pk:1},{name:'person_id',type:'INT',fk:'person'},{name:'institution_id',type:'INT',fk:'edu_institutions'},{name:'degree',type:'VARCHAR'},{name:'track',type:'VARCHAR'},{name:'gpa',type:'DECIMAL'},{name:'graduation_date',type:'DATE'}],rows:[[1,1,1,'BS Information Systems','Data Engineering',3.90,'2026-05']]},
 courses:{columns:[{name:'course_id',type:'INT',pk:1},{name:'degree_id',type:'INT',fk:'degrees'},{name:'course_code',type:'VARCHAR'},{name:'course_name',type:'VARCHAR'},{name:'description',type:'TEXT'}],rows:[
@@ -1214,7 +1228,90 @@ function switchView(v){curView=v;document.getElementById('btn-clean').classList.
 function renderCur(){if(curView==='clean'&&lastPreset&&PRESETS[lastPreset].clean)document.getElementById('results-container').innerHTML=PRESETS[lastPreset].clean();else if(lastResult&&!lastResult.error)renderTable(lastResult);}
 function norm(s){return s.replace(/--[^\n]*/g,'').replace(/\s+/g,' ').trim().toLowerCase();}
 function parseBasic(q){
-  const cl=norm(q);let tn=null;const fm=cl.match(/from\s+(\w+)/);if(fm)tn=fm[1];
+  const cl=norm(q);
+
+  // ── JOIN path ────────────────────────────────────────────────────────────
+  if(/\bjoin\b/.test(cl)){
+    // Syntax: FROM t1 [a1] [INNER] JOIN t2 [a2] ON a1.c1 = a2.c2
+    const jm=cl.match(/from\s+(\w+)(?:\s+(\w+))?\s+(?:inner\s+)?join\s+(\w+)(?:\s+(\w+))?\s+on\s+(\w+)\.(\w+)\s*=\s*(\w+)\.(\w+)/);
+    if(!jm)return{error:'Could not parse JOIN. Supported syntax: FROM t1 [alias] JOIN t2 [alias] ON t1.col = t2.col'};
+    const[,t1n,a1r,t2n,a2r,on1a,on1c,on2a,on2c]=jm;
+    if(!DB[t1n])return{error:`relation "${t1n}" does not exist`};
+    if(!DB[t2n])return{error:`relation "${t2n}" does not exist`};
+    const tbl1=DB[t1n],tbl2=DB[t2n];
+    const cols1=tbl1.columns.map(c=>c.name),cols2=tbl2.columns.map(c=>c.name);
+    // Resolve aliases — reject SQL keywords accidentally captured by the optional group
+    const KW=new Set(['join','inner','on','where','order','group','limit','select','from','left','right','outer','as']);
+    const a1=(a1r&&!KW.has(a1r))?a1r:t1n;
+    const a2=(a2r&&!KW.has(a2r))?a2r:t2n;
+    // aliasMap: alias/tablename -> {tn, cols, off (offset into combined row)}
+    const AM={
+      [a1]:{tn:t1n,cols:cols1,off:0},
+      [a2]:{tn:t2n,cols:cols2,off:cols1.length},
+      [t1n]:{tn:t1n,cols:cols1,off:0},
+      [t2n]:{tn:t2n,cols:cols2,off:cols1.length}
+    };
+    // Resolve ON clause column indices
+    const la=AM[on1a],ra=AM[on2a];
+    if(!la)return{error:`Unknown alias or table "${on1a}" in ON clause`};
+    if(!ra)return{error:`Unknown alias or table "${on2a}" in ON clause`};
+    const lKeyIdx=la.cols.indexOf(on1c),rKeyIdx=ra.cols.indexOf(on2c);
+    if(lKeyIdx<0)return{error:`Column "${on1c}" not found in "${la.tn}"`};
+    if(rKeyIdx<0)return{error:`Column "${on2c}" not found in "${ra.tn}"`};
+    // Inner join: nested loop, combined row = [...r1, ...r2]
+    let rows=[];
+    for(const r1 of tbl1.rows){
+      for(const r2 of tbl2.rows){
+        const lv=(la.tn===t1n)?r1[lKeyIdx]:r2[lKeyIdx];
+        const rv=(ra.tn===t1n)?r1[rKeyIdx]:r2[rKeyIdx];
+        if(lv===rv)rows.push([...r1,...r2]);
+      }
+    }
+    // Build combined column names — prefix duplicates with alias so they're unambiguous
+    const seen=new Set(),dup=new Set();
+    [...cols1,...cols2].forEach(c=>{if(seen.has(c))dup.add(c);seen.add(c);});
+    const allCols=[
+      ...cols1.map(c=>dup.has(c)?a1+'.'+c:c),
+      ...cols2.map(c=>dup.has(c)?a2+'.'+c:c)
+    ];
+    // Resolve a column reference (optional alias prefix + name) to combined row index
+    const res=(prefix,col)=>{
+      if(prefix){const am=AM[prefix];if(!am)return-1;const ci=am.cols.indexOf(col);return ci>=0?am.off+ci:-1;}
+      let i=allCols.indexOf(col);
+      if(i<0)i=allCols.findIndex(c=>c===col||c.endsWith('.'+col));
+      return i;
+    };
+    // WHERE (supports alias.col or plain col)
+    const wm=cl.match(/where\s+(.+?)(?:\s+order|\s+group|\s+limit|\s*;?\s*$)/);
+    if(wm){const cond=wm[1].trim();
+      const nm=cond.match(/(?:(\w+)\.)?(\w+)\s+is\s+null/);if(nm){const i=res(nm[1],nm[2]);if(i>=0)rows=rows.filter(r=>r[i]===null);}
+      const nnm=cond.match(/(?:(\w+)\.)?(\w+)\s+is\s+not\s+null/);if(nnm){const i=res(nnm[1],nnm[2]);if(i>=0)rows=rows.filter(r=>r[i]!==null);}
+      const im=cond.match(/(?:(\w+)\.)?(\w+)\s*=\s*(\d+)/);if(im){const i=res(im[1],im[2]);if(i>=0)rows=rows.filter(r=>r[i]==parseInt(im[3]));}
+      const sm=cond.match(/(?:(\w+)\.)?(\w+)\s*=\s*'([^']+)'/);if(sm){const i=res(sm[1],sm[2]);if(i>=0)rows=rows.filter(r=>String(r[i]).toLowerCase()===sm[3].toLowerCase());}
+    }
+    // ORDER BY (supports alias.col or plain col)
+    const om=cl.match(/order\s+by\s+(?:(\w+)\.)?(\w+)(?:\s+(asc|desc))?/);
+    if(om){const i=res(om[1],om[2]);const d=om[3]==='desc';if(i>=0)rows.sort((a,b)=>{if(a[i]===null)return 1;if(b[i]===null)return-1;const c=String(a[i]).localeCompare(String(b[i]),undefined,{numeric:true});return d?-c:c;});}
+    // LIMIT
+    const lm=cl.match(/limit\s+(\d+)/);if(lm)rows=rows.slice(0,parseInt(lm[1]));
+    // SELECT projection
+    let sc=allCols;
+    if(!cl.match(/select\s+\*/)){
+      const sel=q.match(/SELECT\s+([\s\S]+?)\s+FROM/i);
+      if(sel){
+        const idxList=sel[1].split(',').map(c=>{
+          const s=c.trim().replace(/\s+as\s+\w+$/i,'').trim().toLowerCase();
+          const dm=s.match(/^(\w+)\.(\w+)$/);
+          return dm?res(dm[1],dm[2]):res(null,s);
+        }).filter(i=>i>=0);
+        if(idxList.length>0){sc=idxList.map(i=>allCols[i]);rows=rows.map(r=>idxList.map(i=>r[i]));}
+      }
+    }
+    return{cols:sc,rows};
+  }
+
+  // ── Single-table path ────────────────────────────────────────────────────
+  let tn=null;const fm=cl.match(/from\s+(\w+)/);if(fm)tn=fm[1];
   if(!tn||!DB[tn])return{error:'relation "'+(fm?fm[1]:'?')+'" does not exist. Available: '+Object.keys(DB).join(', ')};
   const table=DB[tn];let rows=table.rows.map(r=>[...r]);const cn=table.columns.map(c=>c.name);
   const wm=cl.match(/where\s+(.+?)(?:\s+order|\s+group|\s+limit|\s*;?\s*$)/);
@@ -1332,57 +1429,146 @@ function buildDict(){
 
 // ═══ ERD ═══
 function buildERD(cid){
-  const L={
-    edu_institutions:{x:20,y:20},degrees:{x:20,y:150},courses:{x:20,y:310},honors:{x:20,y:470},
-    person:{x:300,y:20},employer:{x:300,y:310},
-    position:{x:580,y:20},work_highlights:{x:580,y:210},
-    skill_category:{x:900,y:20},skills:{x:900,y:130},
-    position_skills:{x:580,y:400},projects:{x:900,y:370},project_skills:{x:900,y:270}
-  };
-  const CH=16,HH=26,TW=240,PD=6;
+  const CH=20, HH=32, TW=272, PD=12;
   const tH=t=>HH+DB[t].columns.length*CH+PD;
-  let mx=0,my=0;for(const[t,p]of Object.entries(L)){mx=Math.max(mx,p.x+TW+50);my=Math.max(my,p.y+tH(t)+50);}
-  let svg='<svg width="'+mx+'" height="'+my+'" viewBox="0 0 '+mx+' '+my+'" xmlns="http://www.w3.org/2000/svg" style="font-family:\'JetBrains Mono\',monospace">';
+
+  // 4 columns with ~115px gaps: col1=40 col2=430 col3=820 col4=1210
+  const L={
+    edu_institutions:{x:40,   y:50},
+    degrees:         {x:40,   y:200},
+    courses:         {x:40,   y:430},
+    honors:          {x:40,   y:624},
+    person:          {x:430,  y:50},
+    employer:        {x:430,  y:420},
+    position:        {x:820,  y:50},
+    work_highlights: {x:820,  y:260},
+    position_skills: {x:820,  y:446},
+    skill_category:  {x:1210, y:50},
+    skills:          {x:1210, y:210},
+    project_skills:  {x:1210, y:396},
+    projects:        {x:1210, y:546}
+  };
+
   const rels=[
-    {f:'degrees',fc:'person_id',t:'person',tc:'person_id'},
-    {f:'degrees',fc:'institution_id',t:'edu_institutions',tc:'institution_id'},
-    {f:'courses',fc:'degree_id',t:'degrees',tc:'degree_id'},
-    {f:'honors',fc:'degree_id',t:'degrees',tc:'degree_id'},
-    {f:'position',fc:'person_id',t:'person',tc:'person_id'},
-    {f:'position',fc:'employer_id',t:'employer',tc:'employer_id'},
-    {f:'work_highlights',fc:'position_id',t:'position',tc:'position_id'},
-    {f:'skills',fc:'category_id',t:'skill_category',tc:'category_id'},
-    {f:'position_skills',fc:'position_id',t:'position',tc:'position_id'},
-    {f:'position_skills',fc:'skill_id',t:'skills',tc:'skill_id'},
-    {f:'project_skills',fc:'project_id',t:'projects',tc:'project_id'},
-    {f:'project_skills',fc:'skill_id',t:'skills',tc:'skill_id'}
+    {f:'degrees',        fc:'person_id',     t:'person',         tc:'person_id'},
+    {f:'degrees',        fc:'institution_id', t:'edu_institutions',tc:'institution_id'},
+    {f:'courses',        fc:'degree_id',      t:'degrees',        tc:'degree_id'},
+    {f:'honors',         fc:'degree_id',      t:'degrees',        tc:'degree_id'},
+    {f:'position',       fc:'person_id',      t:'person',         tc:'person_id'},
+    {f:'position',       fc:'employer_id',    t:'employer',       tc:'employer_id'},
+    {f:'work_highlights',fc:'position_id',    t:'position',       tc:'position_id'},
+    {f:'skills',         fc:'category_id',    t:'skill_category', tc:'category_id'},
+    {f:'position_skills',fc:'position_id',    t:'position',       tc:'position_id'},
+    {f:'position_skills',fc:'skill_id',       t:'skills',         tc:'skill_id'},
+    {f:'project_skills', fc:'project_id',     t:'projects',       tc:'project_id'},
+    {f:'project_skills', fc:'skill_id',       t:'skills',         tc:'skill_id'}
   ];
+
+  // Canvas: extra right margin for col1 right-routing curves; left margin for col3/col4 left-routing
+  let mx=0,my=0;
+  for(const[t,p]of Object.entries(L)){mx=Math.max(mx,p.x+TW+100);my=Math.max(my,p.y+tH(t)+70);}
+  mx+=20; // small right buffer
+
+  // Build clipPath defs for each table (clean rounded-corner clipping)
+  const clips=Object.entries(L).map(([t,p])=>
+    `<clipPath id="cp-${t}"><rect width="${TW}" height="${tH(t)}" rx="6"/></clipPath>`
+  ).join('');
+
+  let svg=`<svg width="${mx}" height="${my}" viewBox="0 0 ${mx} ${my}" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="erd-arr" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto">
+    <polygon points="0 0, 7 3, 0 6" fill="#2a3a58"/>
+  </marker>
+  ${clips}
+</defs>`;
+
+  // Draw relationship lines (rendered behind tables)
   for(const r of rels){
     const fp=L[r.f],tp=L[r.t];
-    const fi=DB[r.f].columns.findIndex(c=>c.name===r.fc),ti=DB[r.t].columns.findIndex(c=>c.name===r.tc);
-    const fY=fp.y+HH+fi*CH+CH/2,tY=tp.y+HH+ti*CH+CH/2;
-    let fX,tX;
-    if(fp.x>tp.x+TW){fX=fp.x;tX=tp.x+TW;}
-    else if(tp.x>fp.x+TW){fX=fp.x+TW;tX=tp.x;}
-    else if(fp.x<=tp.x){fX=fp.x+TW;tX=tp.x;}
-    else{fX=fp.x;tX=tp.x+TW;}
-    const mX=(fX+tX)/2;
-    svg+='<path class="erd-line" d="M'+fX+','+fY+' C'+mX+','+fY+' '+mX+','+tY+' '+tX+','+tY+'"/>';
+    const fi=DB[r.f].columns.findIndex(c=>c.name===r.fc);
+    const ti=DB[r.t].columns.findIndex(c=>c.name===r.tc);
+    const fY=fp.y+HH+fi*CH+CH/2;
+    const tY=tp.y+HH+ti*CH+CH/2;
+    const Rf=fp.x+TW, Rt=tp.x+TW;
+    let pathD;
+    if(fp.x>Rt){
+      // fp is right of tp: fp.left → tp.right
+      const mX=(fp.x+Rt)/2;
+      pathD=`M${fp.x},${fY} C${mX},${fY} ${mX},${tY} ${Rt},${tY}`;
+    } else if(tp.x>Rf){
+      // tp is right of fp: fp.right → tp.left
+      const mX=(Rf+tp.x)/2;
+      pathD=`M${Rf},${fY} C${mX},${fY} ${mX},${tY} ${tp.x},${tY}`;
+    } else {
+      // Same column: route to side that stays in the gap, not under adjacent tables
+      // col1 (x≈40): RIGHT into col1→col2 gap
+      // col3 (x≈820) and col4 (x≈1210): LEFT into the gap on their left side
+      const ext=Math.min(68, Math.max(42, Math.abs(fY-tY)*0.26));
+      if(fp.x>=700){
+        pathD=`M${fp.x},${fY} C${fp.x-ext},${fY} ${tp.x-ext},${tY} ${tp.x},${tY}`;
+      } else {
+        pathD=`M${Rf},${fY} C${Rf+ext},${fY} ${Rt+ext},${tY} ${Rt},${tY}`;
+      }
+    }
+    svg+=`<path d="${pathD}" stroke="#2a3a58" stroke-width="1.5" fill="none" marker-end="url(#erd-arr)"/>`;
+    const [,sx,sy]=pathD.match(/^M([\d.]+),([\d.]+)/);
+    svg+=`<circle cx="${sx}" cy="${sy}" r="2.5" fill="#2a3a58"/>`;
   }
+
+  // Draw tables
   for(const[t,pos]of Object.entries(L)){
     const h=tH(t);
-    svg+='<g transform="translate('+pos.x+','+pos.y+')"><rect class="erd-table-bg" width="'+TW+'" height="'+h+'"/><rect class="erd-table-header" width="'+TW+'" height="'+HH+'"/><text class="erd-table-title" x="10" y="17">'+t+'</text>';
+    svg+=`<g transform="translate(${pos.x},${pos.y})" clip-path="url(#cp-${t})">`;
+    // Table body
+    svg+=`<rect width="${TW}" height="${h}" rx="6" fill="#0d1525" stroke="#1e2d4d" stroke-width="1"/>`;
+    // Header background
+    svg+=`<rect width="${TW}" height="${HH}" fill="#111d35"/>`;
+    // Header bottom border
+    svg+=`<line x1="0" y1="${HH}" x2="${TW}" y2="${HH}" stroke="#1e2d4d" stroke-width="1"/>`;
+    // Table name
+    svg+=`<text font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="#64ffda" x="10" y="20">${t}</text>`;
+
     DB[t].columns.forEach((col,i)=>{
-      const y=HH+i*CH+12;
-      svg+='<text class="erd-col-name" x="10" y="'+y+'">'+col.name+'</text>';
-      svg+='<text class="erd-col-type" x="'+(TW-10)+'" y="'+y+'" text-anchor="end">'+col.type+'</text>';
-      if(col.pk)svg+='<text class="erd-col-pk" x="'+(TW-10-col.type.length*5.5-10)+'" y="'+y+'" text-anchor="end">PK</text>';
-      if(col.fk)svg+='<text class="erd-col-fk" x="'+(TW-10-col.type.length*5.5-10)+'" y="'+y+'" text-anchor="end">FK</text>';
+      const rowY=HH+i*CH;
+      const textY=rowY+Math.ceil(CH*0.68);
+      // Row separator (skip last row)
+      if(i<DB[t].columns.length-1)
+        svg+=`<line x1="10" y1="${rowY+CH}" x2="${TW-10}" y2="${rowY+CH}" stroke="#1a2640" stroke-width="1"/>`;
+      // Column name: PK=gold, FK=purple, normal=muted blue
+      const nameColor=col.pk?'#e6c040':col.fk?'#a78bfa':'#8898b8';
+      svg+=`<text font-family="'JetBrains Mono',monospace" font-size="9.5" fill="${nameColor}" x="12" y="${textY}">${col.name}</text>`;
+      // Data type (right-aligned, quiet)
+      svg+=`<text font-family="'JetBrains Mono',monospace" font-size="8" fill="#2e3f5c" text-anchor="end" x="${TW-10}" y="${textY}">${col.type}</text>`;
+      // PK/FK badge
+      if(col.pk||col.fk){
+        const badge=col.pk?'PK':'FK';
+        const bgFill=col.pk?'#1e1600':col.fk?'#160e30':'#160e30';
+        const bdStroke=col.pk?'#6b5500':col.fk?'#4a3680':'#4a3680';
+        const txtFill=col.pk?'#e6c040':col.fk?'#a78bfa':'#a78bfa';
+        const typeW=col.type.length*4.8;
+        const bx=TW-12-typeW-8-20;
+        svg+=`<rect x="${bx}" y="${rowY+4}" width="20" height="11" rx="2" fill="${bgFill}" stroke="${bdStroke}" stroke-width=".8"/>`;
+        svg+=`<text font-family="'JetBrains Mono',monospace" font-size="6.5" font-weight="700" fill="${txtFill}" text-anchor="middle" x="${bx+10}" y="${rowY+13}">${badge}</text>`;
+      }
     });
-    svg+='</g>';
+    svg+=`</g>`;
   }
-  svg+='</svg>';
+
+  svg+=`</svg>`;
   document.getElementById(cid).innerHTML=svg;
+}
+
+// ═══ ERD ZOOM ═══
+let erdScale=1;
+function erdZoom(delta){
+  if(delta===0)erdScale=1;
+  else erdScale=Math.max(0.25,Math.min(2.5,erdScale+delta));
+  const svg=document.querySelector('#erd-main-container svg');
+  if(!svg)return;
+  const vb=svg.getAttribute('viewBox').split(' ').map(Number);
+  svg.setAttribute('width',Math.round(vb[2]*erdScale));
+  svg.setAttribute('height',Math.round(vb[3]*erdScale));
+  document.getElementById('erd-zoom-lvl').textContent=Math.round(erdScale*100)+'%';
 }
 
 // ═══ EDITOR (fixed line numbers) ═══
@@ -1396,6 +1582,23 @@ function updateLineNums(){
 function updateCursor(){const ed=document.getElementById('query-editor');const lines=ed.value.substring(0,ed.selectionStart).split('\n');document.getElementById('ln').textContent=lines.length;document.getElementById('col').textContent=lines[lines.length-1].length+1;}
 function handleKey(e){if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();runQuery();}if(e.key==='Tab'){e.preventDefault();const el=e.target,s=el.selectionStart;el.value=el.value.substring(0,s)+'  '+el.value.substring(el.selectionEnd);el.selectionStart=el.selectionEnd=s+2;}setTimeout(updateCursor,0);}
 function scrollEditorToBottom(){const ed=document.getElementById('query-editor');ed.scrollTop=ed.scrollHeight;}
+function openCustomQuery(){
+  const ed=document.getElementById('query-editor');
+  const es=document.querySelector('.editor-section');
+  ed.value=`-- ── Custom Query Mode ────────────────────────────────────────────────
+-- Schema sidebar (left panel ›): browse all 13 tables and their columns.
+-- Use the schema_erd and data_dictionary tabs above to explore structure.
+--
+-- Supported: SELECT, WHERE, ORDER BY, LIMIT, single INNER JOIN
+-- Not supported: multiple JOINs, aggregates (COUNT, SUM), GROUP BY, subqueries
+--
+-- Try: SELECT * FROM skills WHERE proficiency = 3;
+`;
+  es.style.height=window.innerWidth<=640?'55%':'48%';
+  updateLineNums();
+  ed.focus();
+  ed.setSelectionRange(ed.value.length,ed.value.length);
+}
 
 // Sync line-nums scroll with editor
 (function(){
