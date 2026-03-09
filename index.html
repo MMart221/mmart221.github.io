@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +12,6 @@
     body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:13px;display:flex;flex-direction:column}
     body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 1px 1px,rgba(100,255,218,.03) 1px,transparent 0);background-size:32px 32px;pointer-events:none;z-index:0}
 
-    /* TITLEBAR */
     .titlebar{position:relative;z-index:10;display:flex;align-items:center;gap:1rem;padding:0 1.2rem;height:40px;background:#040710;border-bottom:1px solid var(--border);flex-shrink:0;user-select:none}
     .titlebar-dots{display:flex;gap:7px}.dot{width:12px;height:12px;border-radius:50%}.dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}
     .titlebar-name{font-family:'Outfit';font-size:.8rem;font-weight:500;color:var(--text2)}.titlebar-name b{color:var(--accent);font-weight:600}
@@ -21,15 +19,12 @@
     .conn-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(74,222,128,.5);animation:pd 2s ease-in-out infinite}
     @keyframes pd{0%,100%{box-shadow:0 0 8px rgba(74,222,128,.5)}50%{box-shadow:0 0 14px rgba(74,222,128,.8)}}
 
-    /* MENUBAR */
     .menubar{position:relative;z-index:10;display:flex;align-items:center;height:32px;background:var(--panel);border-bottom:1px solid var(--border);flex-shrink:0;padding:0 1rem}
     .menu-item{padding:0 .9rem;height:100%;display:flex;align-items:center;font-family:'Outfit';font-size:.72rem;color:var(--muted2);cursor:default;transition:color .15s,background .15s}
     .menu-item:hover{color:var(--text);background:var(--surface)}.menu-sep{width:1px;height:16px;background:var(--border);margin:0 .3rem}
 
-    /* WORKSPACE */
     .workspace{position:relative;z-index:1;display:flex;flex:1;overflow:hidden}
 
-    /* SIDEBAR (collapsible) */
     .sidebar{width:260px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transition:width .25s ease}
     .sidebar.collapsed{width:0;border-right:none}
     .sidebar.collapsed .sidebar-header,.sidebar.collapsed .sidebar-content{display:none}
@@ -59,14 +54,12 @@
     .col-badge{font-size:.5rem;font-weight:700;padding:.05rem .3rem;border-radius:2px;margin-left:auto}
     .col-badge.pk{color:var(--yellow);background:rgba(251,191,36,.1)}.col-badge.fk{color:var(--blue);background:rgba(96,165,250,.1)}
 
-    /* MAIN PANE */
     .main-pane{flex:1;display:flex;flex-direction:column;overflow:hidden}
     .tabs{display:flex;background:var(--panel);border-bottom:1px solid var(--border);flex-shrink:0}
     .tab{padding:.55rem 1.2rem;font-size:.72rem;color:var(--muted2);cursor:pointer;border-right:1px solid var(--border);border-bottom:2px solid transparent;transition:all .15s;display:flex;align-items:center;gap:.5rem;font-family:'Outfit';font-weight:400}
     .tab.active{color:var(--text);background:var(--surface);border-bottom-color:var(--accent)}
     .tab-dot{width:6px;height:6px;border-radius:50%}.tab-dot.sql{background:var(--accent2)}.tab-dot.erd{background:var(--purple)}.tab-dot.dict{background:var(--green)}
 
-    /* EDITOR (fixed height, scrollable) */
     .editor-section{flex-shrink:0;border-bottom:none;display:flex;flex-direction:column;height:160px;min-height:60px;max-height:70%}
     .editor-toolbar{display:flex;align-items:center;gap:.6rem;padding:.45rem 1rem;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
     .run-btn{display:flex;align-items:center;gap:.4rem;padding:.35rem 1.1rem;background:var(--accent);color:#060a10;font-family:'Outfit';font-size:.72rem;font-weight:600;border:none;border-radius:4px;cursor:pointer;transition:all .15s}
@@ -79,16 +72,14 @@
     .preset-btn:hover{border-color:var(--accent2);color:var(--accent2);background:rgba(255,179,71,.15);transform:translateY(-1px)}
     .preset-btn.hire{border-color:rgba(255,179,71,.5);background:rgba(255,179,71,.15)}.preset-btn.hire:hover{border-color:var(--accent2);background:rgba(255,179,71,.22)}
 
-    .editor-wrap{position:relative;background:var(--bg);flex:1;overflow:hidden}
-    .line-nums{position:absolute;top:0;left:0;width:44px;text-align:right;font-size:.72rem;color:var(--muted);line-height:1.7;user-select:none;border-right:1px solid var(--border);background:var(--panel);height:100%;overflow:hidden}
-    #query-editor{display:block;width:100%;height:100%;padding:.8rem 1rem .8rem 3.5rem;background:transparent;border:none;outline:none;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--text);line-height:1.7;resize:none;caret-color:var(--accent);tab-size:2;overflow-y:auto}
+    .editor-wrap{position:relative;background:var(--bg);flex:1;overflow:hidden;display:flex}
+    .line-nums{width:44px;flex-shrink:0;text-align:right;padding:.8rem .7rem .8rem 0;font-size:.72rem;color:var(--muted);line-height:1.7;user-select:none;border-right:1px solid var(--border);background:var(--panel);overflow:hidden}
+    #query-editor{flex:1;padding:.8rem 1rem;background:transparent;border:none;outline:none;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--text);line-height:1.7;resize:none;caret-color:var(--accent);tab-size:2;overflow-y:auto}
 
-    /* RESIZER */
     .editor-resizer{height:5px;background:var(--border);cursor:ns-resize;flex-shrink:0;position:relative;transition:background .15s}
     .editor-resizer:hover,.editor-resizer.active{background:var(--accent);opacity:.6}
     .editor-resizer::after{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:30px;height:2px;background:var(--muted);border-radius:1px}
 
-    /* RESULTS */
     .results-section{flex:1;overflow:hidden;display:flex;flex-direction:column}
     .results-toolbar{display:flex;align-items:center;gap:1rem;padding:.4rem 1rem;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
     .results-label{font-family:'Outfit';font-size:.62rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2)}
@@ -102,7 +93,6 @@
     .results-empty-icon{font-size:2.5rem;opacity:.2}.results-empty p{font-family:'Outfit';font-style:italic;font-weight:300;font-size:.78rem}
     .results-empty .hint{font-size:.65rem;color:var(--muted);margin-top:-.3rem}
 
-    /* TABLE VIEW */
     table.rt{width:100%;border-collapse:collapse;font-size:.73rem}
     table.rt thead{position:sticky;top:0;z-index:10}
     table.rt th{padding:.55rem 1rem;text-align:left;background:var(--surface2);color:var(--accent);font-family:'Outfit';font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border-bottom:2px solid var(--border2);border-right:1px solid var(--border);white-space:nowrap}
@@ -112,18 +102,14 @@
     @keyframes rowIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
     table.rt tbody tr:hover td{background:rgba(100,255,218,.02)}
     table.rt td.rn{color:var(--muted);font-size:.62rem;text-align:center}
-    table.rt td.nl{color:var(--muted);font-style:italic}.table.rt td.bt{color:var(--green)}.table.rt td.bf{color:var(--red)}.table.rt td.nm{color:var(--green)}.table.rt td.dt{color:var(--purple)}
 
-    /* ═══ CLEAN VIEW (portfolio-style) ═══ */
     .cv{padding:1.8rem 2.5rem;overflow-y:auto;height:100%;animation:fadeIn .4s ease}
     @keyframes fadeIn{from{opacity:0}to{opacity:1}}
     @keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-
     .cv-section-label{font-size:.68rem;color:var(--accent);letter-spacing:.14em;margin-bottom:.4rem;animation:slideUp .4s ease .05s both}
     .cv-section-title{font-family:'Outfit';font-size:1.6rem;font-weight:800;color:var(--text);margin-bottom:1.5rem;animation:slideUp .4s ease .1s both}
     .cv-section-title em{color:var(--accent);font-style:normal}
 
-    /* Overview */
     .cv-avail{display:inline-flex;align-items:center;gap:.4rem;font-size:.68rem;color:var(--accent);border:1px solid rgba(100,255,218,.3);padding:.3rem .9rem;border-radius:3px;margin-bottom:1.2rem;letter-spacing:.1em;animation:slideUp .4s ease .1s both}
     .cv-avail-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pd 2s ease-in-out infinite}
     .cv-bigname{font-family:'Outfit';font-size:2.8rem;font-weight:800;color:var(--text);line-height:1.05;animation:slideUp .5s ease .15s both}
@@ -137,7 +123,6 @@
     .cv-contact-item{font-size:.72rem;color:var(--text2);display:flex;align-items:center;gap:.4rem}
     .cv-contact-item a{color:var(--accent);text-decoration:none}.cv-contact-item a:hover{text-decoration:underline}
 
-    /* Education */
     .cv-edu-card{background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:1.8rem 2rem;max-width:700px;animation:slideUp .4s ease .2s both}
     .cv-edu-name{font-family:'Outfit';font-size:1.3rem;font-weight:800;color:var(--text);margin-bottom:.3rem}
     .cv-edu-degree{font-size:.78rem;color:var(--accent);margin-bottom:.15rem}
@@ -146,30 +131,31 @@
     .cv-stat{flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:.8rem;text-align:center}
     .cv-stat-val{font-family:'Outfit';font-size:1.4rem;font-weight:800;color:var(--accent)}
     .cv-stat-label{font-size:.6rem;color:var(--muted2);letter-spacing:.1em;text-transform:uppercase;margin-top:.2rem}
-    .cv-pills{display:flex;flex-wrap:wrap;gap:.4rem}
+    .cv-pills{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.5rem}
     .cv-pill{font-size:.65rem;color:var(--text2);border:1px solid var(--border2);padding:.3rem .7rem;border-radius:3px}
+    .cv-courses-title{font-family:'Outfit';font-size:.75rem;font-weight:600;color:var(--text);margin-bottom:.6rem;margin-top:.3rem}
+    .cv-course{font-size:.68rem;color:var(--text2);padding:.3rem 0;padding-left:.8rem;position:relative;line-height:1.4}
+    .cv-course::before{content:'\203A';position:absolute;left:0;color:var(--accent);font-weight:700}
+    .cv-course span{color:var(--muted2);font-size:.62rem}
 
-    /* Skills (two-column) */
     .cv-skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
     .cv-skill-box{border:1px solid var(--border2);border-radius:6px;padding:1.2rem 1.5rem;animation:slideUp .4s ease both}
     .cv-skill-box-title{font-size:.65rem;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
     .cv-skill-line{font-size:.75rem;color:var(--text2);padding:.45rem 0;padding-left:1rem;position:relative;line-height:1.5}
     .cv-skill-line::before{content:'\203A';position:absolute;left:0;color:var(--accent);font-weight:700}
 
-    /* Projects (grid cards) */
     .cv-proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
     .cv-proj-card{border:1px solid var(--border2);border-radius:6px;padding:1.4rem 1.5rem;animation:slideUp .4s ease both;transition:border-color .2s}
     .cv-proj-card:hover{border-color:var(--accent)}
     .cv-proj-label{font-size:.62rem;color:var(--muted2);letter-spacing:.08em;margin-bottom:.5rem}
     .cv-proj-name{font-family:'Outfit';font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.15rem}
     .cv-proj-sub{font-size:.72rem;color:var(--accent);margin-bottom:.7rem}
-    .cv-proj-techs{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.9rem}
+    .cv-proj-techs{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.6rem}
     .cv-proj-tech{font-size:.62rem;color:var(--accent);border:1px solid rgba(100,255,218,.2);padding:.2rem .5rem;border-radius:3px;background:var(--accent-dim)}
-    .cv-proj-bullets{display:flex;flex-direction:column;gap:.4rem}
-    .cv-proj-bullet{font-size:.7rem;color:var(--text2);padding-left:1rem;position:relative;line-height:1.5}
-    .cv-proj-bullet::before{content:'\2014';position:absolute;left:0;color:var(--accent)}
+    .cv-proj-links{margin-top:.4rem;display:flex;gap:.6rem}
+    .cv-proj-link{font-size:.65rem;color:var(--accent);text-decoration:none;border:1px solid rgba(100,255,218,.2);padding:.2rem .6rem;border-radius:3px;transition:all .15s}
+    .cv-proj-link:hover{background:var(--accent-dim);border-color:var(--accent)}
 
-    /* Work Experience (timeline) */
     .cv-work-tl{display:flex;flex-direction:column;position:relative;padding-left:1.2rem}
     .cv-work-tl::before{content:'';position:absolute;left:3px;top:8px;bottom:8px;width:2px;background:linear-gradient(to bottom,var(--accent),var(--border2))}
     .cv-work-entry{position:relative;padding:0 0 2rem 1.8rem;animation:slideUp .4s ease both}
@@ -184,7 +170,6 @@
     .cv-work-bullet{font-size:.72rem;color:var(--text2);padding-left:1rem;position:relative;line-height:1.5}
     .cv-work-bullet::before{content:'\203A';position:absolute;left:0;color:var(--accent);font-weight:700}
 
-    /* Hire Me */
     .hire-banner{padding:1.5rem 0;text-align:center;animation:fadeIn .6s ease}
     .hire-banner h2{font-family:'Outfit';font-size:1.5rem;font-weight:800;color:var(--accent);margin-bottom:.3rem;animation:slideUp .5s ease .15s both}
     .hire-banner .sub{font-family:'Outfit';font-size:.85rem;color:var(--text2);margin-bottom:1.5rem;animation:slideUp .5s ease .25s both}
@@ -192,16 +177,13 @@
     .hire-card{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:1rem 1.2rem;min-width:140px;animation:slideUp .5s ease both}
     .hire-card:nth-child(1){animation-delay:.35s}.hire-card:nth-child(2){animation-delay:.43s}.hire-card:nth-child(3){animation-delay:.51s}.hire-card:nth-child(4){animation-delay:.59s}.hire-card:nth-child(5){animation-delay:.67s}
     .hire-card .cl{font-family:'Outfit';font-size:.58rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:.4rem}
-    .hire-card .hv{font-family:'Outfit';font-size:.85rem;font-weight:600;color:var(--text)}
-    .hire-card .hv.ac{color:var(--accent)}.hire-card .hv.gd{color:var(--accent2)}
+    .hire-card .hv{font-family:'Outfit';font-size:.85rem;font-weight:600;color:var(--text)}.hire-card .hv.ac{color:var(--accent)}.hire-card .hv.gd{color:var(--accent2)}
     .hire-links{display:flex;gap:.8rem;justify-content:center;animation:slideUp .5s ease .8s both}
 
-    /* ERD + Dict + secondary views */
-    .erd-main{display:none;flex:1;overflow:auto;background:var(--bg)}.erd-main.active{display:flex}
+    .erd-main{display:none;flex:1;overflow:scroll;background:var(--bg)}.erd-main.active{display:flex}
     .dict-main{display:none;flex:1;overflow:auto;background:var(--bg);padding:2rem}.dict-main.active{display:block}
     .query-main{display:flex;flex-direction:column;flex:1}.query-main.hidden{display:none}
-
-    .erd-container{width:100%;height:100%;overflow:scroll;padding:2rem}
+    .erd-container{min-width:max-content;padding:2rem}
     .erd-table-bg{rx:6;fill:var(--surface2);stroke:var(--border2);stroke-width:1}
     .erd-table-header{fill:var(--surface3);rx:6}
     .erd-table-title{font-family:'Outfit';font-size:11px;font-weight:600;fill:var(--accent)}
@@ -210,9 +192,7 @@
     .erd-col-pk{font-family:'JetBrains Mono',monospace;font-size:7.5px;fill:var(--yellow);font-weight:700}
     .erd-col-fk{font-family:'JetBrains Mono',monospace;font-size:7.5px;fill:var(--blue);font-weight:700}
     .erd-line{stroke:var(--border2);stroke-width:1.5;fill:none;opacity:.5}
-    .erd-line-label{font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--muted2)}
 
-    /* Data dictionary */
     .dict-table{margin-bottom:2rem;animation:slideUp .3s ease both}
     .dict-table-name{font-family:'Outfit';font-size:.9rem;font-weight:700;color:var(--accent);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
     .dict-table-name span{font-size:.6rem;color:var(--muted2);font-weight:400}
@@ -223,18 +203,16 @@
     .dict-row .dc-name{flex:2;color:var(--text)}.dict-row .dc-type{flex:1.2;color:var(--purple)}.dict-row .dc-key{flex:.8;color:var(--yellow)}.dict-row .dc-ref{flex:1.5;color:var(--blue);font-size:.65rem}.dict-row .dc-desc{flex:3;color:var(--text2);font-size:.65rem}
     .dict-row.head .dc-name,.dict-row.head .dc-type,.dict-row.head .dc-key,.dict-row.head .dc-ref,.dict-row.head .dc-desc{color:var(--muted2)}
 
-    /* STATUS BAR */
     .statusbar{position:relative;z-index:10;height:26px;background:linear-gradient(90deg,var(--accent),#4ac6b0);display:flex;align-items:center;padding:0 1.2rem;gap:1.5rem;flex-shrink:0}
     .status-item{font-family:'Outfit';font-size:.62rem;font-weight:600;color:#060a10}.status-item.right{margin-left:auto}
-
     ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:var(--panel)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:var(--muted)}
   </style>
 </head>
 <body>
   <div class="titlebar">
     <div class="titlebar-dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
-    <div class="titlebar-name"><b>michael_martinez</b>.db — QueryStudio v2.0</div>
-    <div class="titlebar-conn"><div class="conn-dot"></div>Connected · 12 tables · 3NF</div>
+    <div class="titlebar-name"><b>michael_martinez</b>.db &#8212; QueryStudio v2.0</div>
+    <div class="titlebar-conn"><div class="conn-dot"></div>Connected &#183; 13 tables &#183; 3NF</div>
   </div>
   <div class="menubar">
     <div class="menu-item">File</div><div class="menu-item">Edit</div><div class="menu-item">Query</div><div class="menu-item">Tools</div>
@@ -247,7 +225,7 @@
     <div class="sidebar collapsed" id="sidebar">
       <div class="sidebar-header">Schema Explorer</div>
       <div class="sidebar-content">
-        <div class="db-header"><div class="db-icon">⬡</div><span class="db-label">michael_martinez_db</span><span class="db-sublabel">12 tables</span></div>
+        <div class="db-header"><div class="db-icon">&#x2B21;</div><span class="db-label">michael_martinez_db</span><span class="db-sublabel">13 tables</span></div>
         <div class="schema-tree" id="schema-tree"></div>
       </div>
     </div>
@@ -269,11 +247,11 @@
               <button class="preset-btn" onclick="loadPreset('skills')">skills</button>
               <button class="preset-btn" onclick="loadPreset('projects')">projects</button>
               <button class="preset-btn" onclick="loadPreset('experience')">experience</button>
-              <button class="preset-btn hire" onclick="loadPreset('hire_me')">hire_me ✦</button>
+              <button class="preset-btn hire" onclick="loadPreset('hire_me')">hire_me &#x2726;</button>
             </div>
           </div>
           <div class="editor-wrap">
-            <div class="line-nums" id="line-nums">1<br>2<br>3</div>
+            <div class="line-nums" id="line-nums">1</div>
             <textarea id="query-editor" rows="3" spellcheck="false" onkeydown="handleKey(event)" oninput="updateLineNums()" placeholder="-- Write a SQL query or select a preset...&#10;-- Try: SELECT * FROM employer;&#10;-- Ctrl+Enter to execute"></textarea>
           </div>
         </div>
@@ -292,7 +270,7 @@
             </div>
           </div>
           <div class="results-scroll" id="results-container">
-            <div class="results-empty"><div class="results-empty-icon">⬡</div><p>Run a query to explore the database</p><span class="hint">or click a preset to get started</span></div>
+            <div class="results-empty"><div class="results-empty-icon">&#x2B21;</div><p>Run a query to explore the database</p><span class="hint">or click a preset to get started</span></div>
           </div>
         </div>
       </div>
@@ -302,25 +280,69 @@
   </div>
   <div class="statusbar">
     <span class="status-item">michael_martinez_db</span>
-    <span class="status-item">public · 12 tables · 3NF</span>
+    <span class="status-item">public &#183; 13 tables &#183; 3NF</span>
     <span class="status-item" id="status-msg">Ready</span>
-    <span class="status-item right">UTF-8 · SQL · Ln <span id="ln">1</span>, Col <span id="col">1</span></span>
+    <span class="status-item right">UTF-8 &#183; SQL &#183; Ln <span id="ln">1</span>, Col <span id="col">1</span></span>
   </div>
 <script>
-// ═══ DATABASE ═══
+// ═══════════════════════════════════════════════════════
+//  13-TABLE NORMALIZED DATABASE (3NF) — Round 2
+// ═══════════════════════════════════════════════════════
 const DB={
 person:{columns:[{name:'person_id',type:'INT',pk:1},{name:'fname',type:'VARCHAR'},{name:'lname',type:'VARCHAR'},{name:'title',type:'VARCHAR'},{name:'phone',type:'VARCHAR'},{name:'email',type:'VARCHAR'},{name:'linkedin',type:'VARCHAR'},{name:'github',type:'VARCHAR'},{name:'city',type:'VARCHAR'},{name:'state',type:'VARCHAR'},{name:'will_relocate',type:'BOOLEAN'},{name:'available_date',type:'DATE'},{name:'tagline',type:'TEXT'},{name:'status',type:'VARCHAR'}],rows:[[1,'Michael','Martinez','Data Engineer','(435) 764-6679','michaelmartinez24628@gmail.com','linkedin.com/in/mmartinez221','github.com/MMart221','Logan','UT',true,'2026-05-15','Building end-to-end data pipelines, NLP systems, and cloud architectures','Open to full-time DE roles']]},
 edu_institutions:{columns:[{name:'institution_id',type:'INT',pk:1},{name:'institution_name',type:'VARCHAR'},{name:'college',type:'VARCHAR'}],rows:[[1,'Utah State University','Jon M. Huntsman School of Business']]},
 degrees:{columns:[{name:'degree_id',type:'INT',pk:1},{name:'person_id',type:'INT',fk:'person'},{name:'institution_id',type:'INT',fk:'edu_institutions'},{name:'degree',type:'VARCHAR'},{name:'track',type:'VARCHAR'},{name:'gpa',type:'DECIMAL'},{name:'graduation_date',type:'DATE'}],rows:[[1,1,1,'BS Information Systems','Data Engineering',3.90,'2026-05']]},
+courses:{columns:[{name:'course_id',type:'INT',pk:1},{name:'degree_id',type:'INT',fk:'degrees'},{name:'course_code',type:'VARCHAR'},{name:'course_name',type:'VARCHAR'},{name:'description',type:'TEXT'}],rows:[
+[1,1,'DATA 5360','Data Warehousing','Star schema design, ELT pipelines, Snowflake, dbt Cloud, Fivetran'],
+[2,1,'DATA 5330','Data Pipeline Engineering','Scalable data ecosystems and automated dataflows for reliable data delivery'],
+[3,1,'DATA 3330','Database Management','Relational database theory, normalization, schema design, SQL Server'],
+[4,1,'DATA 4330','Advanced Database & Analytics','Advanced SQL, concurrency control, XML/web databases, analytical query optimization'],
+[5,1,'DATA 5500','Advanced Python for Analytics','OOP, data structures, cloud computing integration, data mining, intro ML'],
+[6,1,'IS 3600','Cloud Computing','AWS architecture, scalable deployment, cloud security, infrastructure fundamentals'],
+[7,1,'DATA 5570','Building Software with AI','Software engineering principles, AI-assisted development, architecture design, testing']]},
 honors:{columns:[{name:'honor_id',type:'INT',pk:1},{name:'degree_id',type:'INT',fk:'degrees'},{name:'honor_name',type:'VARCHAR'},{name:'honor_type',type:'VARCHAR'}],rows:[[1,1,"Dean's List - Fall 2024",'Academic'],[2,1,"Dean's List - Spring 2025",'Academic'],[3,1,"Dean's List - Fall 2025",'Academic'],[4,1,'Talent Development Scholarship','Financial'],[5,1,'Assoc. for Information Systems','Membership'],[6,1,'Analytics Solutions Center Innovation Labs','Membership']]},
-employer:{columns:[{name:'employer_id',type:'INT',pk:1},{name:'empname',type:'VARCHAR'},{name:'empname_short',type:'VARCHAR'},{name:'city',type:'VARCHAR'},{name:'state',type:'VARCHAR'},{name:'sector',type:'VARCHAR'}],rows:[[1,'Utah State University - Analytics Solutions Center','USU ASC','Logan','UT','Higher Education'],[2,'ASPIRE NSF Engineering Research Center','ASPIRE','Logan','UT','Research'],[3,'Vivint Smart Home','Vivint','Logan','UT','Technology']]},
-position:{columns:[{name:'position_id',type:'INT',pk:1},{name:'person_id',type:'INT',fk:'person'},{name:'employer_id',type:'INT',fk:'employer'},{name:'position_title',type:'VARCHAR'},{name:'start_date',type:'DATE'},{name:'end_date',type:'DATE'}],rows:[[1,1,1,'Data Engineer','2026-01',null],[2,1,2,'Innovation Analyst','2025-06',null],[3,1,3,'Claims Manager','2024-07','2025-03'],[4,1,3,'Customer Loyalty Specialist','2023-06','2024-07']]},
-work_highlights:{columns:[{name:'highlight_id',type:'INT',pk:1},{name:'position_id',type:'INT',fk:'position'},{name:'accomplishment',type:'TEXT'},{name:'impact',type:'VARCHAR'}],rows:[[1,1,'Mapped data flows across 7 business systems identifying integration gaps and automation opportunities','7 systems mapped'],[2,1,'Led system redesign proposal: Power Automate + Azure SQL + Power BI architecture; presented to senior stakeholders','Architecture proposal'],[3,1,'Built ETL pipelines, dashboards, and system documentation for data modernization engagement','Client-facing delivery'],[4,1,'Coordinated Azure SQL config, Power Automate setup, and Business Central permissions for implementation','Implementation readiness'],[5,2,'Interviewed ASPIRE senior engineers to document data points for electrified roadway pilot - approved by State DOT','DOT pilot approved'],[6,2,'Translated engineering specs into structured RFP requirements for procurement and contracting','RFP development'],[7,2,'Designed pilot data library hub for cross-agency secure data sharing and collaboration','Data library built'],[8,2,'Built NLP analytics dashboard (NLTK + Streamlit) to process and quantify workshop themes via association analysis','NLP dashboard shipped'],[9,3,'Analyzed claims data to identify recurring service issues, reducing repeat claims by 15%','-15% repeat claims'],[10,3,'Identified technician errors through data analysis leading to new auditing standards','New audit standards'],[11,4,'Managed high-conflict interactions meeting 80% retention and $15 RPC goals consistently','80% retention']]},
+employer:{columns:[{name:'employer_id',type:'INT',pk:1},{name:'empname',type:'VARCHAR'},{name:'empname_short',type:'VARCHAR'},{name:'city',type:'VARCHAR'},{name:'state',type:'VARCHAR'},{name:'sector',type:'VARCHAR'}],rows:[[1,'Utah State University - Analytics Solutions Center','USU ASC','Logan','UT','Higher Education'],[2,'ASPIRE NSF Engineering Research Center','ASPIRE','Logan','UT','Research'],[3,'Vivint Smart Home','Vivint','Logan','UT','Technology'],[4,'iFit','iFit','Logan','UT','Technology']]},
+position:{columns:[{name:'position_id',type:'INT',pk:1},{name:'person_id',type:'INT',fk:'person'},{name:'employer_id',type:'INT',fk:'employer'},{name:'position_title',type:'VARCHAR'},{name:'start_date',type:'DATE'},{name:'end_date',type:'DATE'}],rows:[[1,1,1,'Data Engineer','2026-01',null],[2,1,2,'Innovation Analyst','2025-06',null],[3,1,3,'Claims Manager','2024-07','2025-03'],[4,1,3,'Customer Loyalty Specialist','2023-06','2024-07'],[5,1,4,'Software Support Specialist','2021-02','2023-05']]},
+work_highlights:{columns:[{name:'highlight_id',type:'INT',pk:1},{name:'position_id',type:'INT',fk:'position'},{name:'accomplishment',type:'TEXT'},{name:'impact',type:'VARCHAR'}],rows:[
+[1,1,'Mapped data flows across 7 business systems identifying integration gaps and automation opportunities','7 systems mapped'],
+[2,1,'Led system redesign proposal: Power Automate + Azure SQL + Power BI architecture; presented to senior stakeholders including company ownership','Architecture proposal'],
+[3,1,'Contributing to ETL pipeline development, dashboard builds, and system documentation for a client-facing data modernization engagement','Client-facing delivery'],
+[4,1,'Coordinating implementation readiness including Azure SQL database configuration, Power Automate environment setup, and Business Central permission planning','Implementation readiness'],
+[5,2,'Conducted interviews with ASPIRE senior engineers to document critical data points and technical specifications for an electrified roadway pilot approved by a State DOT','DOT pilot approved'],
+[6,2,'Contributed to RFP development and contractor agreement documentation by translating engineering specs into structured procurement requirements','RFP development'],
+[7,2,'Designed pilot data library hub for Agency Working Group members to securely share and access project data across agencies','Data library built'],
+[8,2,'Built NLP analytics dashboard (NLTK + Streamlit) to process annual meeting workshop responses, quantifying key themes and enabling association analysis','NLP dashboard shipped'],
+[9,3,'Analyzed complex claims data to identify recurring service issues, reducing repeat claims by 15% through targeted reporting and solutions','15% reduction'],
+[10,3,'Communicated clearly with customers regarding sensitive claim decisions, improving customer feedback ratings and client trust metrics','Improved satisfaction'],
+[11,3,'Identified recurring technician errors through claim data analysis, directly leading to new auditing standards for thermostat wiring photos','New audit standards'],
+[12,4,'Resolved challenging cancellation requests through effective communication, retaining 85% of at-risk customers','85% retention'],
+[13,4,'Utilized customer usage data to provide personalized solutions, increasing customer satisfaction ratings by approximately 10%','+10% CSAT'],
+[14,4,'Managed high-conflict customer interactions using strategic problem-solving, consistently meeting 80% retention and $15 RPC goals','$15 RPC target met'],
+[15,5,'Communicated technical solutions to customers achieving 90% first-contact resolution rates','90% FCR'],
+[16,5,'Analyzed Jira data and proactively identified previously unknown software issues by collecting diagnostic information from target hardware','Proactive bug detection']]},
 skill_category:{columns:[{name:'category_id',type:'INT',pk:1},{name:'category_name',type:'VARCHAR'},{name:'display_order',type:'INT'}],rows:[[1,'Data Engineering',1],[2,'Cloud & Infra',2],[3,'Programming',3],[4,'BI & Visualization',4],[5,'Development',5]]},
-skills:{columns:[{name:'skill_id',type:'INT',pk:1},{name:'category_id',type:'INT',fk:'skill_category'},{name:'skill_name',type:'VARCHAR'},{name:'proficiency',type:'INT'}],rows:[[1,1,'SQL',3],[2,1,'Snowflake',3],[3,1,'PostgreSQL',3],[4,1,'ETL/ELT Design',3],[5,1,'Databricks',3],[6,1,'Delta Lake / Spark',3],[7,1,'DynamoDB',2],[8,1,'dbt',1],[9,1,'Fivetran',1],[10,1,'Power Automate',2],[11,2,'AWS',2],[12,2,'GCP / BigQuery',2],[13,2,'Azure',2],[14,2,'Azure Data Factory',2],[15,2,'Docker',2],[16,2,'Linux / Unix',2],[17,3,'Python',3],[18,3,'Pandas / NumPy',3],[19,3,'NLTK',2],[20,3,'Matplotlib / Plotly',2],[21,4,'Tableau',2],[22,4,'Power BI',2],[23,4,'Streamlit',2],[24,5,'Django',2],[25,5,'React Native',2]]},
+skills:{columns:[{name:'skill_id',type:'INT',pk:1},{name:'category_id',type:'INT',fk:'skill_category'},{name:'skill_name',type:'VARCHAR'},{name:'proficiency',type:'INT'}],rows:[
+[1,1,'SQL',3],[2,1,'Snowflake',3],[3,1,'PostgreSQL',3],[4,1,'ETL/ELT Design',3],[5,1,'Databricks',3],[6,1,'Delta Lake / Spark',3],[7,1,'DynamoDB',2],[8,1,'dbt',1],[9,1,'Fivetran',1],[10,1,'Power Automate',2],
+[11,2,'AWS',2],[12,2,'GCP / BigQuery',2],[13,2,'Azure',2],[14,2,'Azure Data Factory',2],[15,2,'Docker',2],[16,2,'Linux / Unix',2],
+[17,3,'Python',3],[18,3,'Pandas / NumPy',3],[19,3,'NLTK',2],[20,3,'Matplotlib / Plotly',2],[21,4,'Tableau',2],[22,4,'Power BI',2],[23,4,'Streamlit',2],[24,5,'Django',2],[25,5,'React Native',2],
+[26,3,'NetworkX',2]]},
 position_skills:{columns:[{name:'skill_id',type:'INT',fk:'skills',pk:1},{name:'position_id',type:'INT',fk:'position',pk:1}],rows:[[1,1],[13,1],[14,1],[22,1],[10,1],[17,2],[19,2],[23,2],[1,3]]},
-projects:{columns:[{name:'project_id',type:'INT',pk:1},{name:'project_name',type:'VARCHAR'},{name:'project_type',type:'VARCHAR'},{name:'status',type:'VARCHAR'},{name:'description',type:'TEXT'},{name:'link',type:'VARCHAR'}],rows:[[1,'SoiMate','Personal','Active','End-to-end housing recommender with ETL pipelines on AWS','github.com/MMart221/soimate'],[2,'ASPIRE NLP Dashboard','Research','Delivered','NLP-powered workshop analytics with theme extraction',null],[3,'Supply Chain Analytics','Hackathon','Delivered','Databricks-powered supply chain optimization tool',null],[4,'Crypto Arbitrage Engine','Academic','Complete','Graph-based arbitrage detection with paper trading',null],[5,'Star Schema Warehouse','Academic','Complete','Full OLTP to Star Schema to ELT to BI pipeline',null]]},
-project_skills:{columns:[{name:'skill_id',type:'INT',fk:'skills',pk:1},{name:'project_id',type:'INT',fk:'projects',pk:1}],rows:[[11,1],[7,1],[17,1],[24,1],[25,1],[15,1],[17,2],[19,2],[23,2],[5,3],[6,3],[17,3],[17,4],[1,5],[2,5],[5,5],[8,5],[9,5],[21,5]]}
+projects:{columns:[{name:'project_id',type:'INT',pk:1},{name:'project_name',type:'VARCHAR'},{name:'project_type',type:'VARCHAR'},{name:'status',type:'VARCHAR'},{name:'description',type:'TEXT'},{name:'link',type:'VARCHAR'}],rows:[
+[1,'SoiMate','Personal','Active','Full-stack housing recommender with automated ETL pipelines on AWS, web scraping, NLP extraction, and personalized ranking',null],
+[2,'Star Schema Warehouse','Academic','Complete','End-to-end data warehouse: OLTP source to star schema design, ELT via dbt + Fivetran on Snowflake, Tableau BI layer','https://github.com/MMart221/dw_dbt'],
+[3,'Supply Chain Helper','Hackathon','Delivered','Databricks-powered supply chain analytics app built at HackUSU 2026 with Unity Catalog, Delta Sharing, and production-grade data governance','https://github.com/MMart221/Supply_Chain_Helper'],
+[4,'NLP Workshop Explorer','Research','Delivered','NLP-powered Streamlit tool for analyzing multi-stakeholder workshop notes with theme extraction and GPT-4 AI summaries','https://github.com/MMart221/nlp-workshop-explorer'],
+[5,'Cloud Architecture Design','Academic','Complete','Complete AWS cloud architecture proposal for a scalable data platform with accompanying technical documentation and video presentation','https://drive.google.com/file/d/1FmJBHQw8kBkMYF5evHoDr8AUWdu-x_Sr/view'],
+[6,'Crypto Arbitrage Engine','Academic','Complete','Graph-based cryptocurrency arbitrage detector using live CoinGecko rates with NetworkX pathfinding and Alpaca paper trading execution','https://github.com/MMart221/crypto-graph-arbitrage'],
+[7,'Tableau Dashboards','Personal','Complete','Interactive Tableau Public dashboards: Personal Loan Default Rates by Purpose/Length (Lending Club) and Mortgage Delinquencies 90+ Day by State (CFPB)',null]]},
+project_skills:{columns:[{name:'skill_id',type:'INT',fk:'skills',pk:1},{name:'project_id',type:'INT',fk:'projects',pk:1}],rows:[
+[11,1],[7,1],[17,1],[24,1],[25,1],[15,1],[19,1],
+[1,2],[2,2],[5,2],[8,2],[9,2],[21,2],
+[5,3],[6,3],[17,3],
+[17,4],[19,4],[23,4],
+[11,5],
+[17,6],[26,6],
+[21,7]]}
 };
 
 // ═══ STATE ═══
@@ -332,53 +354,52 @@ overview:{
 sql:`SELECT p.fname || ' ' || p.lname AS full_name,
        p.title, p.tagline, p.status,
        p.available_date,
-       p.email, p.phone,
-       p.linkedin, p.github,
        d.degree || ' @ ' || ei.institution_name AS program,
        d.gpa
 FROM person p
   JOIN degrees d ON d.person_id = p.person_id
-  JOIN edu_institutions ei ON d.institution_id = ei.institution_id
+  JOIN edu_institutions ei
+    ON d.institution_id = ei.institution_id
 WHERE p.person_id = 1;`,
-compute(){const p=DB.person.rows[0],d=DB.degrees.rows[0],ei=DB.edu_institutions.rows[0];return{cols:['full_name','title','tagline','status','available_date','email','phone','linkedin','github','program','gpa'],rows:[[p[1]+' '+p[2],p[3],p[12],p[13],p[11],p[5],p[4],p[6],p[7],d[3]+' @ '+ei[1],d[5]]]}},
+compute(){const p=DB.person.rows[0],d=DB.degrees.rows[0],ei=DB.edu_institutions.rows[0];return{cols:['full_name','title','tagline','status','available_date','program','gpa'],rows:[[p[1]+' '+p[2],p[3],p[12],p[13],p[11],d[3]+' @ '+ei[1],d[5]]]}},
 clean(){const p=DB.person.rows[0],d=DB.degrees.rows[0];return`<div class="cv">
 <div class="cv-avail"><span class="cv-avail-dot"></span>AVAILABLE MAY 2026</div>
 <div class="cv-bigname">Michael<br><em>Martinez</em></div>
-<div class="cv-bio">Data Engineer building end-to-end pipelines, NLP systems, and cloud architectures.<br>${E(d[3])} @ Utah State \u00B7 GPA ${d[5]} \u00B7 Graduating May 2026.</div>
+<div class="cv-bio">Data Engineer building end-to-end pipelines, NLP systems, and cloud architectures.<br>${E(d[3])} @ Utah State &middot; GPA ${d[5]} &middot; Graduating May 2026.</div>
 <div class="cv-actions">
   <button class="cv-btn primary" onclick="loadPreset('projects')">View My Work</button>
   <a class="cv-btn secondary" href="mailto:${E(p[5])}">Get In Touch</a>
 </div>
 <div class="cv-contact-row">
-  <span class="cv-contact-item">\u260E ${E(p[4])}</span>
-  <span class="cv-contact-item">\u2709 <a href="mailto:${E(p[5])}">${E(p[5])}</a></span>
-  <span class="cv-contact-item">\u25C9 <a href="https://${E(p[6])}" target="_blank">LinkedIn</a></span>
-  <span class="cv-contact-item">\u2325 <a href="https://${E(p[7])}" target="_blank">GitHub</a></span>
-</div>
-</div>`}},
+  <span class="cv-contact-item">&#9742; ${E(p[4])}</span>
+  <span class="cv-contact-item">&#9993; <a href="mailto:${E(p[5])}">${E(p[5])}</a></span>
+  <span class="cv-contact-item"><a href="https://${E(p[6])}" target="_blank">LinkedIn</a></span>
+  <span class="cv-contact-item"><a href="https://${E(p[7])}" target="_blank">GitHub</a></span>
+</div></div>`}},
 
 education:{
 sql:`SELECT ei.institution_name,
-       d.degree || ' \u2014 ' || d.track AS program,
-       ei.college,
-       d.gpa,
-       d.graduation_date,
-       STRING_AGG(h.honor_name, ', '
-         ORDER BY h.honor_id) AS honors
+       d.degree || ' -- ' || d.track AS program,
+       ei.college, d.gpa, d.graduation_date,
+       STRING_AGG(h.honor_name, ', ') AS honors,
+       (SELECT STRING_AGG(c.course_name, ', ')
+        FROM courses c
+        WHERE c.degree_id = d.degree_id) AS key_courses
 FROM degrees d
-  JOIN edu_institutions ei ON d.institution_id = ei.institution_id
+  JOIN edu_institutions ei
+    ON d.institution_id = ei.institution_id
   LEFT JOIN honors h ON h.degree_id = d.degree_id
 GROUP BY ei.institution_name, d.degree, d.track,
-         ei.college, d.gpa, d.graduation_date;`,
-compute(){const d=DB.degrees.rows[0],ei=DB.edu_institutions.rows[0],hs=DB.honors.rows.filter(h=>h[1]===d[0]).map(h=>h[2]).join(', ');return{cols:['institution_name','program','college','gpa','graduation_date','honors'],rows:[[ei[1],d[3]+' \u2014 '+d[4],ei[2],d[5],d[6],hs]]}},
-clean(){const d=DB.degrees.rows[0],ei=DB.edu_institutions.rows[0],hs=DB.honors.rows,deans=hs.filter(h=>h[3]==='Academic').length;
+         ei.college, d.gpa, d.graduation_date, d.degree_id;`,
+compute(){const d=DB.degrees.rows[0],ei=DB.edu_institutions.rows[0],hs=DB.honors.rows.filter(h=>h[1]===d[0]).map(h=>h[2]).join(', '),cs=DB.courses.rows.filter(c=>c[1]===d[0]).map(c=>c[3]).join(', ');return{cols:['institution_name','program','college','gpa','graduation_date','honors','key_courses'],rows:[[ei[1],d[3]+' -- '+d[4],ei[2],d[5],d[6],hs,cs]]}},
+clean(){const d=DB.degrees.rows[0],ei=DB.edu_institutions.rows[0],deans=DB.honors.rows.filter(h=>h[3]==='Academic').length,cs=DB.courses.rows;
 return`<div class="cv">
-<div class="cv-section-label">// 01 \u2014 ACADEMIC BACKGROUND</div>
+<div class="cv-section-label">// 01 &mdash; ACADEMIC BACKGROUND</div>
 <div class="cv-section-title">Edu<em>cation</em></div>
 <div class="cv-edu-card">
   <div class="cv-edu-name">${E(ei[1])}</div>
-  <div class="cv-edu-degree">${E(d[3])} \u2014 ${E(d[4])} Emphasis \u00B7 ${E(ei[2])}</div>
-  <div class="cv-edu-detail">Graduating May 2026 \u00B7 Logan, UT</div>
+  <div class="cv-edu-degree">${E(d[3])} &mdash; ${E(d[4])} Emphasis &middot; ${E(ei[2])}</div>
+  <div class="cv-edu-detail">Graduating May 2026 &middot; Logan, UT</div>
   <div class="cv-stats">
     <div class="cv-stat"><div class="cv-stat-val">${d[5]}</div><div class="cv-stat-label">USU GPA</div></div>
     <div class="cv-stat"><div class="cv-stat-val">20+</div><div class="cv-stat-label">Hrs/Wk Worked</div></div>
@@ -390,8 +411,9 @@ return`<div class="cv">
     <span class="cv-pill">Association for Information Systems</span>
     <span class="cv-pill">Analytics Solutions Center Innovation Labs</span>
   </div>
-</div>
-</div>`}},
+  <div class="cv-courses-title">Relevant Coursework</div>
+  ${cs.map(c=>'<div class="cv-course">'+E(c[3])+' <span>('+E(c[2])+')</span></div>').join('')}
+</div></div>`}},
 
 skills:{
 sql:`SELECT sc.category_name,
@@ -402,12 +424,14 @@ sql:`SELECT sc.category_name,
          WHEN 1 THEN 'Familiar'
        END AS proficiency_label
 FROM skills s
-  JOIN skill_category sc ON s.category_id = sc.category_id
+  JOIN skill_category sc
+    ON s.category_id = sc.category_id
 ORDER BY sc.display_order,
-  CASE s.proficiency WHEN 3 THEN 1 WHEN 2 THEN 2 ELSE 3 END;`,
+  CASE s.proficiency WHEN 3 THEN 1
+    WHEN 2 THEN 2 ELSE 3 END;`,
 compute(){const rows=[];DB.skills.rows.forEach(s=>{const cat=DB.skill_category.rows.find(c=>c[0]===s[1]);rows.push([cat[1],s[2],s[3]===3?'Advanced':s[3]===2?'Proficient':'Familiar'])});rows.sort((a,b)=>{const co={};DB.skill_category.rows.forEach(c=>co[c[1]]=c[2]);const d=co[a[0]]-co[b[0]];if(d!==0)return d;const po={Advanced:1,Proficient:2,Familiar:3};return po[a[2]]-po[b[2]]});return{cols:['category_name','skill_name','proficiency_label'],rows}},
 clean(){return`<div class="cv">
-<div class="cv-section-label">// 02 \u2014 CAPABILITIES</div>
+<div class="cv-section-label">// 02 &mdash; CAPABILITIES</div>
 <div class="cv-section-title">Tools & <em>Skills</em></div>
 <div class="cv-skills-grid">
   <div class="cv-skill-box" style="animation-delay:.15s">
@@ -424,87 +448,93 @@ clean(){return`<div class="cv">
     <div class="cv-skill-line">Software & Web Development (Django, React Native, Docker, Cloud Deployment)</div>
     <div class="cv-skill-line">Linux & Unix Systems (Cron Jobs, Shell Scripts, RDP)</div>
   </div>
-</div>
-</div>`}},
+</div></div>`}},
 
 projects:{
-sql:`SELECT pr.project_name,
-       pr.project_type,
-       pr.status,
-       pr.description,
+sql:`SELECT pr.project_name, pr.project_type,
+       pr.status, pr.description,
        STRING_AGG(s.skill_name, ', '
          ORDER BY s.skill_name) AS technologies
 FROM projects pr
-  JOIN project_skills ps ON ps.project_id = pr.project_id
+  JOIN project_skills ps
+    ON ps.project_id = pr.project_id
   JOIN skills s ON ps.skill_id = s.skill_id
 GROUP BY pr.project_id, pr.project_name,
          pr.project_type, pr.status, pr.description
 ORDER BY pr.project_id;`,
-compute(){const pj={};DB.project_skills.rows.forEach(ps=>{if(!pj[ps[1]]){const pr=DB.projects.rows.find(p=>p[0]===ps[1]);pj[ps[1]]={name:pr[1],type:pr[2],status:pr[3],desc:pr[4],skills:[]}}const sk=DB.skills.rows.find(s=>s[0]===ps[0]);pj[ps[1]].skills.push(sk[2])});return{cols:['project_name','project_type','status','description','technologies'],rows:Object.values(pj).map(p=>[p.name,p.type,p.status,p.desc,p.skills.sort().join(', ')])}},
+compute(){const pj={};DB.project_skills.rows.forEach(ps=>{if(!pj[ps[1]]){const pr=DB.projects.rows.find(p=>p[0]===ps[1]);pj[ps[1]]={name:pr[1],type:pr[2],status:pr[3],desc:pr[4],skills:[]}}const sk=DB.skills.rows.find(s=>s[0]===ps[0]);if(sk)pj[ps[1]].skills.push(sk[2])});return{cols:['project_name','project_type','status','description','technologies'],rows:Object.values(pj).map(p=>[p.name,p.type,p.status,p.desc,p.skills.sort().join(', ')])}},
 clean(){
-const pj={};DB.project_skills.rows.forEach(ps=>{if(!pj[ps[1]]){const pr=DB.projects.rows.find(p=>p[0]===ps[1]);pj[ps[1]]={id:pr[0],name:pr[1],type:pr[2],status:pr[3],desc:pr[4],link:pr[5],skills:[]}}const sk=DB.skills.rows.find(s=>s[0]===ps[0]);pj[ps[1]].skills.push(sk[2])});
-const sorted=Object.values(pj).sort((a,b)=>a.id-b.id);
-let h=`<div class="cv"><div class="cv-section-label">// 03 \u2014 BUILT THINGS</div><div class="cv-section-title">Personal <em>Projects</em></div><div class="cv-proj-grid">`;
-sorted.forEach((p,i)=>{
-  h+=`<div class="cv-proj-card" style="animation-delay:${(i+1)*100}ms">
-    <div class="cv-proj-label">0${i+1} / ${p.type.toUpperCase()} PROJECT</div>
-    <div class="cv-proj-name">${E(p.name)}</div>
-    <div class="cv-proj-sub">${E(p.desc)}</div>
-    <div class="cv-proj-techs">${p.skills.sort().map(s=>`<span class="cv-proj-tech">${E(s)}</span>`).join('')}</div>
+const projs=DB.projects.rows;
+const psMap={};DB.project_skills.rows.forEach(ps=>{if(!psMap[ps[1]])psMap[ps[1]]=[];const sk=DB.skills.rows.find(s=>s[0]===ps[0]);if(sk)psMap[ps[1]].push(sk[2])});
+const tabLinks={'Tableau Dashboards':[
+  {label:'Loan Default Rates',url:'https://public.tableau.com/app/profile/michael.martinez5884/viz/PersonalLoanDefaultRates/DefaultbyLoanPurpose'},
+  {label:'Mortgage Delinquencies',url:'https://public.tableau.com/app/profile/michael.martinez5884'}
+]};
+let h=`<div class="cv"><div class="cv-section-label">// 03 &mdash; BUILT THINGS</div><div class="cv-section-title">Personal <em>Projects</em></div><div class="cv-proj-grid">`;
+projs.forEach((p,i)=>{
+  const skills=(psMap[p[0]]||[]).sort();
+  const links=[];
+  if(p[5])links.push({label:p[1]==='Cloud Architecture Design'?'View Project':'GitHub',url:p[5]});
+  if(tabLinks[p[1]])tabLinks[p[1]].forEach(l=>links.push(l));
+  h+=`<div class="cv-proj-card" style="animation-delay:${(i+1)*80}ms">
+    <div class="cv-proj-label">0${i+1} / ${E(p[2]).toUpperCase()} PROJECT</div>
+    <div class="cv-proj-name">${E(p[1])}</div>
+    <div class="cv-proj-sub">${E(p[4])}</div>
+    <div class="cv-proj-techs">${skills.map(s=>'<span class="cv-proj-tech">'+E(s)+'</span>').join('')}</div>
+    ${links.length?'<div class="cv-proj-links">'+links.map(l=>'<a class="cv-proj-link" href="'+E(l.url)+'" target="_blank">'+E(l.label)+' &rarr;</a>').join('')+'</div>':''}
   </div>`;
 });
 return h+'</div></div>'}},
 
 experience:{
-sql:`SELECT e.empname            AS company,
-       p.position_title     AS title,
+sql:`SELECT e.empname AS company,
+       p.position_title AS title,
        e.city || ', ' || e.state AS location,
-       p.start_date,
-       p.end_date,
+       p.start_date, p.end_date,
        wh.accomplishment
 FROM position p
-  JOIN employer e ON p.employer_id = e.employer_id
-  JOIN work_highlights wh ON wh.position_id = p.position_id
-WHERE p.end_date IS NULL
-   OR p.end_date IS NOT NULL
-ORDER BY p.start_date DESC, wh.highlight_id;`,
+  JOIN employer e
+    ON p.employer_id = e.employer_id
+  JOIN work_highlights wh
+    ON wh.position_id = p.position_id
+ORDER BY p.start_date DESC,
+         wh.highlight_id;`,
 compute(){const rows=[];[...DB.position.rows].sort((a,b)=>b[4].localeCompare(a[4])).forEach(pos=>{const emp=DB.employer.rows.find(e=>e[0]===pos[2]);DB.work_highlights.rows.filter(h=>h[1]===pos[0]).forEach(h=>{rows.push([emp[1],pos[3],emp[3]+', '+emp[4],pos[4],pos[5],h[2]])})});return{cols:['company','title','location','start_date','end_date','accomplishment'],rows}},
 clean(){
 const sorted=[...DB.position.rows].sort((a,b)=>b[4].localeCompare(a[4]));
-let h=`<div class="cv"><div class="cv-section-label">// 04 \u2014 WHERE I'VE WORKED</div><div class="cv-section-title">Work <em>Experience</em></div><div class="cv-work-tl">`;
+const mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const fmt=d=>{if(!d)return'Present';const[y,m]=d.split('-');return mo[parseInt(m)-1]+' '+y};
+let h=`<div class="cv"><div class="cv-section-label">// 04 &mdash; WHERE I'VE WORKED</div><div class="cv-section-title">Work <em>Experience</em></div><div class="cv-work-tl">`;
 sorted.forEach((pos,i)=>{
   const emp=DB.employer.rows.find(e=>e[0]===pos[2]);
   const hlts=DB.work_highlights.rows.filter(x=>x[1]===pos[0]);
   const isCur=pos[5]===null;
-  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const fmtDate=(d)=>{if(!d)return'Present';const[y,m]=d.split('-');return months[parseInt(m)-1]+' '+y};
-  const dateStr=fmtDate(pos[4])+' \u2013 '+fmtDate(pos[5]);
-  h+=`<div class="cv-work-entry ${isCur?'':'past'}" style="animation-delay:${i*120}ms">
-    <div class="cv-work-head">
-      <span class="cv-work-company">${E(emp[1])}</span>
-      <span class="cv-work-date">${dateStr}</span>
-    </div>
+  h+=`<div class="cv-work-entry ${isCur?'':'past'}" style="animation-delay:${i*100}ms">
+    <div class="cv-work-head"><span class="cv-work-company">${E(emp[1])}</span><span class="cv-work-date">${fmt(pos[4])} &ndash; ${fmt(pos[5])}</span></div>
     <div class="cv-work-title">${E(pos[3])}</div>
     <div class="cv-work-loc">${E(emp[3])}, ${E(emp[4])}</div>
-    <div class="cv-work-bullets">${hlts.map(x=>`<div class="cv-work-bullet">${E(x[2])}</div>`).join('')}</div>
+    <div class="cv-work-bullets">${hlts.map(x=>'<div class="cv-work-bullet">'+E(x[2])+'</div>').join('')}</div>
   </div>`;
 });
 return h+'</div></div>'}},
 
 hire_me:{
-sql:`-- \u2726 HIRE ME? Let's aggregate the case.
+sql:`-- &#x2726; HIRE ME? Let's aggregate the case.
 WITH candidate AS (
   SELECT fname || ' ' || lname AS full_name,
-         title, tagline, status, available_date,
-         email, linkedin, github
+         title, tagline, status,
+         available_date, email,
+         linkedin, github
   FROM person WHERE person_id = 1
 ),
 current_roles AS (
   SELECT STRING_AGG(
-    e.empname_short || ' \u2192 ' || p.position_title, ' | '
+    e.empname_short || ' -> ' || p.position_title,
+    ' | '
   ) AS positions
   FROM position p
-    JOIN employer e ON p.employer_id = e.employer_id
+    JOIN employer e
+      ON p.employer_id = e.employer_id
   WHERE p.end_date IS NULL
 ),
 skill_summary AS (
@@ -520,8 +550,9 @@ project_count AS (
   FROM projects
 ),
 edu AS (
-  SELECT d.degree || ' \u2014 ' || d.track AS program,
-         d.gpa FROM degrees d WHERE degree_id = 1
+  SELECT d.degree || ' -- ' || d.track AS program,
+         d.gpa
+  FROM degrees d WHERE degree_id = 1
 )
 SELECT c.full_name, c.title,
        cr.positions AS current_roles,
@@ -533,9 +564,9 @@ SELECT c.full_name, c.title,
        c.status AS availability
 FROM candidate c, current_roles cr,
      skill_summary ss, project_count pc, edu;`,
-compute(){const p=DB.person.rows[0];const cr=DB.position.rows.filter(x=>x[5]===null).map(x=>{const emp=DB.employer.rows.find(e=>e[0]===x[2]);return emp[2]+' \u2192 '+x[3]}).join(' | ');const adv=DB.skills.rows.filter(s=>s[3]===3).length,ts=DB.skills.rows.length,tp=DB.projects.rows.length,ap=DB.projects.rows.filter(x=>x[3]==='Active').length;const edu=DB.degrees.rows[0];return{cols:['full_name','title','current_roles','skill_depth','portfolio','program','gpa','availability'],rows:[[p[1]+' '+p[2],p[3],cr,ts+' skills ('+adv+' advanced)',tp+' projects ('+ap+' active)',edu[3]+' \u2014 '+edu[4],edu[5],p[13]]]}},
-clean(){const p=DB.person.rows[0];const cr=DB.position.rows.filter(x=>x[5]===null).map(x=>{const emp=DB.employer.rows.find(e=>e[0]===x[2]);return emp[2]+' \u2192 '+x[3]}).join(' \u00B7 ');const adv=DB.skills.rows.filter(s=>s[3]===3).length,ts=DB.skills.rows.length,tp=DB.projects.rows.length,ap=DB.projects.rows.filter(x=>x[3]==='Active').length,edu=DB.degrees.rows[0];
-return`<div class="cv"><div class="hire-banner"><h2>${E(p[1]+' '+p[2])}</h2><div class="sub">${E(p[12])}</div><div class="hire-cards"><div class="hire-card"><div class="cl">Current Roles</div><div class="hv">${E(cr)}</div></div><div class="hire-card"><div class="cl">Skills</div><div class="hv ac">${ts} total \u00B7 ${adv} advanced</div></div><div class="hire-card"><div class="cl">Projects</div><div class="hv ac">${tp} built \u00B7 ${ap} active</div></div><div class="hire-card"><div class="cl">Education</div><div class="hv">${E(edu[3])} \u2014 ${E(edu[4])}</div></div><div class="hire-card"><div class="cl">GPA / Availability</div><div class="hv gd">${edu[5]} \u00B7 ${E(p[11])}</div></div></div><div class="hire-links"><a class="cv-btn primary" href="mailto:${E(p[5])}">\u2709 Email Me</a><a class="cv-btn secondary" href="https://${E(p[6])}" target="_blank">LinkedIn \u2192</a><a class="cv-btn secondary" href="https://${E(p[7])}" target="_blank">GitHub \u2192</a></div></div></div>`}}
+compute(){const p=DB.person.rows[0];const cr=DB.position.rows.filter(x=>x[5]===null).map(x=>{const emp=DB.employer.rows.find(e=>e[0]===x[2]);return emp[2]+' -> '+x[3]}).join(' | ');const adv=DB.skills.rows.filter(s=>s[3]===3).length,ts=DB.skills.rows.length,tp=DB.projects.rows.length,ap=DB.projects.rows.filter(x=>x[3]==='Active').length;const edu=DB.degrees.rows[0];return{cols:['full_name','title','current_roles','skill_depth','portfolio','program','gpa','availability'],rows:[[p[1]+' '+p[2],p[3],cr,ts+' skills ('+adv+' advanced)',tp+' projects ('+ap+' active)',edu[3]+' -- '+edu[4],edu[5],p[13]]]}},
+clean(){const p=DB.person.rows[0];const cr=DB.position.rows.filter(x=>x[5]===null).map(x=>{const emp=DB.employer.rows.find(e=>e[0]===x[2]);return emp[2]+' &rarr; '+x[3]}).join(' &middot; ');const adv=DB.skills.rows.filter(s=>s[3]===3).length,ts=DB.skills.rows.length,tp=DB.projects.rows.length,ap=DB.projects.rows.filter(x=>x[3]==='Active').length,edu=DB.degrees.rows[0];
+return`<div class="cv"><div class="hire-banner"><h2>${E(p[1]+' '+p[2])}</h2><div class="sub">${E(p[12])}</div><div class="hire-cards"><div class="hire-card"><div class="cl">Current Roles</div><div class="hv">${cr}</div></div><div class="hire-card"><div class="cl">Skills</div><div class="hv ac">${ts} total &middot; ${adv} advanced</div></div><div class="hire-card"><div class="cl">Projects</div><div class="hv ac">${tp} built &middot; ${ap} active</div></div><div class="hire-card"><div class="cl">Education</div><div class="hv">${E(edu[3])} &mdash; ${E(edu[4])}</div></div><div class="hire-card"><div class="cl">GPA / Availability</div><div class="hv gd">${edu[5]} &middot; ${E(p[11])}</div></div></div><div class="hire-links"><a class="cv-btn primary" href="mailto:${E(p[5])}">&#9993; Email Me</a><a class="cv-btn secondary" href="https://${E(p[6])}" target="_blank">LinkedIn &rarr;</a><a class="cv-btn secondary" href="https://${E(p[7])}" target="_blank">GitHub &rarr;</a></div></div></div>`}}
 };
 
 // ═══ QUERY RUNNER ═══
@@ -549,7 +580,7 @@ function runQuery(){
   lastPreset=mp;lastResult=result;
   document.getElementById('view-toggle').classList.toggle('visible',!!mp);
   if(result&&result.error){document.getElementById('status-msg').textContent='ERROR: '+result.error;document.getElementById('results-meta').classList.remove('visible');renderErr(result.error);return;}
-  document.getElementById('status-msg').textContent=(mp==='hire_me'?'\u2726 ':'')+result.rows.length+' row(s) returned in '+elapsed+'ms';
+  document.getElementById('status-msg').textContent=(mp==='hire_me'?'\u2726 ':'')+result.rows.length+' row(s) in '+elapsed+'ms';
   document.getElementById('row-count').textContent=result.rows.length;
   document.getElementById('col-count').textContent=result.cols.length;
   document.getElementById('results-meta').classList.add('visible');
@@ -583,7 +614,7 @@ function renderTable({cols,rows}){
   if(!rows||!rows.length){c.innerHTML='<div class="results-empty"><div class="results-empty-icon">\u2205</div><p>0 rows returned</p></div>';return;}
   let h='<table class="rt"><thead><tr><th>#</th>'+cols.map(x=>'<th>'+x+'</th>').join('')+'</tr></thead><tbody>';
   rows.forEach((row,ri)=>{h+='<tr style="animation-delay:'+Math.min(ri*30,600)+'ms"><td class="rn">'+(ri+1)+'</td>';row.forEach(cell=>{
-    if(cell===null||cell===undefined)h+='<td class="nl">NULL</td>';
+    if(cell===null||cell===undefined)h+='<td style="color:var(--muted);font-style:italic">NULL</td>';
     else if(cell===true)h+='<td style="color:var(--green)">TRUE</td>';
     else if(cell===false)h+='<td style="color:var(--red)">FALSE</td>';
     else if(typeof cell==='number')h+='<td style="color:var(--green)">'+cell+'</td>';
@@ -598,12 +629,10 @@ function E(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'
 // ═══ UI ═══
 function loadPreset(key){
   switchMainTab('query');
-  // Cancel any running animation
   if(typeTimer){clearInterval(typeTimer);typeTimer=null;}
   const ed=document.getElementById('query-editor');
   const txt=PRESETS[key].sql;
-  ed.value='';
-  let i=0;
+  ed.value='';let i=0;
   typeTimer=setInterval(()=>{ed.value+=txt[i];i++;updateLineNums();scrollEditorToBottom();if(i>=txt.length){clearInterval(typeTimer);typeTimer=null;setTimeout(runQuery,120);}},4);
 }
 function switchMainTab(t){
@@ -627,63 +656,54 @@ function buildSchemaTree(){
 function toggleTable(el){const was=el.classList.contains('expanded');document.querySelectorAll('.table-item').forEach(t=>t.classList.remove('expanded','active'));if(!was)el.classList.add('expanded','active');}
 
 // ═══ DATA DICTIONARY ═══
-// Column descriptions
 const COL_DESC={
-person:{person_id:'Unique identifier for each person',fname:'First name',lname:'Last name',title:'Professional title / target role',phone:'Primary phone number',email:'Primary email address',linkedin:'LinkedIn profile URL handle',github:'GitHub profile URL handle',city:'Current city of residence',state:'Current state of residence',will_relocate:'Willing to relocate for work',available_date:'Earliest start date for new role',tagline:'One-line professional summary',status:'Current job search status'},
-edu_institutions:{institution_id:'Unique identifier for institution',institution_name:'Full name of the university',college:'Specific college or school within the university'},
-degrees:{degree_id:'Unique identifier for each degree',person_id:'Person who earned this degree',institution_id:'Institution where degree was earned',degree:'Degree type and major',track:'Specialization or emphasis area',gpa:'Cumulative grade point average',graduation_date:'Expected or actual graduation date'},
-honors:{honor_id:'Unique identifier for each honor',degree_id:'Associated degree',honor_name:'Name of the honor or award',honor_type:'Category: Academic, Financial, or Membership'},
-employer:{employer_id:'Unique identifier for employer',empname:'Full legal / official employer name',empname_short:'Abbreviated name for display',city:'City where position was held',state:'State where position was held',sector:'Industry sector classification'},
-position:{position_id:'Unique identifier for each position',person_id:'Person who held this position',employer_id:'Employer for this position',position_title:'Official job title',start_date:'Date employment began (YYYY-MM)',end_date:'Date employment ended; NULL = current role'},
-work_highlights:{highlight_id:'Unique identifier for each highlight',position_id:'Position this accomplishment belongs to',accomplishment:'Description of work performed and results',impact:'Quantified metric or outcome label'},
-skill_category:{category_id:'Unique identifier for category',category_name:'Display name of the skill group',display_order:'Sort order for presentation'},
-skills:{skill_id:'Unique identifier for each skill',category_id:'Parent category for this skill',skill_name:'Name of the tool or technology',proficiency:'Proficiency rank: 1=Familiar, 2=Proficient, 3=Advanced'},
-position_skills:{skill_id:'Skill used in this position',position_id:'Position where skill was applied'},
-projects:{project_id:'Unique identifier for each project',project_name:'Name of the project',project_type:'Category: Personal, Research, Hackathon, Academic',status:'Current state: Active, Delivered, Complete',description:'Brief summary of the project',link:'URL to project repo or demo'},
-project_skills:{skill_id:'Skill used in this project',project_id:'Project where skill was applied'}
+person:{person_id:'Unique identifier',fname:'First name',lname:'Last name',title:'Professional title / target role',phone:'Primary phone',email:'Primary email',linkedin:'LinkedIn handle',github:'GitHub handle',city:'City of residence',state:'State of residence',will_relocate:'Open to relocation',available_date:'Earliest start date',tagline:'One-line summary',status:'Job search status'},
+edu_institutions:{institution_id:'Unique identifier',institution_name:'University name',college:'College within university'},
+degrees:{degree_id:'Unique identifier',person_id:'FK to person',institution_id:'FK to institution',degree:'Degree type and major',track:'Emphasis area',gpa:'Cumulative GPA',graduation_date:'Graduation date'},
+courses:{course_id:'Unique identifier',degree_id:'FK to degree',course_code:'Course number',course_name:'Course title',description:'Brief course summary'},
+honors:{honor_id:'Unique identifier',degree_id:'FK to degree',honor_name:'Honor or award name',honor_type:'Academic / Financial / Membership'},
+employer:{employer_id:'Unique identifier',empname:'Full employer name',empname_short:'Abbreviated name',city:'Employer city',state:'Employer state',sector:'Industry sector'},
+position:{position_id:'Unique identifier',person_id:'FK to person',employer_id:'FK to employer',position_title:'Job title',start_date:'Start date (YYYY-MM)',end_date:'End date; NULL = current'},
+work_highlights:{highlight_id:'Unique identifier',position_id:'FK to position',accomplishment:'Work performed and results',impact:'Quantified outcome'},
+skill_category:{category_id:'Unique identifier',category_name:'Skill group name',display_order:'Sort order'},
+skills:{skill_id:'Unique identifier',category_id:'FK to category',skill_name:'Tool or technology',proficiency:'1=Familiar, 2=Proficient, 3=Advanced'},
+position_skills:{skill_id:'FK to skills',position_id:'FK to position'},
+projects:{project_id:'Unique identifier',project_name:'Project name',project_type:'Personal / Research / Hackathon / Academic',status:'Active / Delivered / Complete',description:'Brief summary',link:'Repo or demo URL'},
+project_skills:{skill_id:'FK to skills',project_id:'FK to project'}
 };
-
 function buildDict(){
-  const container=document.getElementById('dict-view');let h='<div class="cv-section-label">// REFERENCE</div><div class="cv-section-title">Data <em>Dictionary</em></div>';
+  const c=document.getElementById('dict-view');let h='<div class="cv-section-label">// REFERENCE</div><div class="cv-section-title">Data <em>Dictionary</em></div>';
   let i=0;
-  for(const[tname,tdata]of Object.entries(DB)){
-    h+='<div class="dict-table" style="animation-delay:'+(i*50)+'ms"><div class="dict-table-name">'+tname+' <span>'+tdata.rows.length+' row'+(tdata.rows.length!==1?'s':'')+'</span></div>';
+  for(const[tn,td]of Object.entries(DB)){
+    h+='<div class="dict-table" style="animation-delay:'+(i*50)+'ms"><div class="dict-table-name">'+tn+' <span>'+td.rows.length+' row'+(td.rows.length!==1?'s':'')+'</span></div>';
     h+='<div class="dict-cols"><div class="dict-row head"><span class="dc-name">Column</span><span class="dc-type">Type</span><span class="dc-key">Key</span><span class="dc-ref">References</span><span class="dc-desc">Description</span></div>';
-    for(const col of tdata.columns){
+    for(const col of td.columns){
       let key='';if(col.pk)key='PK';if(col.fk)key+=(key?' / ':'')+'FK';
-      const desc=(COL_DESC[tname]&&COL_DESC[tname][col.name])||'';
+      const desc=(COL_DESC[tn]&&COL_DESC[tn][col.name])||'';
       h+='<div class="dict-row"><span class="dc-name">'+col.name+'</span><span class="dc-type">'+col.type+'</span><span class="dc-key">'+(key||'\u2014')+'</span><span class="dc-ref">'+(col.fk||'\u2014')+'</span><span class="dc-desc">'+desc+'</span></div>';
     }
     h+='</div></div>';i++;
   }
-  container.innerHTML=h;
+  c.innerHTML=h;
 }
 
-// ═══ ERD (cleaned layout) ═══
+// ═══ ERD ═══
 function buildERD(cid){
   const L={
-    edu_institutions:{x:20,y:20},
-    degrees:{x:20,y:150},
-    honors:{x:20,y:340},
-    person:{x:300,y:20},
-    employer:{x:300,y:310},
-    position:{x:580,y:20},
-    work_highlights:{x:580,y:200},
-    skill_category:{x:880,y:20},
-    skills:{x:880,y:130},
-    position_skills:{x:580,y:380},
-    projects:{x:880,y:380},
-    project_skills:{x:880,y:290}
+    edu_institutions:{x:20,y:20},degrees:{x:20,y:150},courses:{x:20,y:310},honors:{x:20,y:470},
+    person:{x:300,y:20},employer:{x:300,y:310},
+    position:{x:580,y:20},work_highlights:{x:580,y:210},
+    skill_category:{x:900,y:20},skills:{x:900,y:130},
+    position_skills:{x:580,y:400},projects:{x:900,y:370},project_skills:{x:900,y:270}
   };
-  const CH=16,HH=26,TW=230,PD=6;
+  const CH=16,HH=26,TW=240,PD=6;
   const tH=t=>HH+DB[t].columns.length*CH+PD;
   let mx=0,my=0;for(const[t,p]of Object.entries(L)){mx=Math.max(mx,p.x+TW+50);my=Math.max(my,p.y+tH(t)+50);}
-
   let svg='<svg width="'+mx+'" height="'+my+'" viewBox="0 0 '+mx+' '+my+'" xmlns="http://www.w3.org/2000/svg" style="font-family:\'JetBrains Mono\',monospace">';
-
   const rels=[
     {f:'degrees',fc:'person_id',t:'person',tc:'person_id'},
     {f:'degrees',fc:'institution_id',t:'edu_institutions',tc:'institution_id'},
+    {f:'courses',fc:'degree_id',t:'degrees',tc:'degree_id'},
     {f:'honors',fc:'degree_id',t:'degrees',tc:'degree_id'},
     {f:'position',fc:'person_id',t:'person',tc:'person_id'},
     {f:'position',fc:'employer_id',t:'employer',tc:'employer_id'},
@@ -696,8 +716,7 @@ function buildERD(cid){
   ];
   for(const r of rels){
     const fp=L[r.f],tp=L[r.t];
-    const fi=DB[r.f].columns.findIndex(c=>c.name===r.fc);
-    const ti=DB[r.t].columns.findIndex(c=>c.name===r.tc);
+    const fi=DB[r.f].columns.findIndex(c=>c.name===r.fc),ti=DB[r.t].columns.findIndex(c=>c.name===r.tc);
     const fY=fp.y+HH+fi*CH+CH/2,tY=tp.y+HH+ti*CH+CH/2;
     let fX,tX;
     if(fp.x>tp.x+TW){fX=fp.x;tX=tp.x+TW;}
@@ -723,60 +742,44 @@ function buildERD(cid){
   document.getElementById(cid).innerHTML=svg;
 }
 
-// ═══ EDITOR ═══
+// ═══ EDITOR (fixed line numbers) ═══
 function updateLineNums(){
   const ed=document.getElementById('query-editor');
   const n=ed.value.split('\n').length;
-  const nums=Array.from({length:n},(_,i)=>i+1).join('<br>');
-  document.getElementById('line-nums').innerHTML='<div id="ln-inner" style="padding:.8rem 0;padding-right:.7rem">'+nums+'</div>';
-  syncLineNums();
+  const lnDiv=document.getElementById('line-nums');
+  lnDiv.innerHTML=Array.from({length:n},(_,i)=>i+1).join('<br>');
   updateCursor();
-}
-function syncLineNums(){
-  const ed=document.getElementById('query-editor');
-  const inner=document.getElementById('ln-inner');
-  if(inner)inner.style.marginTop=-ed.scrollTop+'px';
 }
 function updateCursor(){const ed=document.getElementById('query-editor');const lines=ed.value.substring(0,ed.selectionStart).split('\n');document.getElementById('ln').textContent=lines.length;document.getElementById('col').textContent=lines[lines.length-1].length+1;}
 function handleKey(e){if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();runQuery();}if(e.key==='Tab'){e.preventDefault();const el=e.target,s=el.selectionStart;el.value=el.value.substring(0,s)+'  '+el.value.substring(el.selectionEnd);el.selectionStart=el.selectionEnd=s+2;}setTimeout(updateCursor,0);}
 function scrollEditorToBottom(){const ed=document.getElementById('query-editor');ed.scrollTop=ed.scrollHeight;}
 
-// Sync line-nums on editor scroll
-document.addEventListener('DOMContentLoaded',()=>{
+// Sync line-nums scroll with editor
+(function(){
   const ed=document.getElementById('query-editor');
-  ed.addEventListener('scroll',syncLineNums);
-});
+  const ln=document.getElementById('line-nums');
+  ed.addEventListener('scroll',()=>{ln.scrollTop=ed.scrollTop;});
+  // Make line-nums scrollable but hidden scrollbar
+  ln.style.overflowY='hidden';
+})();
 
 // ═══ SIDEBAR TOGGLE ═══
 function toggleSidebar(){
-  const sb=document.getElementById('sidebar');
-  const tog=document.getElementById('sidebar-toggle');
-  sb.classList.toggle('collapsed');
-  tog.classList.toggle('open');
+  document.getElementById('sidebar').classList.toggle('collapsed');
+  document.getElementById('sidebar-toggle').classList.toggle('open');
 }
 
-// ═══ RESIZER DRAG ═══
+// ═══ RESIZER ═══
 (function(){
   const resizer=document.getElementById('editor-resizer');
-  const editorSection=document.querySelector('.editor-section');
+  const es=document.querySelector('.editor-section');
   let startY,startH,dragging=false;
   resizer.addEventListener('mousedown',e=>{
-    e.preventDefault();
-    dragging=true;startY=e.clientY;startH=editorSection.offsetHeight;
-    resizer.classList.add('active');
-    document.body.style.cursor='ns-resize';document.body.style.userSelect='none';
+    e.preventDefault();dragging=true;startY=e.clientY;startH=es.offsetHeight;
+    resizer.classList.add('active');document.body.style.cursor='ns-resize';document.body.style.userSelect='none';
   });
-  document.addEventListener('mousemove',e=>{
-    if(!dragging)return;
-    const dy=e.clientY-startY;
-    const newH=Math.max(60,Math.min(startH+dy,window.innerHeight*0.7));
-    editorSection.style.height=newH+'px';
-  });
-  document.addEventListener('mouseup',()=>{
-    if(!dragging)return;
-    dragging=false;resizer.classList.remove('active');
-    document.body.style.cursor='';document.body.style.userSelect='';
-  });
+  document.addEventListener('mousemove',e=>{if(!dragging)return;const dy=e.clientY-startY;es.style.height=Math.max(60,Math.min(startH+dy,window.innerHeight*0.7))+'px';});
+  document.addEventListener('mouseup',()=>{if(!dragging)return;dragging=false;resizer.classList.remove('active');document.body.style.cursor='';document.body.style.userSelect='';});
 })();
 
 // ═══ INIT ═══
