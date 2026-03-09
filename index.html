@@ -750,14 +750,38 @@
       .run-btn      { padding: .45rem 1rem; }
       .preset-btn   { padding: .4rem .75rem; font-size: .7rem; }
 
-      /* Give the editor section room to breathe after the toolbar wraps.
-         The JS also respects this via offsetHeight (see loadPreset). */
-      .editor-section {
-        height: auto !important;  /* override any inline style set during init */
-        min-height: 60px;
-        max-height: 55vh;
+      /* Resizer: bigger tap target + arrow indicator instead of drag handle */
+      .editor-resizer {
+        height: 28px;
+        cursor: pointer;
+        background: var(--surface);
+        border-top: 1px solid var(--border2);
+        border-bottom: 1px solid var(--border2);
       }
-      .editor-wrap { min-height: 36px; }
+      .editor-resizer::after {
+        /* Replace horizontal bar with upward-pointing triangle */
+        width: 0;
+        height: 0;
+        background: transparent;
+        border-radius: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 7px solid var(--muted2);
+        border-top: none;
+      }
+      /* Fully-expanded state: accent color, arrow points down */
+      .editor-resizer.results-expanded {
+        background: var(--surface2);
+        border-top-color: var(--accent);
+        border-bottom-color: var(--accent);
+      }
+      .editor-resizer.results-expanded::after {
+        border-bottom: none;
+        border-top: 7px solid var(--accent);
+      }
+
+      /* Smooth momentum scrolling on iOS */
+      .results-scroll { -webkit-overflow-scrolling: touch; }
 
       /* Clean views */
       .cv            { padding: 1.2rem 1rem; }
@@ -1205,6 +1229,7 @@ function E(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'
 function loadPreset(key){
   switchMainTab('query');
   if(typeTimer){clearInterval(typeTimer);typeTimer=null;}
+  document.getElementById('editor-resizer').classList.remove('results-expanded');
   const ed=document.getElementById('query-editor');
   const es=document.querySelector('.editor-section');
   const txt=PRESETS[key].sql;
@@ -1368,12 +1393,27 @@ function toggleSidebar(){
   const resizer=document.getElementById('editor-resizer');
   const es=document.querySelector('.editor-section');
   let startY,startH,dragging=false;
+
+  // Desktop: drag to resize
   resizer.addEventListener('mousedown',e=>{
     e.preventDefault();dragging=true;startY=e.clientY;startH=es.offsetHeight;
     resizer.classList.add('active');document.body.style.cursor='ns-resize';document.body.style.userSelect='none';
   });
   document.addEventListener('mousemove',e=>{if(!dragging)return;const dy=e.clientY-startY;es.style.height=Math.max(60,Math.min(startH+dy,window.innerHeight*0.7))+'px';});
   document.addEventListener('mouseup',()=>{if(!dragging)return;dragging=false;resizer.classList.remove('active');document.body.style.cursor='';document.body.style.userSelect='';});
+
+  // Mobile: tap to toggle between expanded output and normal split
+  resizer.addEventListener('click',()=>{
+    if(window.innerWidth>640)return;
+    const toolbarH=es.querySelector('.editor-toolbar').offsetHeight;
+    if(resizer.classList.contains('results-expanded')){
+      resizer.classList.remove('results-expanded');
+      es.style.height=(toolbarH+80)+'px';
+    }else{
+      resizer.classList.add('results-expanded');
+      es.style.height=toolbarH+'px';
+    }
+  });
 })();
 
 // ═══ INIT ═══
