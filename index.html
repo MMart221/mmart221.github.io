@@ -912,7 +912,7 @@
 //  13-TABLE NORMALIZED DATABASE (3NF) — Round 2
 // ═══════════════════════════════════════════════════════
 const DB={
-person:{columns:[{name:'person_id',type:'INT',pk:1},{name:'fname',type:'VARCHAR'},{name:'lname',type:'VARCHAR'},{name:'title',type:'VARCHAR'},{name:'email',type:'VARCHAR'},{name:'linkedin',type:'VARCHAR'},{name:'github',type:'VARCHAR'},{name:'city',type:'VARCHAR'},{name:'state',type:'VARCHAR'},{name:'will_relocate',type:'BOOLEAN'},{name:'available_date',type:'DATE'},{name:'tagline',type:'TEXT'},{name:'status',type:'VARCHAR'}],rows:[[1,'Michael','Martinez','Data Engineer','michaelmartinez24628@gmail.com','linkedin.com/in/mmartinez221','github.com/MMart221','Logan','UT',true,'2026-05-15','Data engineer focused on SQL pipelines, automation, and practical data applications.','Open to full-time roles']]},
+person:{columns:[{name:'person_id',type:'INT',pk:1},{name:'fname',type:'VARCHAR'},{name:'lname',type:'VARCHAR'},{name:'title',type:'VARCHAR'},{name:'email',type:'VARCHAR'},{name:'linkedin',type:'VARCHAR'},{name:'github',type:'VARCHAR'},{name:'city',type:'VARCHAR'},{name:'state',type:'VARCHAR'},{name:'will_relocate',type:'BOOLEAN'},{name:'available_date',type:'DATE'},{name:'tagline',type:'TEXT'},{name:'status',type:'VARCHAR'}],rows:[[1,'Michael','Martinez','Data Engineer','michaelmartinez24628@gmail.com','www.linkedin.com/in/mmartinez221/','github.com/MMart221','Logan','UT',true,'2026-05-15','Data engineer focused on SQL pipelines, automation, and practical data applications.','Open to full-time roles']]},
 edu_institutions:{columns:[{name:'institution_id',type:'INT',pk:1},{name:'institution_name',type:'VARCHAR'},{name:'college',type:'VARCHAR'}],rows:[[1,'Utah State University','Jon M. Huntsman School of Business']]},
 degrees:{columns:[{name:'degree_id',type:'INT',pk:1},{name:'person_id',type:'INT',fk:'person'},{name:'institution_id',type:'INT',fk:'edu_institutions'},{name:'degree',type:'VARCHAR'},{name:'track',type:'VARCHAR'},{name:'gpa',type:'DECIMAL'},{name:'graduation_date',type:'DATE'}],rows:[[1,1,1,'BS Information Systems','Data Engineering',3.90,'2026-05']]},
 courses:{columns:[{name:'course_id',type:'INT',pk:1},{name:'degree_id',type:'INT',fk:'degrees'},{name:'course_code',type:'VARCHAR'},{name:'course_name',type:'VARCHAR'},{name:'description',type:'TEXT'}],rows:[
@@ -1017,7 +1017,7 @@ GROUP BY ei.institution_name, d.degree, d.track,
 compute(){const d=DB.degrees.rows[0],ei=DB.edu_institutions.rows[0],hs=DB.honors.rows.filter(h=>h[1]===d[0]).map(h=>h[2]).join(', '),cs=DB.courses.rows.filter(c=>c[1]===d[0]).map(c=>c[3]).join(', ');return{cols:['institution_name','program','college','gpa','graduation_date','honors','key_courses'],rows:[[ei[1],d[3]+' -- '+d[4],ei[2],d[5],d[6],hs,cs]]}},
 clean(){const d=DB.degrees.rows[0],ei=DB.edu_institutions.rows[0],deans=DB.honors.rows.filter(h=>h[3]==='Academic').length,cs=DB.courses.rows;
 return`<div class="cv">
-<div class="cv-section-label">// 01 &mdash; ACADEMIC BACKGROUND</div>
+<div class="cv-section-label">// 05 &mdash; ACADEMIC BACKGROUND</div>
 <div class="cv-section-title">Edu<em>cation</em></div>
 <div class="cv-edu-card">
   <div class="edu-body">
@@ -1060,7 +1060,7 @@ ORDER BY sc.display_order,
     WHEN 2 THEN 2 ELSE 3 END;`,
 compute(){const rows=[];DB.skills.rows.forEach(s=>{const cat=DB.skill_category.rows.find(c=>c[0]===s[1]);rows.push([cat[1],s[2],s[3]===3?'Advanced':s[3]===2?'Proficient':'Familiar'])});rows.sort((a,b)=>{const co={};DB.skill_category.rows.forEach(c=>co[c[1]]=c[2]);const d=co[a[0]]-co[b[0]];if(d!==0)return d;const po={Advanced:1,Proficient:2,Familiar:3};return po[a[2]]-po[b[2]]});return{cols:['category_name','skill_name','proficiency_label'],rows}},
 clean(){return`<div class="cv">
-<div class="cv-section-label">// 02 &mdash; CAPABILITIES</div>
+<div class="cv-section-label">// 04 &mdash; CAPABILITIES</div>
 <div class="cv-section-title">Tools & <em>Skills</em></div>
 <div class="cv-skills-grid">
   <div class="cv-skill-box" style="animation-delay:.15s">
@@ -1099,7 +1099,7 @@ const tabLinks={'Tableau Dashboards':[
   {label:'Loan Default Rates',url:'https://public.tableau.com/app/profile/michael.martinez5884/viz/PersonalLoanDefaultRates/DefaultbyLoanPurpose'},
   {label:'Mortgage Delinquencies',url:'https://public.tableau.com/app/profile/michael.martinez5884/viz/PersonalLoanDefaultRates/DefaultbyLoanPurpose'}
 ]};
-let h=`<div class="cv"><div class="cv-section-label">// 03 &mdash; BUILT THINGS</div><div class="cv-section-title">Projects / <em>Portfolio</em></div><div class="cv-proj-grid">`;
+let h=`<div class="cv"><div class="cv-section-label">// 02 &mdash; BUILT THINGS</div><div class="cv-section-title">Projects / <em>Portfolio</em></div><div class="cv-proj-grid">`;
 projs.forEach((p,i)=>{
   const skills=(psMap[p[0]]||[]).sort();
   const links=[];
@@ -1140,7 +1140,7 @@ clean(){
 const sorted=[...DB.position.rows].sort((a,b)=>b[4].localeCompare(a[4]));
 const mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const fmt=d=>{if(!d)return'Present';const[y,m]=d.split('-');return mo[parseInt(m)-1]+' '+y};
-let h=`<div class="cv"><div class="cv-section-label">// 04 &mdash; WHERE I'VE WORKED</div><div class="cv-section-title">Work <em>Experience</em></div><div class="cv-work-tl">`;
+let h=`<div class="cv"><div class="cv-section-label">// 03 &mdash; WHERE I'VE WORKED</div><div class="cv-section-title">Work <em>Experience</em></div><div class="cv-work-tl">`;
 sorted.forEach((pos,i)=>{
   const emp=DB.employer.rows.find(e=>e[0]===pos[2]);
   const hlts=DB.work_highlights.rows.filter(x=>x[1]===pos[0]);
