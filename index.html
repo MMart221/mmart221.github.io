@@ -365,7 +365,7 @@
     }
 
     /* ── Results panel ─────────────────────────────────────── */
-    .results-section  { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+    .results-section  { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
     .results-toolbar  {
       display: flex;
       align-items: center;
@@ -396,7 +396,7 @@
     .results-meta.visible { display: flex; }
     .meta-item      { color: var(--muted2); font-family: 'Outfit'; }
     .meta-item span { color: var(--green); font-family: 'JetBrains Mono', monospace; font-weight: 500; }
-    .results-scroll { overflow: auto; flex: 1; }
+    .results-scroll { overflow: auto; flex: 1; min-height: 0; }
     .results-empty {
       display: flex;
       align-items: center;
@@ -447,7 +447,7 @@
     }
 
     /* ── Clean-view (CV) shared styles ─────────────────────── */
-    .cv { padding: 1.8rem 2.5rem; overflow-y: auto; height: 100%; animation: fadeIn .4s ease; }
+    .cv { padding: 1.8rem 2.5rem; animation: fadeIn .4s ease; }
     @keyframes fadeIn  { from { opacity: 0; }                        to { opacity: 1; } }
     @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
     .cv-section-label {
@@ -661,11 +661,14 @@
     .hire-links { display: flex; gap: .8rem; justify-content: center; animation: slideUp .5s ease .8s both; }
 
     /* ── Tab views ─────────────────────────────────────────── */
-    .erd-main          { display: none; flex: 1; overflow: scroll; background: var(--bg); }
+    /* min-height: 0 on all flex-column children that need to scroll —
+       without it, flex items default to min-height: auto and refuse to
+       shrink below their content, so overflow: auto never triggers. */
+    .erd-main          { display: none; flex: 1; min-height: 0; overflow: scroll; background: var(--bg); }
     .erd-main.active   { display: flex; }
-    .dict-main         { display: none; flex: 1; overflow: auto; background: var(--bg); padding: 2rem; }
+    .dict-main         { display: none; flex: 1; min-height: 0; overflow: auto; background: var(--bg); padding: 2rem; }
     .dict-main.active  { display: block; }
-    .query-main        { display: flex; flex-direction: column; flex: 1; }
+    .query-main        { display: flex; flex-direction: column; flex: 1; min-height: 0; }
     .query-main.hidden { display: none; }
     .erd-container     { min-width: max-content; padding: 2rem; }
 
