@@ -728,6 +728,63 @@
     ::-webkit-scrollbar-track  { background: var(--panel); }
     ::-webkit-scrollbar-thumb  { background: var(--border2); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+    /* ── Mobile ────────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      /* Sidebar toggle wastes horizontal space — sidebar is always collapsed on mobile */
+      .sidebar-toggle { display: none; }
+
+      /* Trim the titlebar */
+      .titlebar      { padding: 0 .8rem; gap: .6rem; }
+      .titlebar-conn { display: none; }
+      .titlebar-name { font-size: .72rem; }
+
+      /* Let the toolbar wrap onto two lines for the preset buttons */
+      .editor-toolbar {
+        flex-wrap: wrap;
+        row-gap: .4rem;
+        padding: .5rem .8rem;
+      }
+      .toolbar-sep  { display: none; }
+      .preset-label { display: none; }
+      .run-btn      { padding: .45rem 1rem; }
+      .preset-btn   { padding: .4rem .75rem; font-size: .7rem; }
+
+      /* Give the editor section room to breathe after the toolbar wraps.
+         The JS also respects this via offsetHeight (see loadPreset). */
+      .editor-section {
+        height: auto !important;  /* override any inline style set during init */
+        min-height: 60px;
+        max-height: 55vh;
+      }
+      .editor-wrap { min-height: 36px; }
+
+      /* Clean views */
+      .cv            { padding: 1.2rem 1rem; }
+      .cv-bigname    { font-size: 2rem; }
+      .cv-bio        { font-size: .75rem; }
+      .cv-edu-card   { padding: 1.2rem 1.2rem; }
+      .cv-stats      { gap: .5rem; }
+
+      /* Stack two-column grids to single column */
+      .cv-proj-grid,
+      .cv-skills-grid { grid-template-columns: 1fr; }
+
+      /* Work experience: stack date badge below company name */
+      .cv-work-head { flex-direction: column; gap: .2rem; }
+      .cv-work-date { align-self: flex-start; }
+
+      /* Hire me cards: full-width */
+      .hire-card { min-width: 0; width: 100%; max-width: 320px; }
+
+      /* Data dictionary: hide the FK references column (too wide on small screens) */
+      .dict-row .dc-ref,
+      .dict-row.head .dc-ref { display: none; }
+      .dict-main { padding: 1rem .8rem; }
+
+      /* Status bar */
+      .statusbar { gap: .8rem; padding: 0 .8rem; }
+    }
   </style>
 </head>
 <body>
@@ -1151,8 +1208,8 @@ function loadPreset(key){
   const ed=document.getElementById('query-editor');
   const es=document.querySelector('.editor-section');
   const txt=PRESETS[key].sql;
-  // Expand editor while typing
-  es.style.height='50%';
+  // Expand editor while typing; use less height on mobile so results are visible
+  es.style.height = window.innerWidth <= 640 ? '40%' : '50%';
   ed.value='';let i=0;
   // Max 1 second total: calculate interval from query length
   const interval=Math.max(1,Math.floor(900/txt.length));
@@ -1165,8 +1222,9 @@ function loadPreset(key){
       clearInterval(typeTimer);typeTimer=null;
       setTimeout(()=>{
         runQuery();
-        // Collapse editor so output dominates
-        es.style.height='60px';
+        // Collapse editor so output dominates; respect wrapped toolbar height on mobile
+        const toolbarH = es.querySelector('.editor-toolbar').offsetHeight;
+        es.style.height = Math.max(60, toolbarH + 10) + 'px';
       },80);
     }
   },interval);
