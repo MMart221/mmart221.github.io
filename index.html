@@ -1108,7 +1108,7 @@ const projs=DB.projects.rows;
 const psMap={};DB.project_skills.rows.forEach(ps=>{if(!psMap[ps[1]])psMap[ps[1]]=[];const sk=DB.skills.rows.find(s=>s[0]===ps[0]);if(sk)psMap[ps[1]].push(sk[2])});
 const tabLinks={'Tableau Dashboards':[
   {label:'Loan Default Rates',url:'https://public.tableau.com/app/profile/michael.martinez5884/viz/PersonalLoanDefaultRates/DefaultbyLoanPurpose'},
-  {label:'Mortgage Delinquencies',url:'https://public.tableau.com/app/profile/michael.martinez5884/viz/PersonalLoanDefaultRates/DefaultbyLoanPurpose'}
+  {label:'Mortgage Delinquencies',url:'https://public.tableau.com/views/MortgageDelinquenciesbyState2008-2024/MortgageExplorationDashboard?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link'}
 ]};
 let h=`<div class="cv"><div class="cv-section-label">// 02 &mdash; BUILT THINGS</div><div class="cv-section-title">Projects / <em>Portfolio</em></div><div class="cv-proj-grid">`;
 projs.forEach((p,i)=>{
